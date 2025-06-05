@@ -21,7 +21,7 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
   templateUrl: './nominee-details.component.html',
   styleUrls: ['./nominee-details.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, PipesModule, SharedModule, TranslateModule, NgbModule, ControlMessagesComponent, NgbNavModule, NgbNavItem, NgbNav, NgbNavContent, NgbDatepickerModule, NgxMaskDirective, NgxMaskPipe],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, PipesModule, SharedModule, TranslateModule, NgbModule, ControlMessagesComponent, NgbNavModule, NgbNavItem, NgbNav, NgbNavContent, NgbDatepickerModule, NgxMaskPipe],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
     { provide: NgbDateAdapter, useClass: CustomAdapter },
@@ -283,7 +283,7 @@ export class NomineeDetailsComponent implements OnInit {
     setTimeout(() => {
       // this.tabset.select(`tab${this.items.length - 1}`);
       this.active = Number(this.items.length) - 1;
-      console.log('test', this.active);
+      // console.log('test', this.active);
     }, 500);
   }
 
@@ -293,7 +293,7 @@ export class NomineeDetailsComponent implements OnInit {
   createNewItem(percentage: any = 100): UntypedFormGroup {
     return this.fb.group({
       // prefix_name: new UntypedFormControl('', [ValidationService.required]),
-      percentage: new UntypedFormControl('', [ValidationService.required, ValidationService.percentageRegex]),
+      percentage: new UntypedFormControl('', [ValidationService.required]),
       nominee_full_name: new UntypedFormControl('', [ValidationService.onlyRequired, ValidationService.onlyAlphabeticAllow]),
       // nominee_last_name: new UntypedFormControl('', [ValidationService.onlyRequired]),
       // pan_number: new UntypedFormControl('', Validators.compose([Validators.maxLength(10), ValidationService.panValidator])),
@@ -385,7 +385,8 @@ export class NomineeDetailsComponent implements OnInit {
    */
   maskProof = '';
   changeNomineeProof($event, index: any) {
-    // console.log('getNomineeInfoData', this.getNomineeInfoData[index].nominee_proof_number);
+    console.log('$event.target.value', $event.target.value);
+    console.log('this.nomineeForm?.value?.items[index]?.nominee_proof_type', this.nomineeForm?.value?.items[index]?.nominee_proof_type);
     if (environment?.isNomineeProofNumberRequired) {
       const isRequired = this.getValueCheck.transform(this.commonConfigFlow?.nomineeProof, $event.target.value);
       const nomineeArrayItems = this.nomineeForm.get('items') as UntypedFormArray;
@@ -397,8 +398,15 @@ export class NomineeDetailsComponent implements OnInit {
             this.maskProof = "SSSSS9999S";
             formItem.get('nominee_proof_number').setValidators([Validators.required, ValidationService.panValidator]);
           } else if (this.nomineeForm.value.items[index].nominee_proof_type === '03') {
+            this.maskProof = "9999";
+            formItem.get('nominee_proof_number').setValidators([Validators.required, ValidationService.fourDigit]);
+          } else if (this.nomineeForm.value.items[index].nominee_proof_type === '06') {
+            // this.maskProof = "999999999999";
             this.maskProof = "999999999999";
-            formItem.get('nominee_proof_number').setValidators([Validators.required, ValidationService.adhaarNumberValidator]);
+            formItem.get('nominee_proof_number').setValidators([Validators.required, ValidationService.drivingLicence]);
+          } else if (this.nomineeForm.value.items[index].nominee_proof_type === '07') {
+            this.maskProof = "999999999999";
+            formItem.get('nominee_proof_number').setValidators([Validators.required, ValidationService.isValidPassportNo]);
           } else {
             this.maskProof = "99999999";
             formItem.get('nominee_proof_number').setValidators([Validators.required]);
@@ -432,8 +440,14 @@ export class NomineeDetailsComponent implements OnInit {
             this.maskGuardianProof = "SSSSS9999S";
             formItem.get('guardian_proof_number').setValidators([Validators.required, ValidationService.panValidator]);
           } else if (this.nomineeForm.value.items[index].guardian_proof_type === '03') {
+            this.maskGuardianProof = "9999";
+            formItem.get('guardian_proof_number').setValidators([Validators.required, ValidationService.fourDigit]);
+          } else if (this.nomineeForm.value.items[index].guardian_proof_type === '06') {
             this.maskGuardianProof = "999999999999";
-            formItem.get('guardian_proof_number').setValidators([Validators.required, ValidationService.adhaarNumberValidator]);
+            formItem.get('guardian_proof_number').setValidators([Validators.required, ValidationService.drivingLicence]);
+          } else if (this.nomineeForm.value.items[index].guardian_proof_type === '07') {
+            this.maskGuardianProof = "999999999999";
+            formItem.get('guardian_proof_number').setValidators([Validators.required, ValidationService.isValidPassportNo]);
           } else {
             this.maskGuardianProof = "99999999";
             formItem.get('guardian_proof_number').setValidators([Validators.required]);
@@ -535,7 +549,7 @@ export class NomineeDetailsComponent implements OnInit {
       });
     }
     nomineeArrayItems.controls.forEach((formItem, j) => {
-      formItem.get('percentage').setValidators([ValidationService.onlyRequired, ValidationService.percentageRegex]);
+      formItem.get('percentage').setValidators([ValidationService.onlyRequired]);
       formItem.get('percentage').updateValueAndValidity();
     });
     if (index) {
@@ -553,7 +567,7 @@ export class NomineeDetailsComponent implements OnInit {
           //   formItem.get(item).updateValueAndValidity();
           // } else
           if (item === 'percentage') {
-            formItem.get(item).setValidators(Validators.compose([ValidationService.required, ValidationService.percentageRegex]));
+            formItem.get(item).setValidators(Validators.compose([ValidationService.required]));
             formItem.get(item).updateValueAndValidity();
           } else {
             formItem.get(item).setValidators([Validators.required]);

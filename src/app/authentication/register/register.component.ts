@@ -496,9 +496,21 @@ export class RegisterComponent implements OnInit, AfterViewInit {
         if (res?.result?.arihant_system) {
           this.mobileExistInSystem(this.registerform.value.mobilenumber);
         } else if (res?.result?.isMobileExistInArihantPlus && !res?.result?.isMobileExistInArihantCapital) {// mobile exist in arihant plus
-          this.mobileExistInSystemEKYC(this.registerform.value.mobilenumber);
+          // this.mobileExistInSystemEKYC(this.registerform.value.mobilenumber);
+          if (res?.result?.token) {
+            const url = `${environment.ekycArihantPlusLogin}/mobile-verify?params=${res?.result?.token}`;
+            window.location.href = url;
+          } else {
+            this.mobileExistInSystemEKYC(this.registerform.value.mobilenumber);
+          }
         } else if (!res?.result?.isMobileExistInArihantPlus && res?.result?.isMobileExistInArihantCapital) { // mobile exist in arihant capital
-          this.mobileExistInSystemEKYCForArihantplus(this.registerform.value.mobilenumber);
+          // this.mobileExistInSystemEKYCForArihantplus(this.registerform.value.mobilenumber);
+          if (res?.result?.token) {
+            const url = `${environment.ekycArihantCapitalLogin}/mobile-verify?params=${res?.result?.token}`;
+            window.location.href = url;
+          } else {
+            this.mobileExistInSystemEKYCForArihantplus(this.registerform.value.mobilenumber);
+          }
         } else if (res.message) {
           this.global.errorToastr(res.message);
         }

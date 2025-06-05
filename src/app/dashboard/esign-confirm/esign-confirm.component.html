@@ -1,0 +1,217 @@
+<div class="card-body">
+
+  <div class="row tb-content esign-confirm ">
+    <!-- <div class="col-md-5 col-lg-4">
+      <img [src]="contentData?.id_welcome_message" src="assets/images/dashboard/ic-welcome.png" class="img-fluid tb-icon">
+    </div> -->
+
+    <div class="dashboard-heading pl-3 pb-3" *ngIf="!isLoading && !isEligibleEsign">
+
+      <h3>
+        <span *ngIf="(rejectreason?.length && esignValidations?.isChangeMade) || !rejectreason?.length">
+          Approval Pending
+        </span>
+
+        <span *ngIf="rejectreason?.length && !esignValidations?.isChangeMade">
+          Application Rejected
+        </span>
+      </h3>
+    </div>
+    <div class="dashboard-heading" *ngIf="!isLoading && isEligibleEsign">
+      <h3>Lastly, let’s eSign your application!</h3>
+      <p class="pt-2">eSign your application using Aadhaar OTP</p>
+    </div>
+    <div class="col-md-12 col-lg-12">
+      <!-- <div class="dashboard-heading" *ngIf="isEligibleEsign" [innerHTML]="confirmEsignDetailsContent"></div> -->
+
+
+      <div class="row nsdl-box mb-4 mt-4" *ngIf="!isLoading && isEligibleEsign">
+        <div class="col-md-2 nsdl-img">
+          <img class="img-fluid pt-1 text-center" src="assets/images/dashboard/nsdl.png" alt="">
+        </div>
+        <div class="col-md-10">
+          <div class="nsdl-content">
+            <h5>You will be redirected to the NSDL website.</h5>
+            <p class="pt-3">
+              Once eSigned, the details cannot be changed without contacting the service team. Kindly cross check the
+              details before you digitally sign it. You can <a style="display: inline;" href="javascript:void(0)"
+                (click)="getEsignPdf()">review the details and edit</a> it on this step if required.
+            </p>
+          </div>
+        </div>
+        <div class="nsdl-case">
+          <p>In case your mobile number is not linked to Aadhar or if you are facing any problem during the e-sign
+            process, please contact our customer support team on <a
+              href="mailto:customersupport@arihantcapital.com">customersupport&#64;arihantcapital.com</a></p>
+        </div>
+      </div>
+
+      <div *ngIf="!isLoading && !isEmailVerified">
+        <p *ngIf="!isEligibleEsign" style="font-size: 14px;">
+          <strong>Note:</strong> Are you not eligible to esign due to your email is not verified yet.
+        </p>
+        <div class="reg-card welcome-btn">
+          <button (click)="verifyEmail()" type="button"
+            [ngClass]="{'disable': !verifiedSteps?.isUsedKRA && !verifiedSteps?.isUsedDigiLocker}" class="btn">{{'Verify
+            Email' | translate}}
+          </button>
+        </div>
+      </div>
+
+
+      <div *ngIf="!isLoading && isEmailVerified">
+        <hr>
+        <!-- <p  *ngIf="!isEligibleEsign" style="font-size: 14px;">
+         <strong>Note:</strong> Are you not eligible to esign due to below mention declarations. You can contact to admin as below mention.
+        </p> -->
+        <div class="bg-red-tag" *ngIf="!isEligibleEsign && (rejectreason?.length || esignValidations?.isChangeMade)">
+          <ng-container *ngIf="rejectreason?.length && verifiedSteps?.adminApproval === 'RequestForReview'">
+            <p class="mb-0 mt-1 pl-3 text-left">
+              <b>Your application was rejected due to below reasons:</b>
+            </p>
+            <ul style="list-style: disc;" class="mb-0 mt-1 pl-3 ml-3 font-14 ">
+              <li *ngFor="let item of rejectreason">
+                {{item}}
+              </li>
+            </ul>
+            <p *ngIf="!esignValidations?.isDigiLockerVerified && !esignValidations?.isKRAVerified" class="mb-0 mt-3">
+              Your pan details does not match, please contact to admin.
+            </p>
+          </ng-container>
+          <ng-container
+            *ngIf="esignValidations?.isChangeMade && verifiedSteps?.adminApproval === 'NOT Eligible For Esign'">
+            <div>
+              <b class="mb-0"> {{'agent_on_review' | translate}} </b>
+            </div>
+            <!-- <p class="mb-0 mt-3" *ngIf="rejectreason?.length">
+              {{'please_ignore' | translate}}
+            </p>             -->
+          </ng-container>
+          <!-- <p *ngIf="!esignValidations?.is_fatca" class="mb-0 mt-3">
+            You are not following FATCA instructions and your application is underreview, You can contact to admin as below mention.
+          </p>  
+           <p *ngIf="!esignValidations?.is_indian_resident" class="mb-0 mt-3">
+            You are not a resident citizen of india. 
+          </p>  
+          <p *ngIf="!esignValidations?.is_not_pep_expose" class="mb-0 mt-3">
+            You are NOT a PEP (Politically Exposed Person) or related to a PEP so that your application is underreview. you can also contact about that concern.
+          </p> -->
+        </div>
+
+        <p class="con-tx mt-3 esign" *ngIf="!isEligibleEsign">{{'get_in_touch_advisor' | translate}}</p>
+
+        <p class="con-tx mt-3 esign" *ngIf="!isEligibleEsign">{{'call_us' | translate}}
+
+          <a href="tel:0731-4217003">0731-4217003</a>or
+
+          email <a href="mailto:customersupport@arihantcapital.com">customersupport&#64;arihantcapital.com</a>
+        </p>
+
+      </div>
+      <div *ngIf="isLoading || !isEsign" [ngStyle]="{'min-height': '250px'}" class="row my-auto">
+        <div class="col-md-12 d-flex justify-content-center">
+          <div class="align-self-center"><span> <i class="fa fa-circle-o-notch fa-spin"></i> </span></div>
+        </div>
+      </div>
+    </div>
+
+
+    <form *ngIf="isEsign" #esignForm id="URL" name="URL" method="POST" enctype="multipart/formdata"
+      action="{{esignActionUrl}}">
+      <input type="hidden" name="msg" value="{{isEsignXmlData}}" />
+      <button hidden type="submit" class="btn btn-success" (click)="esignForm.submit()">Submit</button>
+    </form>
+    <div class="container footer-dash" *ngIf="isEligibleEsign">
+      <hr>
+      <div class="dashboard-btn">
+        <div class="reg-card welcome-btn">
+          <button (click)="finishTheEKYC()" type="button"
+            [ngClass]="{'disable': !verifiedSteps?.isUsedKRA && !verifiedSteps?.isUsedDigiLocker}"
+            class="btn">{{'continue to eSign' | translate}}
+          </button>
+        </div>
+
+      </div>
+    </div>
+    <div class="container footer-dash"
+      *ngIf="esignValidations?.isChangeMade && verifiedSteps?.adminApproval === 'RequestForReview'">
+      <hr>
+      <div class="dashboard-btn">
+        <div class="reg-card welcome-btn">
+          <button (click)="reSubmitEKYCData()" type="button"
+            [ngClass]="{'disable': !verifiedSteps?.isUsedKRA && !verifiedSteps?.isUsedDigiLocker}"
+            class="btn">{{'Re-submit the changes' | translate}}
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+<ng-template #esignPdf let-c="close" let-d="dismiss" class="aadhar-popup">
+  <div class="modal-header green common-header">
+    <div class="popup-header">
+      <h4 class="modal-title">{{userInfo?.panUserName | uppercase}}</h4>
+    </div>
+    <div class="popup-icon">
+      <img src="assets/images/Vector.svg">
+    </div>
+  </div>
+
+  <div class="modal-boy">
+    <iframe [src]="esignPdfUrl | safeUrl" style="min-height: 500px;" height="400px" width="100%"></iframe>
+  </div>
+  <div class="modal-footer d-flex justify-content-between">
+
+    <a class="btn modal-btn-continue" (click)="c('cancel')" href="javascript:void(0)">
+      {{'Close' | translate}}
+    </a>
+  </div>
+</ng-template>
+
+
+<ng-template #esignPopuPdf let-c="close" let-d="dismiss" class="aadhar-popup">
+  <form *ngIf="isEsign" #esignForm id="URL" name="URL" method="POST" enctype="multipart/formdata"
+    action="{{esignActionUrl}}">
+    <input type="hidden" name="msg" value="{{isEsignXmlData}}" />
+    <button hidden type="submit" class="btn btn-success" (click)="esignForm.submit()">Submit</button>
+  </form>
+</ng-template>
+
+<ng-template #emailNotVerify let-c="close" let-d="dismiss" class="aadhar-popup">
+  <div class="modal-header green common-header">
+    <div class="popup-header">
+      <!-- <span>{{'Email verification' | translate}}</span> -->
+      <h4 class="modal-title">{{'Email verification' | translate}}</h4>
+    </div>
+    <div class="popup-icon">
+      <img src="assets/images/Vector.svg">
+    </div>
+  </div>
+
+  <div class="modal-boy">
+    <p class="wr-msg mb-2">
+      {{'Almost there…' | translate}}
+    </p>
+    <p class="wr-msg mb-2">
+      {{'Just one last step, check your inbox, verify your email and review & e-Sign your application to enjoy a
+      seamless trading experience.' | translate}}
+    </p>
+    <p class="wr-msg mb-2">
+      {{'Beep Beep! The email is waiting for you' | translate}}
+      <ng-container *ngIf="emailData">on <b>{{emailData?.email}}</b></ng-container>
+    </p>
+    <!-- <p class="wr-msg mb-2">{{'We recommend you to continue & complete your KYC first.' | translate}}</p> -->
+    <br>
+  </div>
+  <div class="modal-footer d-flex justify-content-between">
+    <a class="btn modal-btn-cancel" (click)="resendVerifyEmail()" href="javascript:void(0)">{{'Verify Email' |
+      translate}}</a>
+    <!-- <a class="btn modal-btn-continue" (click)="c('cancel')" href="javascript:void(0)">
+      {{'Continue' | translate}}
+    </a> -->
+  </div>
+</ng-template>

@@ -1,0 +1,7 @@
+.fixed-button-whtsapp{
+    width: 200px;background-color: rgba(0, 0, 0, 0.7);left: auto;right: 1%;bottom: 19%;padding: .675rem .75rem;line-height: auto;
+}
+
+@media only screen and (max-width: 640px) {
+    .fixed-button-whtsapp{ bottom: 3%; }
+}

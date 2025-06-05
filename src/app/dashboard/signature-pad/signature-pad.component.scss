@@ -1,0 +1,10 @@
+
+    .signature-pad {
+      border: none;
+      position: relative;
+    }
+    canvas {
+      border: 1px solid #000;
+      touch-action: none; /* Prevent touch events from scrolling */
+    }
+  

@@ -1,0 +1,101 @@
+<section class="reg-main1">
+  <div class="container photo-capture">
+    <div class="row reg-card">
+
+      <div class="col-md-12 mb-0 text-center">
+        <p>{{'Photograph_document_text' | translate}}</p>
+      </div>
+      <div class="col-md-12 mb-0 text-center error"><b class="font-18">NOTE : Please open this link in google chrome
+          only</b>
+      </div>
+      <div class="pr-0 mt-0" style="margin:0 auto;" *ngIf="!webCamMediaPriview">
+        <div class="upload-box col-md-12 "
+          *ngIf="(global?.selfieMode === 'hyperverge' || global?.AINEXTSelfieMode) && global?.isOwnPhotoCapture !== 'Yes'">
+          <div class="d-flex justify-content-center">
+            <div class="row signature-row mb-2">
+              <div class="col-md-4 col-4 mx-auto">
+                <div class="text-center">
+                  <img src="assets/images/dashboard/incorrect-pic.png" alt="">
+                  <p class="sign-head" style="color: #C7264C;">Incorrect Photo</p>
+                  <p class="sign-para">Side facing, with sunglasses or with filters</p>
+                </div>
+              </div>
+              <div class="col-md-4 col-4 mx-auto">
+                <div class="text-center">
+                  <img src="assets/images/dashboard/right-pic.png" alt="">
+                  <p class="sign-head" style="color: #34B350;">Correct Photo</p>
+                  <p class="sign-para">Full face should be clearly visible in the photo with no filters</p>
+                </div>
+              </div>
+              <div class="col-md-4 col-4 mx-auto">
+                <div class="text-center">
+                  <img src="assets/images/dashboard/wrong-pic.png" alt="">
+                  <p class="sign-head" style="color: #C7264C;">Incorrect Photo</p>
+                  <p class="sign-para">No group photos or tilted or unclear photos</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <webcam [trigger]="triggerObservable" (imageCapture)="handleImage($event)"
+          [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable" [videoOptions]="videoOptions"
+          [imageQuality]="1" (cameraSwitched)="cameraWasSwitched($event)" (initError)="handleInitError($event)"
+          class="webcam" *ngIf="global?.isOwnPhotoCapture === 'Yes'">
+        </webcam>
+        <div class="form-group justify-content-center text-center">
+          <button type="button" class="btn mt-0" (click)="triggerSnapshot();"
+            *ngIf="global?.isOwnPhotoCapture === 'Yes'">Capture <img src="assets/images/arrow-right.svg"
+              alt=""></button>
+          <button type="button" class="btn mt-0" (click)="getAINEXTToken();"
+            *ngIf="global?.AINEXTSelfieMode && global?.isOwnPhotoCapture !== 'Yes'">Capture
+            <img src="assets/images/arrow-right.svg" alt=""></button>
+        </div>
+        <!-- <div *ngIf="webCamMediaPriview">
+          <h5>Preview</h5>
+          <img [src]="webCamMediaPriview" class="mb-2"/>
+          <div class="form-group">
+            <button type="button" class="btn mt-0" (click)="submitWebCamUpload();">Submit </button>
+          </div>
+        </div> -->
+      </div>
+
+
+
+      <div class="col-md-12 justify-content-center text-center" *ngIf="webCamMediaPriview">
+        <div class="row justify-content-center text-center">
+          <div class="col-md-9 align-items-center">
+            <!-- <div class="col-md-3 justify-content-start" >
+              <div>Preview</div>
+              <button class="view-img" *ngIf="webCamMediaPriview"  style="background: #1d1d1d;">
+                <div class="img-td-div" >
+                  <img [src]="croppedImage" />
+                </div>
+              </button>
+            </div> -->
+            <!-- <div class="mt-1"><span>You can crop the image to ensure readability but make sure the document doesn’t get cut!</span></div> -->
+            <image-cropper [cropperMinWidth]="351" [cropperMinHeight]="351" [imageURL]="webCamMediaPriview"
+              [maintainAspectRatio]="false" [aspectRatio]="1 / 1" format="jpeg" output="base64" [imageQuality]="50"
+              (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady()"
+              (loadImageFailed)="loadImageFailed()" [canvasRotation]="canvasRotation"
+              [transform]="transform"></image-cropper>
+          </div>
+          <div class="row form-group d-flex text-center justify-content-center capture-btn-option">
+            <button type="button" class="btn mr-2 mt-1" style="background: #1d1d1d;color:white;"
+              (click)="cancelCropped()">{{'Cancel' | translate}}
+            </button>
+            <button type="button" class="btn mt-1" style="background-color: #09B7DD;color:white;right: 0;"
+              (click)="submitWebCamUpload()">{{'Confirmed' | translate}}
+            </button>
+
+            <button type="button" class="btn ml-2 mr-2 mt-1"
+              style="background: #1d1d1d;color:white;right: 0;float: right;" (click)="rotateLeft()">Rotate left</button>
+            <button type="button" class="btn mt-1" style="background: #1d1d1d;color:white;right: 0;float: right;"
+              (click)="rotateRight()">Rotate right</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

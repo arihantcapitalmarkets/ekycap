@@ -1,0 +1,371 @@
+<div class="card-body segment-card">
+	<app-step-header [userInfo]='userInfo'></app-step-header>
+
+	<div class="row tb-content">
+		<div class="col-md-5 col-lg-4">
+			<img [src]="contentData?.id_segment_details" src="assets/images/dashboard/segment.svg"
+				class="img-fluid tb-icon">
+		</div>
+		<div class="col-md-7 col-lg-8">
+			<h4 class="tb-subtitle">Let’s get your trading preferences</h4>
+			<p class="mb-3 mb-md-5">Choose segments to trade in and the brokerage plans.</p>
+			<form [formGroup]="segmentForm" (ngSubmit)="onSubmit()">
+				<!-- <label class="line-lable mt-4"><span>Code Used</span></label>
+				<div class="select-label mb-3">Arihant Capital has the right to revoke any promo code without information.</div> -->
+
+				<div class="row align-items-end segment-code">
+					<div class="col-md-12 position-relative">
+						<div class="form-group mb-0">
+							<label for="Plan" class="ble-labl">Code(Optional)</label>
+							<input type="text" formControlName="code" class="form-control" style="text-transform: none;"
+								placeholder="Enter your code">
+						</div>
+						<button type="button" class="btn-apply" (click)="checkCode()">Apply
+
+						</button>
+					</div>
+					<div class="col-md-12 mt-3" *ngIf="rmCode">
+						<span class="tagline" style="text-transform: none;">
+							{{rmCode}}<button type="button" (click)="removeCode()">&times;</button>
+						</span>
+					</div>
+				</div>
+
+				<div *ngIf="global.isLoading">
+					<div class="col-md-12 p-2 global-loader">
+						<span> <i class="fa fa-circle-o-notch fa-spin"></i> </span>
+					</div>
+				</div>
+
+				<label *ngIf="mainSegmentType?.length" class="line-lable"><span>Set your trading
+						preferences</span></label>
+				<div *ngIf="mainSegmentType?.length">
+					<!-- <div class="row">
+						<div class="col-!2 pr-2">
+							<div class="form-group">
+								<label for="Segment" class="ble-labl">Set your trading preferences.</label>
+							</div>
+						</div> 
+						<div class="col-4 center-h4">
+							<div class="form-group">
+								<label for="Plan" class="ble-labl">Brokerage Plan</label>
+							</div>
+						</div>
+						<div class="col-4">
+							<div class="form-group">
+								<label for="Rate" class="ble-labl">Brokerage Rate</label>
+							</div>
+						</div> 
+					</div>-->
+					<div formArrayName="mainCatItems" class="row segment-fun">
+						<!-- <ng-container [formGroupName]="mainIndex"
+							*ngFor="let cate of segmentForm.get('mainCatItems')['controls']; let mainIndex = index;">
+							<ng-container *ngIf="cate?.get('sub_cat_items')['controls'].length > 0">
+								<div class="border-bottom-line">
+									<div class="row sub_cat_items" formArrayName="sub_cat_items"
+										*ngFor="let subcate of cate?.get('sub_cat_items')['controls']; let iIndex = index;">
+										<ng-container [formGroupName]="iIndex">
+
+											<div class="custom-checkbox col-4 pr-2">
+												<input type="checkbox" id="logo1" formControlName="subcate_selected"
+													(click)="selectSubCategory($event,cate?.get('category_id').value)">
+												<label>{{subcate.get('sub_category_name').value}}</label>
+											</div>
+
+											<div class="col-4 center-h4">
+												<select class="form-control" placeholder="select plan" formControlName="plan_id"
+													(change)="selectPlan($event,cate?.get('category_id').value,subcate?.get('sub_category_id').value)">
+													<option value="">Select</option>
+													<option [value]="planItem?.get('plan_id').value"
+														*ngFor="let planItem of subcate['controls'].plans['controls']; let jIndex = index;">
+														{{planItem?.get('plan_name').value}}
+													</option>
+												</select>
+											</div>
+											<div class="col-4">
+												<p>{{subcate?.get('plan_description')?.value}}</p>
+											</div>
+										</ng-container>
+									</div>
+								</div>
+							</ng-container>
+						</ng-container> -->
+						<ng-container [formGroupName]="mainIndex"
+							*ngFor="let cate of segmentForm.get('mainCatItems')['controls']; let mainIndex = index;">
+							<!-- <ng-container *ngIf="cate?.get('sub_cat_items')['controls'].length === 0"> -->
+							<!-- <div class="mt-2"> -->
+							<div class="custom-checkbox col-md-6 mt-2 border-box"
+								[ngClass]="{'disabled': cate?.get('is_disable').value}">
+								<input type="checkbox" id="logo1" formControlName="selected"
+									(click)="selectCategory($event,cate?.get('category_id').value)">
+								<label>{{cate.get('category_name').value}}</label>
+								<div class="ft-12 ml-19"> {{cate.get('category_description').value}}</div>
+							</div>
+							<!-- </div> -->
+							<!-- </ng-container> -->
+							<!-- </div> -->
+						</ng-container>
+						<!-- <div class="border-bottom-line mb-4">
+							<div class="row">
+								<div class="custom-checkbox col-md-4 pr-2">
+									<input type="checkbox">
+									<label>Mutual Funds</label>
+								</div>
+							</div>
+						</div> -->
+					</div>
+				</div>
+
+				<div class="row ml-0 mr-0">
+					<div class="col-md-12 select-label mt-3 mb-3 d-flex justify-content-between">
+						POA
+						<span class="nominee-switch">
+							<span class="gray">No</span><label class="switch">
+								<input type="checkbox" formControlName="POA">
+								<span class="slider round"></span>
+							</label>
+							Yes
+						</span>
+					</div>
+				</div>
+
+				<div class="row ml-0 mr-0">
+					<div class="col-md-12 select-label mt-2 mb-3 d-flex justify-content-between">
+						Demat
+						<span class="nominee-switch pointer-events-none">
+							<span class="gray">No</span><label class="switch">
+								<input type="checkbox" formControlName="demat">
+								<span class="slider round"></span>
+							</label>
+							Yes
+						</span>
+					</div>
+				</div>
+				<div class="row segment-fun mt-2">
+					<div class="col-md-12">
+						<div class="custom-checkbox">
+							<!-- {{isTermsCondition}} -->
+							<input type="checkbox" id="terms" formControlName="isTermsCondition">
+							<label class="ft-12 pt-2px" for="terms">I have read and hereby agree to all the <a
+									class="ble-labl" (click)="openDisclaimer()" href="javascript:void(0);">Terms and
+									Conditions*</a>.</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="reg-card welcome-btn ng-star-inserted">
+					<button type="submit" class="btn"
+						[ngClass]="{'disable': !segmentForm?.controls['isTermsCondition']?.value}">continue
+
+					</button>
+				</div>
+			</form>
+		</div>
+
+	</div>
+</div>
+
+<ng-template #disclaimerModal let-c="close" let-d="dismiss" class="aadhar-popup">
+	<div class="modal-header blue common-header">
+		<div class="popup-header">
+			<span>{{'Terms & Conditions' | translate}}</span>
+			<h4 class="modal-title">{{'Arihant Capital Markets Ltd' | translate}}</h4>
+		</div>
+		<div class="popup-icon">
+			<img src="assets/images/help-circle-blue.svg">
+		</div>
+	</div>
+	<div class="modal-boy">
+		<section class="declarations-main">
+			<!-- <div class="container"> -->
+			<div class="row">
+				<div class="dec-content">
+					<div class="select-label mb-3 d-flex justify-content-between">
+						{{'This document contains important information regarding the terms and conditions, which apply
+						to your Net
+						-Trading Account with Arihant Capital Markets Ltd. PLEASE READ THIS DOCUMENT CAREFULLY and
+						retain it for
+						future reference. Please note that the information contained herein is subject to change without
+						notice.' |
+						translate}}
+					</div>
+					<h3>Opening your Arihant Capital Markets Ltd. Net Trading Account</h3>
+					<p>To start Net trading with Arihant Capital Markets Ltd. you need to open a trading Account and a
+						Depository
+						(or Demat shares) Account with Arihant Capital Markets Ltd.. All receipts and payments for
+						buying and
+						selling
+						of shares and all commissions and charges will be posted to your trading Account . Shares which
+						you buy
+						and
+						sell through the trading Account will be received in or delivered from your demat Account.
+						Trading account
+						refers to the account of client maintained by Arihant Capital Markets Ltd. in their books of
+						accounts.</p>
+					<!-- <h3>Title here</h3> -->
+					<p> Demat account refers to the account opened by you with Depository for holding securities in
+						electronic
+						form.
+						For the purpose of Net-Trading through Arihant Capital Markets Ltd. demat account refers to the
+						account
+						opened
+						by client with National Securities Depository Limited (NSDL) through Arihant Capital Markets
+						Ltd. as
+						Depository Participants (DP). If you already have a demat Account with Arihant Capital Markets
+						Ltd., then
+						the
+						same Account can be linked to your Net trading Account. Just give us your Account details at the
+						time of
+						becoming a Net trading customer.Before we can make your Account operative, we require that you
+						fill and
+						sign
+						all forms / agreements which form part of your Account opening kit, and supply us with all the
+						relevant
+						legal
+						documents and financial information which law requires us to maintain. You warrant and represent
+						that the
+						information that you supply in your Account Application (or other information that Arihant
+						Capital Markets
+						Ltd. may require) is accurate and truthful. You also expressly authorize Arihant Capital Markets
+						Ltd. to
+						obtain reports concerning your credit standing and business conduct.</p>
+					<p> If your application is approved, Arihant Capital Markets Ltd. will open a Net trading Account
+						(an
+						"Account")
+						for you. We reserve the absolute right to either accept or reject your application on any
+						grounds
+						whatsoever
+						and you agree that you shall not dispute the result in any manner whatsoever.</p>
+					<!-- <h3>Title here</h3> -->
+					<h3>B) Investment advice</h3>
+					<p>You acknowledge that while Arihant Capital Markets Ltd. does provide advice regarding the
+						suitability or
+						profitability of a Scrip or investment, or any other tax or legal advice it may add on from time
+						to time,
+						You
+						assume full responsibility with respect to transactions in or for your Account and your
+						investment
+						decisions.
+						Arihant Capital Markets Ltd. and its officers, directors, employees, agents and affiliates will
+						have no
+						liability with respect to transactions in or for your Account and your investment decisions.</p>
+					<h3> C) Applicable rules and regulations</h3>
+					<p>All transactions in your Account shall be subject to the constitution, rules, regulations,
+						customs and
+						usage
+						of the exchange or market, and its clearing house, if any, where the transactions are executed
+						by Arihant
+						Capital Markets Ltd. or its agents, including Arihant Capital Markets Ltd.âs subsidiaries and
+						affiliates.
+						Also, where applicable, the transactions shall be subject to the provisions of the Securities
+						and
+						Contracts
+						Regulations Act (SCRA), as amended, and to the rules and regulations of the Securities and
+						Exchange Board
+						of
+						India (SEBI), National Securities Depository Limited (NSDL), the exchanges where Arihant Capital
+						Markets
+						Ltd.
+						will facilitate trading, and any applicable self-regulatory organization. </p>
+					<h3>D) Who is eligible</h3>
+					<p>You can open these Accounts if you are over 18 years and if you will operate this on an
+						individual basis.
+						It
+						is open for resident Indian only. Indian regulations require us to maintain basic financial
+						details about
+						each
+						client. You need to provide us the details of your bank Account. Your signatures on the Account
+						opening
+						form
+						need to be the same, as maintained in the bank records. All Resident Individuals need to provide
+						us Income
+						Tax
+						returns details - IT PAN/GIR number, during your Account opening process. </p>
+					<h3>E) Commissions and fees</h3>
+					<p>As mutually agreed and subject to the maximum prescribed by SEBI. </p>
+					<h3>F) Depository Account</h3>
+					<p>1. Joint Accounts</p>
+
+					<p> Your demat Account can be held jointly with other people (typically relatives). For your demat
+						Account,
+						an
+						instruction given to us by someone who knows your password will be necessary and sufficient
+						condition to
+						effect a transaction. Please note that normally regulations require both the Account holders to
+						sign on
+						instruction but that you are agreeable to any transactions on such Account being executed in the
+						manner
+						outlined above. </p>
+					<p>2. Nomination</p>
+					<p> You can also nominate someone in your Demat Account, who becomes the beneficiary of the shares
+						held in
+						the
+						Account in the unfortunate event of your demise.</p>
+					<h3>G) Cheque receipt/ payment</h3>
+					<p>You can deposit amount in your Account by using Internet banking, or by personal cheque or a
+						demand
+						draft.
+						Credit will be available in your Account after the funds are cleared. </p>
+					<h3>H) Digital contract notes </h3>
+					<p>Contract notes, as per the prevailing rules and regulations, shall be issued within the
+						stipulated time
+						limit
+						by e-mail to the address submitted by you. </p>
+					<h3>I) Exposure Limit</h3>
+					<p>Different scrips attracts different margin</p>
+					<h3>J) Compliance action</h3>
+					<p> We may initiate compliance action in case of any default in payments of any dues receivable by
+						us from
+						client.</p>
+					<p> A. Compliance action includes but not limited to --</p>
+					<p> 1. Squaring off of outstanding transactions.</p>
+					<p>2. We have full LIEN ON CASH AND SECURITIES BALANCES in trading account /depository account of
+						client and
+						may
+						sale such securities lying with us or stock lying in client depository account with us. Any loss
+						arising
+						out
+						of squaring off or sale of securities will be to client account and we will not be liable for
+						any cost or
+						damage or any consequences thereof.</p>
+					<p>3. Locking / suspending client account and no further transactions will be allowed till the time
+						all dues
+						are
+						settled or till the time as may deem fit by us. </p>
+					<p>4. Withholding payout of securities bought by client against any dues receivable by us.</p>
+					<p>5. Levy of interest &#64;24 p.a. for any delay in receipt of our dues, which includes pay in
+						amount, margin
+						amount, fees, commission, or pay other charges. We may take any one or all compliance actions as
+						mentioned
+						above and will intimate to the client on compliance action being taken and details thereof. To
+						avoid
+						compliance action, client should deposit additional funds, squared off outstanding transactions
+						or sale
+						other
+						securities lying in his depository account to make his CCB positive. Client should always look
+						at his
+						exposure, M to M losses, pay in and other obligation alerts forwarded by us, etc. to enable
+						himself to
+						take
+						necessary action in a timely manner. </p>
+					<h3>K) Disclosure of Information regarding client</h3>
+					<p>Arihant Capital Markets Ltd. hereby undertakes to maintain the details of the client as mentioned
+						in the
+						client registration form or any other information pertaining to the client, in confidence and
+						that he
+						shall
+						not disclose the same to any person/entity except as required under the law:</p>
+					<p>Provided however that Arihant Capital Markets Ltd. shall be allowed to share the details of the
+						client as
+						mentioned in the client registration form or any other information pertaining to the client with
+						parties/entities other than required under law with the express permission of the client.</p>
+				</div>
+			</div>
+			<!-- </div> -->
+		</section>
+	</div>
+	<div class="modal-footer  justify-content-between">
+		<a class="btn modal-btn-continue" (click)="c('ok')" href="javascript:void(0)"
+			style="margin: 0 auto;">Continue</a>
+	</div>
+</ng-template>

@@ -1,0 +1,1089 @@
+<div class="card-body  nominee-card">
+   <div class="row tb-content">
+
+      <div class="col-md-12 col-lg-12">
+         <!-- <div [innerHTML]="nomineeDetailsContent"></div> -->
+         <div class="dashboard-heading">
+            <h3>Nominee Details</h3>
+            <p>It’s always a good practice to nominate someone.</p>
+         </div>
+         <!-- <div class="select-label mb-3 row justify-content-between mt-4">
+            <div class="col-md-6">
+               <div class="nominee-info">
+                  Do you want to nominate anyone for your account?
+               </div>
+            </div>
+            <div class="col-md-6 nominee-option">
+               <span class="nominee-switch">
+                  <div class="form-check form-check-inline">
+                     <input class="cursor-pointer" type="radio" name="radio" id="inlineRadio1"
+                        (change)="switchToNominee()" [checked]="isNomineeAvailable" /> &nbsp;
+                     <label class="form-check-label cursor-pointer" for="inlineRadio1" (click)="switchToNominee()">Yes,
+                        let’s do it</label> &nbsp;
+                     <input class="cursor-pointer" type="radio" name="radio" id="inlineRadio2"
+                        (change)="switchToNominee()" [checked]="!isNomineeAvailable" /> &nbsp;
+                     <label class="form-check-label cursor-pointer" for="inlineRadio2" (click)="switchToNominee()">No,
+                        I’ll
+                        do it later</label>
+                  </div>
+               </span>
+            </div>
+         </div> -->
+
+         <div class="col-md-12 p-5" *ngIf="isLoading" style="text-align: center; margin: 10% auto; ">
+            <span> <i class="fa fa-circle-o-notch fa-spin"></i> </span>
+         </div>
+         <div class="nominee-tab mt-4" id="accordion" *ngIf="isNomineeAvailable">
+
+            <!-- <button (click)="addItem()" class="add-btn">+ Add More Nominee</button> -->
+            <form class="position-relative" [formGroup]="nomineeForm" (ngSubmit)="onSubmit()">
+
+               <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav nav-tabs d-flex justify-content-start">
+                  <ng-container ngbNavItem="i" formArrayName="items"
+                     *ngFor="let item of nomineeForm?.get('items')?.controls; let i = index; let j = last;">
+                     <li [ngbNavItem]="i">
+                        <a ngbNavLink>Nominee {{ i + 1 }}</a>
+                        <ng-template ngbNavContent>
+                           <div class="card" [formGroupName]="i">
+                              <div class="card-body">
+                                 <div class="reg-card">
+                                    <div class="row g-3">
+                                       <!-- Nominee Full Name -->
+                                       <div class="col-md-6">
+                                          <label for="nominee_full_name" class="form-label required">Nominee Full
+                                             Name</label>
+                                          <input type="text" id="nominee_full_name" placeholder="Nominee Full Name"
+                                             formControlName="nominee_full_name" class="form-control">
+                                          <app-control-messages fieldName="Nominee Full Name"
+                                             [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.nominee_full_name">
+                                          </app-control-messages>
+                                       </div>
+
+                                       <!-- Relation with Applicant -->
+                                       <div class="col-md-3">
+                                          <label for="nominee_relation" class="form-label required">Relation with
+                                             Applicant</label>
+                                          <select id="nominee_relation" class="form-control"
+                                             placeholder="Select relation" formControlName="nominee_relation"
+                                             (change)="changeNomineeRelation($event, i)">
+                                             <option value="">Select relation</option>
+                                             <option [value]="item?.value" *ngFor="let item of relationShipDropDown">
+                                                {{ item.label }}
+                                             </option>
+                                          </select>
+                                          <app-control-messages fieldName="Relation"
+                                             [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.nominee_relation">
+                                          </app-control-messages>
+                                       </div>
+
+                                       <!-- Other Nominee Relation -->
+                                       <div class="col-md-3"
+                                          *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls?.nominee_relation?.value === 'Others'">
+                                          <label for="other_nominee_relation" class="form-label required">Other Nominee
+                                             Relation</label>
+                                          <input type="text" id="other_nominee_relation"
+                                             placeholder="Your Nominee Relation"
+                                             formControlName="other_nominee_relation" class="form-control">
+                                          <app-control-messages fieldName="Other Nominee Relation"
+                                             [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.other_nominee_relation">
+                                          </app-control-messages>
+                                       </div>
+                                    </div>
+
+
+
+                                    <div class="row pt-3">
+                                       <div class="col-md-3 ">
+                                          <div class="form-group">
+                                             <label for="nominee_dob" class="ble-labl req-control">Nominee’s DOB</label>
+                                             <div class="position-relative datepicker">
+                                                <input type="text" (ngModelChange)="checkAge($event, i)"
+                                                   class="form-control disabled" placeholder="DD/MM/YYYY"
+                                                   dateFormat="dd/MM/yyyy" mask="99/99/9999"
+                                                   formControlName="nominee_dob" ngbDatepicker #d="ngbDatepicker">
+                                                <div class="input-group-append calendar">
+                                                   <span class="btn btn-outline-secondary" (click)="d.toggle()"
+                                                      type="button"><img _ngcontent-serverapp-c122=""
+                                                         src="assets/images/calendar.svg"></span>
+                                                </div>
+                                             </div>
+
+                                             <div
+                                                *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls['nominee_dob']?.invalid && (nomineeForm?.controls?.items?.controls[i]?.controls['nominee_dob']?.dirty || nomineeForm?.controls?.items?.controls[i]?.controls['nominee_dob']?.touched)">
+                                                <div class="error"
+                                                   *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls['nominee_dob']?.errors?.required">
+                                                   {{'Date Of Birth is required' | translate}}
+                                                </div>
+                                                <div class="error"
+                                                   *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls['nominee_dob']?.errors?.Invaliddob && !nomineeForm?.controls?.items?.controls[i]?.controls['nominee_dob']?.errors?.required">
+                                                   {{'Invalid Date Of Birth' | translate}}
+                                                </div>
+                                                <div class="error"
+                                                   *ngIf="!nomineeForm?.controls?.items?.controls[i]?.controls['nominee_dob']?.errors?.Invaliddob && nomineeForm?.controls?.items?.controls[i]?.controls['nominee_dob']?.errors?.ngbDate['invalid']">
+                                                   {{'Invalid Date Of Birth' | translate}}
+                                                </div>
+
+                                             </div>
+
+                                          </div>
+                                       </div>
+                                       <div class="col-md-3">
+                                          <div class="form-group">
+                                             <label for="nominee_email" class="req-control">Nominee’s email Id</label>
+                                             <input style="text-transform: none;" required
+                                                placeholder="Enter nominee email" type="email"
+                                                formControlName="nominee_email" class="form-control">
+                                             <app-control-messages fieldName="Email"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.nominee_email">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+                                       <div class="col-md-3 ">
+                                          <div class="form-group">
+                                             <label for="mobile_number" class="ble-labl req-control">Nominee’s mobile
+                                                no</label>
+                                             <input type="tel" placeholder="Enter nominee mobile number" maxlength="10"
+                                                mask="0000000000" formControlName="nominee_mobile_number"
+                                                class="form-control">
+                                             <app-control-messages fieldName="Mobile Number"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.nominee_mobile_number">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+                                       <div class="col-md-3">
+                                          <div class="form-group">
+                                             <label for="mrs" class="ble-labl req-control">Nominee’s Id proof</label>
+                                             <select class="form-control" placeholder="Select relation"
+                                                formControlName="nominee_proof_type">
+                                                <option value="">Select Proof </option>
+                                                <option [value]="item.id"
+                                                   *ngFor="let item of commonConfigFlow?.nomineeProof">
+                                                   {{item?.name}}</option>
+                                             </select>
+                                             <app-control-messages fieldName="Proof"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.nominee_proof_type">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+
+                                    </div>
+                                    <div class="row pt-2">
+                                       <div class="col-md-4 col-6"
+                                          *ngIf="nomineeForm?.get('items')?.controls?.length > 1">
+                                          <div class="form-group">
+                                             <label for="nominee_name" class="ble-labl req-control">Nominee’s
+                                                share</label>
+                                             <input type="text" placeholder="Percentage" (keyup)="makeValidation(i)"
+                                                formControlName="percentage" class="form-control nominee-percentage">
+                                             <app-control-messages fieldName="Percentage"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.percentage">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+                                       <div class="col-md-8 col-6 nominate-delete-btn ustify-content-end text-right">
+                                          <a (click)="removeNewNominee(i)"
+                                             *ngIf="nomineeForm?.get('items')?.controls?.length > 1">
+                                             <span class="item-self-right">
+                                                Delete &nbsp;<i class="fa fa-trash" aria-hidden="true"></i></span>
+                                          </a>
+                                       </div>
+                                       <!-- <div class="col-md-12 mt-2 mb-2"
+                                          *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls['percentage']?.errors">
+                                          <app-control-messages fieldName="Percentage"
+                                             [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.percentage">
+                                          </app-control-messages>
+                                       </div> -->
+
+                                       <div class="col-md-12 mb-3 d-flex justify-content-between"
+                                          *ngIf="nomineeForm?.controls?.items?.controls[i].controls.isGuardian?.value">
+                                          <div class="form-group select-label ">
+                                             <img src="../../../assets/images/minor.svg"> Your nominee is a minor,
+                                             please fill
+                                             guardian’s details
+                                          </div>
+                                       </div>
+
+                                       <div class="col-md-12 mt-2 mb-2">
+                                          <div class="custom-checkbox accept-check colps-check" data-toggle="collapse"
+                                             data-target="#address">
+                                             <input type="checkbox" id="logo1" formControlName="is_same_as_user"
+                                                (change)="checkForSameAsPermenent($event,i)">
+                                             <label class="mb-0">Is nominee address same as the applicant’s
+                                                address?</label>
+                                          </div>
+                                       </div>
+                                    </div>
+
+                                    <div class="row">
+                                       <div class="col-md-12">
+                                          <div id="address" class="collapse"
+                                             [ngClass]="{'show': !nomineeForm?.controls?.items?.controls[i].controls.is_same_as_user?.value}"
+                                             [hidden]="nomineeForm?.controls?.items?.controls[i].controls.is_same_as_user?.value">
+                                             <div class="row">
+                                                <div class="col-md-12">
+                                                   <div class="form-group">
+                                                      <label for="email" class="req-control">Address Line 1</label>
+                                                      <input class="form-control" placeholder="enter address line 1"
+                                                         type="text" formControlName="address_line1">
+                                                      <app-control-messages fieldName="Address Line 1"
+                                                         [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.address_line1">
+                                                      </app-control-messages>
+                                                   </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                   <div class="form-group">
+                                                      <label for="email" class="req-control">Address Line 2</label>
+                                                      <input class="form-control" placeholder="enter address line 2"
+                                                         type="text" formControlName="address_line2">
+                                                      <app-control-messages fieldName="Address Line 2"
+                                                         [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.address_line2">
+                                                      </app-control-messages>
+                                                   </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                   <div class="form-group">
+                                                      <label for="email" class="req-control">Address Line 3</label>
+                                                      <input class="form-control" placeholder="enter address line 3"
+                                                         type="text" formControlName="address_line3">
+                                                      <app-control-messages fieldName="Address Line 3"
+                                                         [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.address_line3">
+                                                      </app-control-messages>
+                                                   </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                   <div class="form-group">
+                                                      <label for="email" class="req-control">PIN code</label>
+                                                      <input class="form-control" placeholder="Enter PIN code"
+                                                         (keyup)="checkPincodeofNominee($event, true, i)" type="text"
+                                                         maxlength="6" formControlName="pin_code">
+                                                      <app-control-messages fieldName="PIN code"
+                                                         [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.pin_code">
+                                                      </app-control-messages>
+                                                   </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                   <div class="form-group">
+                                                      <label for="email" class="req-control">Country</label>
+                                                      <select class="form-control" formControlName="country"
+                                                         [ngClass]="{'grey-placeholder': !nomineeForm?.controls?.items?.controls[i].controls.country?.value}">
+                                                         <option value="">Country</option>
+                                                         <option value="INDIA">India</option>
+                                                         <option value="USA">USA</option>
+                                                      </select>
+                                                      <app-control-messages fieldName="Country"
+                                                         [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.country">
+                                                      </app-control-messages>
+                                                   </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                   <div class="form-group">
+                                                      <label for="email" class="req-control">State</label>
+                                                      <select class="form-control" formControlName="state"
+                                                         [ngClass]="{'grey-placeholder': nomineeForm?.controls?.items?.controls[i].controls.state.value}">
+
+                                                         <option value="">State</option>
+                                                         <option *ngIf="i === 0" [value]="nominee1State">
+                                                            {{nominee1State}} </option>
+                                                         <option *ngIf="i === 1" [value]="nominee2State">
+                                                            {{nominee2State}} </option>
+                                                         <option *ngIf="i === 2" [value]="nominee3State">
+                                                            {{nominee3State}} </option>
+                                                      </select>
+                                                      <app-control-messages fieldName="State"
+                                                         [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.state">
+                                                      </app-control-messages>
+                                                   </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                   <div class="form-group">
+                                                      <label for="email" class="req-control">City</label>
+                                                      <select class="form-control" formControlName="city"
+                                                         [ngClass]="{'grey-placeholder': !nomineeForm?.controls?.items?.controls[i].controls.city.value}">
+                                                         <option value="">City</option>
+                                                         <ng-container *ngIf="i===0">
+                                                            <option [value]="city"
+                                                               *ngFor="let city of nominee1CityList; let j = index">
+                                                               {{city}}</option>
+                                                         </ng-container>
+                                                         <ng-container *ngIf="i===1">
+                                                            <option [value]="city"
+                                                               *ngFor="let city of nominee2CityList; let j = index">
+                                                               {{city}}</option>
+                                                         </ng-container>
+                                                         <ng-container *ngIf="i===2">
+                                                            <option [value]="city"
+                                                               *ngFor="let city of nominee3CityList; let j = index">
+                                                               {{city}}</option>
+                                                         </ng-container>
+                                                      </select>
+                                                      <app-control-messages fieldName="City"
+                                                         [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.city">
+                                                      </app-control-messages>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+
+                                    <div class="row"
+                                       *ngIf="nomineeForm?.controls?.items?.controls[i].controls.isGuardian?.value">
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label for="guardian_first_name" class="ble-labl req-control">Guardian's
+                                                First
+                                                Name</label>
+                                             <input type="text" placeholder="guardian first name"
+                                                formControlName="guardian_first_name" class="form-control">
+                                             <app-control-messages fieldName="Guardian First Name"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_first_name">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label for="guardian_last_name" class="ble-labl req-control">Guardian's
+                                                Last
+                                                Name</label>
+                                             <input type="text" placeholder="guardian first name"
+                                                formControlName="guardian_last_name" class="form-control">
+                                             <app-control-messages fieldName="Guardian First Name"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_last_name">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label for="guardian_dob" class="ble-labl req-control">Guardian's Date Of
+                                                Birth</label>
+                                             <div class="position-relative datepicker">
+                                                <input type="text" class="form-control disabled"
+                                                   placeholder="DD/MM/YYYY" dateFormat="dd/MM/yyyy" mask="d0/M0/0000"
+                                                   formControlName="guardian_dob" ngbDatepicker #d="ngbDatepicker">
+
+                                                <div class="input-group-append calendar">
+                                                   <span class="btn btn-outline-secondary" (click)="d.toggle()"
+                                                      type="button"><img _ngcontent-serverapp-c122=""
+                                                         src="assets/images/calendar.svg"></span>
+                                                </div>
+                                             </div>
+                                             <div
+                                                *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.invalid && (nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.dirty || nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.touched)">
+                                                <div class="error"
+                                                   *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.errors?.required">
+                                                   {{'Date Of Birth is required' | translate}}
+                                                </div>
+                                                <div class="error"
+                                                   *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.errors?.Invaliddob && !nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.errors?.required && !nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.errors?.InvalidAge">
+                                                   {{'Invalid Date Of Birth' | translate}}
+                                                </div>
+                                                <div class="error"
+                                                   *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.errors?.Invaliddob && nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.errors?.InvalidAge">
+                                                   {{'Invalid Date Of Birth' | translate}}
+                                                </div>
+                                                <div class="error"
+                                                   *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.errors?.InvalidAge && !nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.errors?.Invaliddob">
+                                                   {{'Invalid Age' | translate}}
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label for="mrs" class="ble-labl req-control">Relation</label>
+                                             <select class="form-control" placeholder="Select relation"
+                                                formControlName="guardian_nominee_relation">
+                                                <option value="">Select relation </option>
+                                                <option [value]="item.value" *ngFor="let item of relationShipDropDown">
+                                                   {{item.label}}</option>
+                                             </select>
+                                             <app-control-messages fieldName="Relation"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_nominee_relation">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label for="nominee_email" class="req-control">Guardian's Email id</label>
+                                             <input style="text-transform: none;" required
+                                                placeholder="Enter guardian email" type="email"
+                                                formControlName="guardian_email" class="form-control">
+                                             <app-control-messages fieldName="Email"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_email">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label for="mobile_number" class="ble-labl req-control">Guardian's Mobile
+                                                Number</label>
+                                             <input type="text" placeholder="Enter guardian mobile number"
+                                                mask="0000000000" maxlength="10"
+                                                formControlName="guardian_mobile_number" class="form-control">
+                                             <app-control-messages fieldName="Mobile Number"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_mobile_number">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+                                    </div>
+
+                                    <div class="row"
+                                       *ngIf="nomineeForm?.controls?.items?.controls[i].controls.isGuardian?.value">
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label for="mrs" class="ble-labl req-control">Guardian Proof</label>
+                                             <select class="form-control" placeholder="Select relation"
+                                                formControlName="guardian_proof_type">
+                                                <option value="">Select Proof </option>
+                                                <option [value]="item.id"
+                                                   *ngFor="let item of commonConfigFlow?.nomineeProof">
+                                                   {{item?.name}}</option>
+                                             </select>
+                                             <app-control-messages fieldName="Guardian Proof"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_proof_type">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+
+                                    </div>
+
+                                    <div class="row"
+                                       *ngIf="nomineeForm?.controls?.items?.controls[i].controls.isGuardian?.value">
+                                       <div class="col-md-12 mt-2">
+                                          <div class="custom-checkbox accept-check colps-check">
+                                             <input type="checkbox" id="logo2"
+                                                formControlName="guardian_address_same_applicant"
+                                                (change)="checkForSameAsPermenentForGuardian($event,i)">
+                                             <label class="mb-0">Address: Same As Nominee </label>
+                                          </div>
+                                       </div>
+
+                                       <div id="guardian_address" class="collapse"
+                                          [ngClass]="{'show': !nomineeForm?.controls?.items?.controls[i].controls.guardian_address_same_applicant?.value}"
+                                          [hidden]="nomineeForm?.controls?.items?.controls[i].controls.guardian_address_same_applicant?.value">
+                                          <div class="row ml-0">
+                                             <div class="col-md-12">
+                                                <div class="form-group">
+                                                   <label for="email" class="req-control">Address Line 1</label>
+                                                   <input class="form-control" placeholder="enter address line 1"
+                                                      type="text" formControlName="guardian_address_line1">
+                                                   <app-control-messages fieldName="Address Line 1"
+                                                      [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_address_line1">
+                                                   </app-control-messages>
+                                                </div>
+                                             </div>
+                                             <div class="col-md-12">
+                                                <div class="form-group">
+                                                   <label for="email" class="req-control">Address Line 2</label>
+                                                   <input class="form-control" placeholder="enter address line 2"
+                                                      type="text" formControlName="guardian_address_line2">
+                                                   <app-control-messages fieldName="Address Line 2"
+                                                      [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_address_line2">
+                                                   </app-control-messages>
+                                                </div>
+                                             </div>
+                                             <div class="col-md-12">
+                                                <div class="form-group">
+                                                   <label for="email" class="req-control">Address Line 3</label>
+                                                   <input class="form-control" placeholder="enter address line 3"
+                                                      type="text" formControlName="guardian_address_line3">
+                                                   <app-control-messages fieldName="Address Line 3"
+                                                      [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_address_line3">
+                                                   </app-control-messages>
+                                                </div>
+                                             </div>
+
+                                             <div class="col-md-6">
+                                                <div class="form-group">
+                                                   <label for="email" class="req-control">PIN code</label>
+                                                   <input class="form-control" placeholder="Enter PIN code" type="text"
+                                                      maxlength="6" formControlName="guardian_pin_code">
+                                                   <app-control-messages fieldName="PIN code"
+                                                      [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_pin_code">
+                                                   </app-control-messages>
+                                                </div>
+                                             </div>
+                                             <div class="col-md-6">
+                                                <div class="form-group">
+                                                   <label for="email" class="req-control">Country</label>
+                                                   <select class="form-control" formControlName="guardian_country"
+                                                      [ngClass]="{'grey-placeholder': !nomineeForm?.controls?.items?.controls[i].controls.guardian_country?.value}">
+                                                      <option value="">Country</option>
+                                                      <option value="INDIA">India</option>
+                                                      <option value="USA">USA</option>
+                                                   </select>
+                                                   <app-control-messages fieldName="Country"
+                                                      [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_country">
+                                                   </app-control-messages>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+
+                                 </div>
+                              </div>
+                           </div>
+                        </ng-template>
+                     </li>
+                  </ng-container>
+               </ul>
+               <div [ngbNavOutlet]="nav" class="mt-2"></div>
+
+
+
+
+
+
+               <!-- <ngb-tabset #tabset="">
+                  <ng-container formArrayName="items"
+                     *ngFor="let item of nomineeForm?.get('items')?.controls; let i = index; let j = last;">
+                     <ngb-tab id="tab{{i}}">
+                        <ng-template ngbTabTitle>Nominee - {{i+1}}</ng-template>
+                        <ng-template ngbTabContent>
+
+                           <div class="card" [formGroupName]="i">
+
+                              <div class="card-body">
+                                 <div class="reg-card">
+                                    <div class="row">
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label for="nominee_full_name" class="ble-labl req-control">Nominee Full
+                                                Name</label>
+                                             <input type="text" placeholder="Nominee Full Name"
+                                                formControlName="nominee_full_name" class="form-control">
+                                             <app-control-messages fieldName="Nominee Full Name"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.nominee_full_name">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+                                       <div class="col-md-3">
+                                          <div class="form-group">
+                                             <label for="mrs" class="ble-labl req-control">Relation with
+                                                applicant</label>
+                                             <select class="form-control" placeholder="Select relation "
+                                                formControlName="nominee_relation"
+                                                (change)="changeNomineeRelation($event, i)">
+                                                <option value="">Select relation </option>
+                                                <option [value]="item?.value" *ngFor="let item of relationShipDropDown">
+                                                   {{item.label}}</option>
+                                             </select>
+                                             <app-control-messages fieldName="Relation"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.nominee_relation">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+
+                                       <div class="col-md-3"
+                                          *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls?.nominee_relation?.value === 'Others'">
+                                          <div class="form-group">
+                                             <label for="other_nominee_relation" class="ble-labl req-control">
+                                                Other Nominee Relation</label>
+                                             <input type="text" placeholder="Your Nominee Relation"
+                                                formControlName="other_nominee_relation" class="form-control">
+                                             <app-control-messages fieldName="Other Nominee Relation"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.other_nominee_relation">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+                                    </div>
+
+
+                                    <div class="row pt-3">
+                                       <div class="col-md-3 ">
+                                          <div class="form-group">
+                                             <label for="nominee_dob" class="ble-labl req-control">Nominee’s DOB</label>
+                                             <div class="position-relative datepicker">
+                                                <input type="text" (ngModelChange)="checkAge($event, i)"
+                                                   class="form-control" placeholder="DD/MM/YYYY" dateFormat="dd/MM/yyyy"
+                                                   mask="d0/M0/0000" formControlName="nominee_dob" ngbDatepicker
+                                                   #d="ngbDatepicker">
+                                                <div class="input-group-append calendar">
+                                                   <span class="btn btn-outline-secondary" (click)="d.toggle()"
+                                                      type="button"><img _ngcontent-serverapp-c122=""
+                                                         src="assets/images/calendar.svg"></span>
+                                                </div>
+                                             </div>
+
+                                             <div
+                                                *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls['nominee_dob']?.invalid && (nomineeForm?.controls?.items?.controls[i]?.controls['nominee_dob']?.dirty || nomineeForm?.controls?.items?.controls[i]?.controls['nominee_dob']?.touched)">
+                                                <div class="error"
+                                                   *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls['nominee_dob']?.errors?.required">
+                                                   {{'Date Of Birth is required' | translate}}
+                                                </div>
+                                                <div class="error"
+                                                   *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls['nominee_dob']?.errors?.Invaliddob && !nomineeForm?.controls?.items?.controls[i]?.controls['nominee_dob']?.errors?.required">
+                                                   {{'Invalid Date Of Birth' | translate}}
+                                                </div>
+                                                <div class="error"
+                                                   *ngIf="!nomineeForm?.controls?.items?.controls[i]?.controls['nominee_dob']?.errors?.Invaliddob && nomineeForm?.controls?.items?.controls[i]?.controls['nominee_dob']?.errors?.ngbDate['invalid']">
+                                                   {{'Invalid Date Of Birth' | translate}}
+                                                </div>
+
+                                             </div>
+                                       
+                                          </div>
+                                       </div>
+                                       <div class="col-md-3">
+                                          <div class="form-group">
+                                             <label for="nominee_email" class="req-control">Nominee’s email Id</label>
+                                             <input style="text-transform: none;" required
+                                                placeholder="Enter nominee email" type="email"
+                                                formControlName="nominee_email" class="form-control">
+                                             <app-control-messages fieldName="Email"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.nominee_email">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+                                       <div class="col-md-3 ">
+                                          <div class="form-group">
+                                             <label for="mobile_number" class="ble-labl req-control">Nominee’s mobile
+                                                no</label>
+                                             <input type="tel" placeholder="Enter nominee mobile number" maxlength="10"
+                                                mask="0000000000" formControlName="nominee_mobile_number"
+                                                class="form-control">
+                                             <app-control-messages fieldName="Mobile Number"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.nominee_mobile_number">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+                                       <div class="col-md-3">
+                                          <div class="form-group">
+                                             <label for="mrs" class="ble-labl req-control">Nominee’s Id proof</label>
+                                             <select class="form-control" placeholder="Select relation"
+                                                formControlName="nominee_proof_type">
+                                                <option value="">Select Proof </option>
+                                                <option [value]="item.id"
+                                                   *ngFor="let item of commonConfigFlow?.nomineeProof">
+                                                   {{item?.name}}</option>
+                                             </select>
+                                             <app-control-messages fieldName="Proof"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.nominee_proof_type">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+                                     
+                                    </div>
+                                    <div class="row pt-2">
+                                       <div class="col-md-4 col-6"
+                                          *ngIf="nomineeForm?.get('items')?.controls?.length > 1">
+                                          <div class="form-group">
+                                             <label for="nominee_name" class="ble-labl req-control">Nominee’s
+                                                share</label>
+                                             <input type="text" placeholder="Percentage" (keyup)="makeValidation(i)"
+                                                formControlName="percentage" class="form-control nominee-percentage">
+
+                                          </div>
+                                       </div>
+                                       <div class="col-md-8 col-6 nominate-delete-btn ustify-content-end text-right">
+                                          <a (click)="removeNewNominee(i)"
+                                             *ngIf="nomineeForm?.get('items')?.controls?.length > 1">
+                                             <span class="item-self-right">
+                                                Delete &nbsp;<i class="fa fa-trash" aria-hidden="true"></i></span>
+                                          </a>
+                                       </div>
+                                       <div class="col-md-12 mt-2 mb-2"
+                                          *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls['percentage']?.errors">
+                                          <app-control-messages fieldName="Percentage"
+                                             [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.percentage">
+                                          </app-control-messages>
+                                       </div>
+
+                                       <div class="col-md-12 mb-3 d-flex justify-content-between"
+                                          *ngIf="nomineeForm?.controls?.items?.controls[i].controls.isGuardian?.value">
+                                          <div class="form-group select-label ">
+                                             <img src="../../../assets/images/minor.svg"> Your nominee is a minor,
+                                             please fill
+                                             guardian’s details
+                                          </div>
+                                       </div>
+
+                                       <div class="col-md-12 mt-2 mb-2">
+                                          <div class="custom-checkbox accept-check colps-check" data-toggle="collapse"
+                                             data-target="#address">
+                                             <input type="checkbox" id="logo1" formControlName="is_same_as_user"
+                                                (change)="checkForSameAsPermenent($event,i)">
+                                             <label class="mb-0">Is nominee address same as the applicant’s
+                                                address?</label>
+                                          </div>
+                                       </div>
+                                    </div>
+
+                                    <div class="row">
+                                       <div class="col-md-12">
+                                          <div id="address" class="collapse"
+                                             [ngClass]="{'show': !nomineeForm?.controls?.items?.controls[i].controls.is_same_as_user?.value}"
+                                             [hidden]="nomineeForm?.controls?.items?.controls[i].controls.is_same_as_user?.value">
+                                             <div class="row">
+                                                <div class="col-md-12">
+                                                   <div class="form-group">
+                                                      <label for="email" class="req-control">Address Line 1</label>
+                                                      <input class="form-control" placeholder="enter address line 1"
+                                                         type="text" formControlName="address_line1">
+                                                      <app-control-messages fieldName="Address Line 1"
+                                                         [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.address_line1">
+                                                      </app-control-messages>
+                                                   </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                   <div class="form-group">
+                                                      <label for="email" class="req-control">Address Line 2</label>
+                                                      <input class="form-control" placeholder="enter address line 2"
+                                                         type="text" formControlName="address_line2">
+                                                      <app-control-messages fieldName="Address Line 2"
+                                                         [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.address_line2">
+                                                      </app-control-messages>
+                                                   </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                   <div class="form-group">
+                                                      <label for="email" class="req-control">Address Line 3</label>
+                                                      <input class="form-control" placeholder="enter address line 3"
+                                                         type="text" formControlName="address_line3">
+                                                      <app-control-messages fieldName="Address Line 3"
+                                                         [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.address_line3">
+                                                      </app-control-messages>
+                                                   </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                   <div class="form-group">
+                                                      <label for="email" class="req-control">PIN code</label>
+                                                      <input class="form-control" placeholder="Enter PIN code"
+                                                         (keyup)="checkPincodeofNominee($event, true, i)" type="text"
+                                                         maxlength="6" formControlName="pin_code">
+                                                      <app-control-messages fieldName="PIN code"
+                                                         [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.pin_code">
+                                                      </app-control-messages>
+                                                   </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                   <div class="form-group">
+                                                      <label for="email" class="req-control">Country</label>
+                                                      <select class="form-control" formControlName="country"
+                                                         [ngClass]="{'grey-placeholder': !nomineeForm?.controls?.items?.controls[i].controls.country?.value}">
+                                                         <option value="">Country</option>
+                                                         <option value="INDIA">India</option>
+                                                         <option value="USA">USA</option>
+                                                      </select>
+                                                      <app-control-messages fieldName="Country"
+                                                         [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.country">
+                                                      </app-control-messages>
+                                                   </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                   <div class="form-group">
+                                                      <label for="email" class="req-control">State</label>
+                                                      <select class="form-control" formControlName="state"
+                                                         [ngClass]="{'grey-placeholder': nomineeForm?.controls?.items?.controls[i].controls.state.value}">
+
+                                                         <option value="">State</option>
+                                                         <option *ngIf="i === 0" [value]="nominee1State">
+                                                            {{nominee1State}} </option>
+                                                         <option *ngIf="i === 1" [value]="nominee2State">
+                                                            {{nominee2State}} </option>
+                                                         <option *ngIf="i === 2" [value]="nominee3State">
+                                                            {{nominee3State}} </option>
+                                                      </select>
+                                                      <app-control-messages fieldName="State"
+                                                         [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.state">
+                                                      </app-control-messages>
+                                                   </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                   <div class="form-group">
+                                                      <label for="email" class="req-control">City</label>
+                                                      <select class="form-control" formControlName="city"
+                                                         [ngClass]="{'grey-placeholder': !nomineeForm?.controls?.items?.controls[i].controls.city.value}">
+                                                         <option value="">City</option>
+                                                         <ng-container *ngIf="i===0">
+                                                            <option [value]="city"
+                                                               *ngFor="let city of nominee1CityList; let j = index">
+                                                               {{city}}</option>
+                                                         </ng-container>
+                                                         <ng-container *ngIf="i===1">
+                                                            <option [value]="city"
+                                                               *ngFor="let city of nominee2CityList; let j = index">
+                                                               {{city}}</option>
+                                                         </ng-container>
+                                                         <ng-container *ngIf="i===2">
+                                                            <option [value]="city"
+                                                               *ngFor="let city of nominee3CityList; let j = index">
+                                                               {{city}}</option>
+                                                         </ng-container>
+                                                      </select>
+                                                      <app-control-messages fieldName="City"
+                                                         [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.city">
+                                                      </app-control-messages>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+
+                                    <div class="row"
+                                       *ngIf="nomineeForm?.controls?.items?.controls[i].controls.isGuardian?.value">
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label for="guardian_first_name" class="ble-labl req-control">Guardian's
+                                                First
+                                                Name</label>
+                                             <input type="text" placeholder="guardian first name"
+                                                formControlName="guardian_first_name" class="form-control">
+                                             <app-control-messages fieldName="Guardian First Name"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_first_name">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label for="guardian_last_name" class="ble-labl req-control">Guardian's
+                                                Last
+                                                Name</label>
+                                             <input type="text" placeholder="guardian first name"
+                                                formControlName="guardian_last_name" class="form-control">
+                                             <app-control-messages fieldName="Guardian First Name"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_last_name">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+                                 
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label for="guardian_dob" class="ble-labl req-control">Guardian's Date Of
+                                                Birth</label>
+                                             <div class="position-relative datepicker">
+                                                <input type="text" class="form-control" placeholder="DD/MM/YYYY"
+                                                   dateFormat="dd/MM/yyyy" mask="d0/M0/0000"
+                                                   formControlName="guardian_dob" ngbDatepicker #d="ngbDatepicker">
+                                                <div class="input-group-append calendar">
+                                                   <span class="btn btn-outline-secondary" (click)="d.toggle()"
+                                                      type="button"><img _ngcontent-serverapp-c122=""
+                                                         src="assets/images/calendar.svg"></span>
+                                                </div>
+                                             </div>
+                                             <div
+                                                *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.invalid && (nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.dirty || nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.touched)">
+                                                <div class="error"
+                                                   *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.errors?.required">
+                                                   {{'Date Of Birth is required' | translate}}
+                                                </div>
+                                                <div class="error"
+                                                   *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.errors?.Invaliddob && !nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.errors?.required && !nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.errors?.InvalidAge">
+                                                   {{'Invalid Date Of Birth' | translate}}
+                                                </div>
+                                                <div class="error"
+                                                   *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.errors?.Invaliddob && nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.errors?.InvalidAge">
+                                                   {{'Invalid Date Of Birth' | translate}}
+                                                </div>
+                                                <div class="error"
+                                                   *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.errors?.InvalidAge && !nomineeForm?.controls?.items?.controls[i]?.controls['guardian_dob']?.errors?.Invaliddob">
+                                                   {{'Invalid Age' | translate}}
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label for="mrs" class="ble-labl req-control">Relation</label>
+                                             <select class="form-control" placeholder="Select relation"
+                                                formControlName="guardian_nominee_relation">
+                                                <option value="">Select relation </option>
+                                                <option [value]="item.value" *ngFor="let item of relationShipDropDown">
+                                                   {{item.label}}</option>
+                                             </select>
+                                             <app-control-messages fieldName="Relation"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_nominee_relation">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label for="nominee_email" class="req-control">Guardian's Email id</label>
+                                             <input style="text-transform: none;" required
+                                                placeholder="Enter guardian email" type="email"
+                                                formControlName="guardian_email" class="form-control">
+                                             <app-control-messages fieldName="Email"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_email">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label for="mobile_number" class="ble-labl req-control">Guardian's Mobile
+                                                Number</label>
+                                             <input type="text" placeholder="Enter guardian mobile number"
+                                                mask="0000000000" maxlength="10"
+                                                formControlName="guardian_mobile_number" class="form-control">
+                                             <app-control-messages fieldName="Mobile Number"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_mobile_number">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+                                    </div>
+
+                                    <div class="row"
+                                       *ngIf="nomineeForm?.controls?.items?.controls[i].controls.isGuardian?.value">
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label for="mrs" class="ble-labl req-control">Guardian Proof</label>
+                                             <select class="form-control" placeholder="Select relation"
+                                                formControlName="guardian_proof_type">
+                                                <option value="">Select Proof </option>
+                                                <option [value]="item.id"
+                                                   *ngFor="let item of commonConfigFlow?.nomineeProof">
+                                                   {{item?.name}}</option>
+                                             </select>
+                                             <app-control-messages fieldName="Guardian Proof"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_proof_type">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+                                     
+                                    </div>
+
+                                    <div class="row"
+                                       *ngIf="nomineeForm?.controls?.items?.controls[i].controls.isGuardian?.value">
+                                       <div class="col-md-12 mt-2">
+                                          <div class="custom-checkbox accept-check colps-check">
+                                             <input type="checkbox" id="logo2"
+                                                formControlName="guardian_address_same_applicant"
+                                                (change)="checkForSameAsPermenentForGuardian($event,i)">
+                                             <label class="mb-0">Address: Same As Nominee </label>
+                                          </div>
+                                       </div>
+
+                                       <div id="guardian_address" class="collapse"
+                                          [ngClass]="{'show': !nomineeForm?.controls?.items?.controls[i].controls.guardian_address_same_applicant?.value}"
+                                          [hidden]="nomineeForm?.controls?.items?.controls[i].controls.guardian_address_same_applicant?.value">
+                                          <div class="row ml-0">
+                                             <div class="col-md-12">
+                                                <div class="form-group">
+                                                   <label for="email" class="req-control">Address Line 1</label>
+                                                   <input class="form-control" placeholder="enter address line 1"
+                                                      type="text" formControlName="guardian_address_line1">
+                                                   <app-control-messages fieldName="Address Line 1"
+                                                      [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_address_line1">
+                                                   </app-control-messages>
+                                                </div>
+                                             </div>
+                                             <div class="col-md-12">
+                                                <div class="form-group">
+                                                   <label for="email" class="req-control">Address Line 2</label>
+                                                   <input class="form-control" placeholder="enter address line 2"
+                                                      type="text" formControlName="guardian_address_line2">
+                                                   <app-control-messages fieldName="Address Line 2"
+                                                      [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_address_line2">
+                                                   </app-control-messages>
+                                                </div>
+                                             </div>
+                                             <div class="col-md-12">
+                                                <div class="form-group">
+                                                   <label for="email" class="req-control">Address Line 3</label>
+                                                   <input class="form-control" placeholder="enter address line 3"
+                                                      type="text" formControlName="guardian_address_line3">
+                                                   <app-control-messages fieldName="Address Line 3"
+                                                      [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_address_line3">
+                                                   </app-control-messages>
+                                                </div>
+                                             </div>
+
+                                             <div class="col-md-6">
+                                                <div class="form-group">
+                                                   <label for="email" class="req-control">PIN code</label>
+                                                   <input class="form-control" placeholder="Enter PIN code" type="text"
+                                                      maxlength="6" formControlName="guardian_pin_code">
+                                                   <app-control-messages fieldName="PIN code"
+                                                      [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_pin_code">
+                                                   </app-control-messages>
+                                                </div>
+                                             </div>
+                                             <div class="col-md-6">
+                                                <div class="form-group">
+                                                   <label for="email" class="req-control">Country</label>
+                                                   <select class="form-control" formControlName="guardian_country"
+                                                      [ngClass]="{'grey-placeholder': !nomineeForm?.controls?.items?.controls[i].controls.guardian_country?.value}">
+                                                      <option value="">Country</option>
+                                                      <option value="INDIA">India</option>
+                                                      <option value="USA">USA</option>
+                                                   </select>
+                                                   <app-control-messages fieldName="Country"
+                                                      [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_country">
+                                                   </app-control-messages>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                   
+                                 </div>
+                              </div>
+                           </div>
+                        </ng-template>
+                     </ngb-tab>
+                  </ng-container>
+<<<<<<< HEAD
+               </ngb-tabset> -->
+
+               <div class="error" *ngIf="percentageError">{{percentageError}}</div>
+               <span class="reg-card d-flex" *ngIf="nomineeForm?.get('items')?.controls?.length < 3">
+                  <a type="button" (click)="addNewNominee()" class="btn new-add-btn add-new-btn"> <i class="fa fa-plus"
+                        aria-hidden="true"></i> Add New </a>
+               </span>
+               <div class="container footer-dash" *ngIf="isNomineeAvailable">
+                  <hr>
+                  <div class="dashboard-btn">
+                     <div class="reg-card welcome-btn">
+                        <button type="submit" class="btn" [ngClass]="{'disable': !nomineeForm.valid}">Save & Continue
+                        </button>
+                     </div>
+                  </div>
+               </div>
+            </form>
+            <div class="reg-card mt-4 note-tag nominate-tag" *ngIf="nomineeDocumentUploadNote">
+               <div class="mb-0" [innerHTML]="nomineeDocumentUploadNote"></div>
+            </div>
+         </div>
+         <div class="container footer-dash" *ngIf="!isNomineeAvailable">
+            <hr>
+            <div class="dashboard-btn">
+               <div class="reg-card welcome-btn">
+                  <button type="button" class="btn" (click)="onSubmit()">Save & continue
+                  </button>
+               </div>
+            </div>
+         </div>
+
+      </div>
+   </div>
+</div>
+
+<ng-template #deleteNominee let-c="close" let-d="dismiss" class="aadhar-popup">
+   <div class="modal-header yellow common-header">
+      <div class="popup-header">
+         <!-- <span>{{'Confirmation' | translate}}</span> -->
+         <h4 class="modal-title">{{'Delete nominee' | translate}}</h4>
+      </div>
+      <div class="cross-icon">
+         <a (click)="c('cancel')" href="javascript:void(0)"> <img src="assets/images/cross-icon.png"></a>
+      </div>
+   </div>
+
+   <div class="modal-boy">
+
+      <p class="wr-msg mb-2">Are you sure you want to delete the selected nominee details?</p>
+      <br>
+   </div>
+   <div class="modal-footer d-flex justify-content-between">
+      <a class="btn modal-btn-continue" (click)="c('cancel')" href="javascript:void(0)">
+         {{'No' | translate}}
+      </a>
+      <a class="btn modal-btn-cancel" (click)="c('ok')" href="javascript:void(0)">{{'Yes, Delete' | translate}}</a>
+   </div>
+</ng-template>

@@ -1,0 +1,388 @@
+<section class="reg-main1" style="padding:100px 0 105px">
+  <div class="container ">
+    <div class="row reg-card">
+
+
+      <div class="col-md-12 align-items-center" *ngIf="!loader">
+        <h4 class="tb-subtitle text-center">{{'Upload Documents' | translate}}</h4>
+        <p class="text-center">Upload the following documents and we promise to verify them in a jiffy!</p>
+        <div class="upload-doc align-items-center ">
+          <div class="doc-btn">
+            <ng-container *ngFor="let item of getDocumentAvailableList">
+              <button [ngStyle]="{'display': item?.text?'block':'flex'}" style="display: block;"
+                *ngIf="item?.is_visible && item?.type === 'document'" class="btn-doc m-auto"
+                (click)="openDocumentPopupModal(item?.document_name, item?.document_modal_title, item?.document_status, item)">
+                <ng-container *ngIf="item?.text">
+                  <div [ngStyle]="{'display': item?.text?'flex':'flex'}" style="width: 100%;">
+                    <span class="align-items-start">
+                      {{item?.document_button_lable}}
+                    </span>
+                    <span class="align-items-end">
+                      <div class="doc-status d-flex align-items-center">
+                        <span *ngIf="item?.is_optional" class="d-flex align-items-center ml-2 ">
+                          (Optional)
+                        </span>
+                        <span *ngIf="item?.document_status === 'verified'"
+                          class="d-flex align-items-center doc-verify"><img
+                            src="assets/images/dashboard/upload-verified.svg">Verified</span>
+                        <span *ngIf="item?.document_status === 'uploaded'"
+                          class="d-flex align-items-center doc-success"><img
+                            src="assets/images/dashboard/upload-suc.svg">Uploaded</span>
+                        <i class="fa fa-angle-right"></i>
+                      </div>
+                    </span>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="!item?.text">
+                  <span class="align-items-start">
+                    {{item?.document_button_lable}}
+                  </span>
+                  <span class="align-items-end">
+                    <div class="doc-status d-flex align-items-center">
+                      <span *ngIf="item?.is_optional" class="d-flex align-items-center ml-2">
+                        (Optional)
+                      </span>
+                      <span *ngIf="item?.document_status === 'verified'"
+                        class="d-flex align-items-center doc-verify"><img
+                          src="assets/images/dashboard/upload-verified.svg">Verified</span>
+                      <span *ngIf="item?.document_status === 'uploaded'"
+                        class="d-flex align-items-center doc-success"><img
+                          src="assets/images/dashboard/upload-suc.svg">Uploaded</span>
+                      <i class="fa fa-angle-right"></i>
+                    </div>
+                  </span>
+                </ng-container>
+
+                <div class="align-items-start text_description" *ngIf="item?.text">
+                  {{item?.text}}
+                </div>
+              </button>
+            </ng-container>
+          </div>
+          <!-- <div class="form-group">
+          <button (click)="submitDocumentUpload()" type="button" class="btn" >{{'Submit' | translate}}
+            <img src="assets/images/arrow-right.svg" alt="">
+          </button>
+        </div> -->
+        </div>
+      </div>
+      <div class="col-md-12 p-5" *ngIf="loader" style="text-align: center; margin: 10% auto; color: #09B7DD;">
+        <span> <i class="fa fa-circle-o-notch fa-spin"></i> </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<ng-template #fileuploadAadharpopup let-c="close" let-d="dismiss">
+
+  <div class="modal-body p-0 payment-popup uploaddoc-popup">
+    <div class="d-flex justify-content-between align-items-end main-header">
+      <div class="popup-header">
+        <span>Upload Document</span>
+        <h4 class="modal-title">{{nameOfTitleDocument}}</h4>
+      </div>
+      <div class="star">
+        <img src="assets/images/doc.svg">
+      </div>
+    </div>
+    <h4 class="border-btm-none" *ngIf="documentDetails?.proof_name">Please upload {{documentDetails?.proof_name}}</h4>
+    <h4 class="border-btm-none" *ngIf="documentDetails?.guardian_proof_name">Please upload
+      {{documentDetails?.guardian_proof_name}}</h4>
+    <p class="border-btm-none" *ngIf="!documentDetails?.detailText">Hello! Please take a picture and click on Save and
+      Continue to upload the document. Make
+      sure
+      the picture is
+      clear (not cut or blurry), otherwise application will be rejected.</p>
+
+
+    <div class="border-none" *ngIf="nameOfDocument === 'cancelled_cheque'">
+      <p> Please upload a clear copy of your cancelled cheque with your name printed on it <br>
+        {{verifiedSteps?.firstName || ''}} {{verifiedSteps?.middleName || ''}} {{verifiedSteps?.lastName || ''}} </p>
+    </div>
+    <div class="border-none" [innerHTML]="documentDetails?.detailText"
+      *ngIf="documentDetails?.detailText && nameOfDocument !== 'cancelled_cheque'"></div>
+
+    <div class="form-group col-md-6 pr-1 pl-0" *ngIf="isDocsProofRequired">
+      <label for="email" class="req-control">Document Type</label>
+      <select class="form-control" [(ngModel)]="isDocsDropDownSelected" style="color: #000;">
+        <option value="" selected>-- select -- </option>
+        <option [value]="item?.id" *ngFor="let item of isDocsDropDown">{{item?.name}}</option>
+      </select>
+      <div class="error" *ngIf="!isDocsDropDownSelected">Please select type</div>
+    </div>
+
+    <!--------------------- Webcome code: START --------------------->
+    <div *ngIf="clickedWebcamPicture && !fileUploading && !viewSectionOfImage">
+      <div class="snapshot row mr-md-0">
+        <!-- <div class="col-md-10" *ngIf="!liveWebcam">
+          <div class="upload-doc-box">
+            <img [src]="webCamMediaPriview" />
+            <span (click)="removeWebCamMedia(webCamMediaPriview)"><img src="assets/images/edit.svg">Edit
+              Image/File</span>
+          </div>
+        </div> -->
+
+        <div class="col-md-10" *ngIf="!liveWebcam">
+          <div class="row">
+            <div class="col-md-3">
+              <div>Preview</div>
+              <button class="view-img" *ngIf="!liveWebcam">
+                <div class="img-td-div">
+                  <img [src]="croppedImage" />
+                </div>
+              </button>
+            </div>
+            <div class="col-md-12">
+              <div class="mt-1"><span>You can crop the image to ensure readability but make sure the document doesn’t
+                  get cut!</span></div>
+              <image-cropper [imageURL]="webCamMediaPriview" [maintainAspectRatio]="false" [aspectRatio]="1 / 1"
+                format="jpeg" [imageQuality]="50" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
+                (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()" [canvasRotation]="canvasRotation"
+                [transform]="transform"></image-cropper>
+              <div class="row form-group text-center justify-content-center">
+                <button type="button" class="btn m-1" style="background-color: #1d1d1d;color:white;right: 0;"
+                  (click)="cancelCropped()">{{'Cancel' | translate}}
+                </button>
+                <button type="button" class="btn m-1" style="background-color: #09B7DD;color:white;right: 0;"
+                  (click)="confirmCropped()">{{'Confirm' | translate}}
+                </button>
+                <button type="button" class="btn m-1"
+                  style="background-color: #1d1d1d;color:white;right: 0;float: right;margin:0 0 0 11px;"
+                  (click)="rotateLeft()">Rotate left</button>
+                <button type="button" class="btn m-1"
+                  style="background-color: #1d1d1d;color:white;right: 0;float: right;margin:0 0 0 11px;"
+                  (click)="rotateRight()">Rotate right</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-10" *ngIf="liveWebcam">
+          <div class="upload-doc-box d-flex justify-content-center align-items-center">
+            <webcam [trigger]="triggerObservable" (imageCapture)="handleImage($event)"
+              [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
+              [videoOptions]="videoOptions" [imageQuality]="1" (cameraSwitched)="cameraWasSwitched($event)"
+              (initError)="handleInitError($event)" class="webcam">
+            </webcam>
+          </div>
+        </div>
+
+        <div class="col-md-2 p-md-0">
+          <div class="scroll-upload">
+            <button *ngIf="liveWebcam" class="capture-btn" (click)="triggerSnapshot();">Capture</button>
+            <button *ngIf="nameOfDocument !=='photograph'" class="add-img"
+              (click)="addNewDocumentImage()"><span>+</span>Add New
+              Image/File</button>
+            <button class="view-img" *ngFor="let mediaPreview of webCamMediaList; let i = index">
+              <div class="img-td-div" (click)="webCamShowMediaBig(i)">
+                <img src="{{ mediaPreview }}" alt="img">
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <h4 *ngIf="errors.length > 0">Messages:</h4>
+      <ul *ngFor="let error of errors">
+        <li>{{error | json}}</li>
+      </ul>
+    </div>
+    <!--------------------- Webcome code: End --------------------->
+
+
+    <!----------------- UPLOAD image/file aadhar: START -------------->
+
+    <div class="row mr-md-0" *ngIf="!viewSectionOfImage">
+      <div class="col-md-10" *ngIf="!fileUploading">
+        <div class="upload-box"
+          *ngIf="addNewAadhaarImageUpload && !imageChangedEvent && nameOfDocument !=='photograph' && isUseCamera && isUploadFile">
+          <a (click)="enableWebcamPicture()" href="javascript:void(0)" *ngIf="nameOfDocument !=='photograph'"
+            class="d-flex flex-column"><img src="assets/images/dashboard/camera.svg">
+            <div class="d-flex align-items-center"><img src="assets/images/dashboard/camera-sml.svg">Use Camera
+            </div>
+          </a>
+          <div *ngIf="nameOfDocument !=='photograph'" class="or-text"><span>OR</span></div>
+          <a *ngIf="nameOfDocument !=='photograph'" href="javascript:void(0)"
+            class="d-flex flex-column align-items-center upload-file"><img src="assets/images/dashboard/file-minus.svg">
+            <input type="file" ng2FileSelect [uploader]="uploader" multiple>
+            <div class="d-flex"><img src="assets/images/dashboard/upload.svg">Upload File</div>
+            <input type="file" (change)="fileChangeEvent($event)" />
+          </a>
+          <a (click)="enableWebcamPicture()" href="javascript:void(0)" *ngIf="nameOfDocument ==='photograph'"
+            style="margin: 0 auto;"><img src="assets/images/dashboard/camera.svg">
+            <div class="align-items-center"><img style="margin:5% 25%" src="assets/images/dashboard/camera-sml.svg">Use
+              Camera </div>
+          </a>
+        </div>
+
+        <div class="upload-box"
+          *ngIf="addNewAadhaarImageUpload && !imageChangedEvent && nameOfDocument !=='photograph' && isUseCamera && !isUploadFile">
+          <a (click)="enableWebcamPicture()" href="javascript:void(0)" *ngIf="nameOfDocument ==='photograph'"
+            style="margin: 0 auto;width: 150px;">
+            <img src="assets/images/dashboard/camera.svg" style="width: 100%;">
+            <div class="align-items-center"><img src="assets/images/dashboard/camera-sml.svg">Use Camera </div>
+          </a>
+        </div>
+
+        <div class="upload-box"
+          *ngIf="addNewAadhaarImageUpload && !imageChangedEvent && nameOfDocument !=='photograph' && !isUseCamera && isUploadFile">
+          <!-- <a (click)="enableWebcamPicture()" href="javascript:void(0)" *ngIf="nameOfDocument ==='photograph'" style="margin: 0 auto;width: 150px;">
+            <img src="assets/images/dashboard/camera.svg" style="width: 100%;">
+            <div class="align-items-center"><img src="assets/images/dashboard/upload.svg">Upload File </div>
+          </a> -->
+          <a href="javascript:void(0)" class="d-flex flex-column align-items-center upload-file"
+            style="margin: 0 auto;">
+            <img src="assets/images/dashboard/file-minus.svg" style="width: 100%;">
+            <input type="file" ng2FileSelect [uploader]="uploader" multiple>
+            <input type="file" (change)="fileChangeEvent($event)" />
+            <div class="align-items-center"><img src="assets/images/dashboard/upload.svg">Upload File</div>
+          </a>
+        </div>
+
+        <div class="upload-box"
+          *ngIf="addNewAadhaarImageUpload && !imageChangedEvent && nameOfDocument ==='photograph'">
+          <a (click)="enableWebcamPicture()" href="javascript:void(0)" *ngIf="nameOfDocument ==='photograph'"
+            style="margin: 0 auto;width: 150px;text-align: center;">
+            <img src="assets/images/dashboard/camera.svg" style="width: 100%;">
+            <div class="align-items-center"><img src="assets/images/dashboard/camera-sml.svg">Use Camera </div>
+          </a>
+        </div>
+
+
+        <div class="upload-doc-box d-flex justify-content-center align-items-center"
+          *ngIf="!addNewAadhaarImageUpload && !clickedWebcamPicture">
+          <img *ngIf="aadharDisplayImage?.contentType !== 'application/pdf'" src="{{aadharDisplayImage?.file}}">
+          <img *ngIf="aadharDisplayImage?.contentType === 'application/pdf'" src="assets/images/pdf_icon.png"
+            style="width: 100px;object-fit: contain;">
+          <span (click)="removeEditMedia(aadharDisplayImage?.file)"><img src="assets/images/edit.svg">Edit
+            Image/File</span>
+        </div>
+      </div>
+
+      <div class="col-md-10" *ngIf="fileUploading">
+        <div class="upload-box upload-progress">
+          <h5>Uploading File...</h5>
+          <div class="progress-ratio d-flex justify-content-between"><span>
+              Uploading...</span><span>{{uploadProgress}} %</span></div>
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploadProgress + '%' }"></div>
+          </div>
+          <p>Give us a moment to upload your documents</p>
+        </div>
+      </div>
+
+      <div class="col-md-10" *ngIf="imageChangedEvent">
+        <div class="row">
+          <div class="col-md-3">
+            <div>Preview</div>
+            <button class="view-img" *ngIf="imageChangedEvent">
+              <div class="img-td-div">
+                <img [src]="croppedImage" />
+              </div>
+            </button>
+          </div>
+          <div class="col-md-12">
+            <div class="mt-1"><span>You can crop the image to ensure readability but make sure the document doesn’t get
+                cut!</span></div>
+            <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="false" [aspectRatio]="1 / 1"
+              format="jpeg" [imageQuality]="50" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
+              (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()" [canvasRotation]="canvasRotation"
+              [transform]="transform"></image-cropper>
+            <div class="row form-group text-center justify-content-center">
+              <button type="button" class="btn m-1" style="background-color: #1d1d1d;color:white;right: 0;"
+                (click)="cancelCropped()">{{'Cancel' | translate}}
+              </button>
+              <button type="button" class="btn m-1" style="background-color: #09B7DD;color:white;right: 0;"
+                (click)="confirmCropped()">{{'Confirm' | translate}}
+              </button>
+
+              <button type="button" class="btn m-1"
+                style="background-color: #1d1d1d;color:white;right: 0;float: right;margin:0 0 0 11px;"
+                (click)="rotateLeft()" *ngIf="imageChangedEvent">Rotate left</button>
+              <button type="button" class="btn m-1"
+                style="background-color: #1d1d1d;color:white;right: 0;float: right;margin:0 0 0 11px;"
+                (click)="rotateRight()" *ngIf="imageChangedEvent">Rotate right</button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="col-md-2 p-md-0" *ngIf="!clickedWebcamPicture">
+        <div class="scroll-upload">
+          <button class="add-img" (click)="addNewDocumentImage()"
+            *ngIf="mediaPreviews?.length && maxUploadLimit > mediaPreviews?.length"><span>+</span>Add New
+            Image/File</button>
+          <button class="view-img" *ngFor="let mediaPreview of mediaPreviews; let i = index">
+            <div class="img-td-div" (click)="documentShowBigMedia(i,true)">
+
+              <img *ngIf="mediaPreview?.contentType !== 'application/pdf'" src="{{ mediaPreview?.file }}" alt="img">
+              <img class="pdf-listview" *ngIf="mediaPreview?.contentType === 'application/pdf'"
+                src="assets/images/pdf_icon.png" alt="img">
+            </div>
+          </button>
+        </div>
+      </div>
+
+    </div>
+    <!----------------- UPLOAD image/file aadhar: END -------------->
+
+    <!----------------- VIEW image/file : START -------------->
+
+    <div class="row mr-md-0" *ngIf="viewSectionOfImage">
+      <div class="col-md-10" *ngIf="!fileUploading">
+        <div class="upload-doc-box"
+          *ngIf="viewPreviewDisplayImage?.content_type === 'image/jpeg' || viewPreviewDisplayImage?.content_type === 'image/jpg' || viewPreviewDisplayImage?.content_type === 'image/png'">
+          <img src="{{viewPreviewDisplayImage?.url}}">
+          <span *ngIf="!isDocumentVerified" (click)="removeViewSectionMedia(viewPreviewDisplayImage?.id)">
+            <img src="assets/images/edit.svg">Remove Image/File</span>
+        </div>
+
+        <div class="upload-doc-box" *ngIf="viewPreviewDisplayImage?.content_type === 'application/pdf'">
+          <iframe [src]="viewPreviewDisplayImage?.url | safeUrl" height="100%" width="100%"></iframe>
+          <span *ngIf="!isDocumentVerified" (click)="removeViewSectionMedia(viewPreviewDisplayImage?.id)">
+            <img src="assets/images/edit.svg">Remove Image/File</span>
+        </div>
+      </div>
+
+      <div class="col-md-2 p-md-0">
+        <div class="scroll-upload">
+          <button *ngIf="!isDocumentVerified && maxUploadLimit > mediaPreviews?.length" class="add-img"
+            (click)="addNewDocumentImage()"><span>+</span>Add New
+            Image/File</button>
+          <button class="view-img" *ngFor="let mediaPreview of viewMediaPreviewsList; let i = index">
+            <div class="img-td-div" (click)="previewImageBig(i)">
+              <img *ngIf="mediaPreview?.content_type !== 'application/pdf'" src="{{ mediaPreview?.url }}" alt="img">
+              <img class="pdf-listview" *ngIf="mediaPreview?.content_type === 'application/pdf'"
+                src="assets/images/pdf_icon.png" alt="img">
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!----------------- VIEW image/file : END -------------->
+    <div class="row mr-md-0 mb-2" *ngIf="nameOfDocument ==='photograph'">
+      <div class="col-md-10 border-none">
+        <p class="mb-1 pb-0 border-none">{{'share_photocapture_link_text' | translate}}</p>
+      </div>
+      <a href="javascript::void(0);" class="mr-2 ml-3" (click)="sharePhotoCaptureLink()">Share Photo Capture Link</a>
+    </div>
+
+    <div class="modal-footer d-flex justify-content-between">
+      <a class="btn modal-btn-cancel" (click)="c('cancel')" href="javascript:void(0)">{{'Cancel' | translate}}</a>
+      <a *ngIf="!clickedWebcamPicture" [ngClass]="{'disabled': !mediaPreviews.length}" class="btn modal-btn-continue"
+        (click)="submitDocumentUploadModalCropped()" href="javascript:void(0)">
+        {{'Save & Continue' | translate}}
+      </a>
+      <a *ngIf="clickedWebcamPicture" [ngClass]="{'disabled': !webCamMediaList?.length}" class="btn modal-btn-continue"
+        (click)="submitWebCamUploadModal()" href="javascript:void(0)">
+        {{'Save & Continue' | translate}}
+      </a>
+    </div>
+  </div>
+</ng-template>

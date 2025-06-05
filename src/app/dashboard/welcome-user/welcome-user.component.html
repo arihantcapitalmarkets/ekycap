@@ -1,0 +1,186 @@
+<div class="card-body pb-4 mb-4">
+  <!-- <div class="tb-title">
+    <h3><span>Application Id :</span> {{userInfo?.appId | uppercase}}</h3>
+  </div> -->
+  <!-- <app-step-header [userInfo]='userInfo' [whichPage]="true"></app-step-header> -->
+
+  <div class="row tb-content">
+    <!-- <div class="col-md-5 col-lg-4">
+      <img [src]="contentData?.id_welcome_message" src="assets/images/dashboard/ic-welcome.png" class="img-fluid tb-icon">
+    </div> -->
+    <div class="col-md-12 col-lg-12">
+      <!-- {{welcomeContent}} -->
+      <div class="dashboard-heading">
+        <h3 *ngIf="verifiedSteps?.firstName">Hello {{verifiedSteps?.firstName | titlecase}},</h3>
+        <!-- <div [innerHTML]="welcomeKRADIGILOCKERVerified"
+          *ngIf="verifiedSteps?.isPanVerified && verifiedSteps?.isDigiLockerVerified"></div>
+        <div [innerHTML]="welcomeContent" *ngIf="verifiedSteps?.isPanVerified && verifiedSteps?.isKRAVerified"></div>
+        <div [innerHTML]="welcomeContentDigilocker"
+          *ngIf="!verifiedSteps?.isPanVerified && !verifiedSteps?.isKRAVerified && !verifiedSteps?.isDigiLockerVerified">
+        </div> -->
+        <p class="pt-1">Welcome to the Arihant Capital trading experience. </p>
+      </div>
+      <hr>
+
+      <!-- <p class="pt-4 welcome-para">
+        You will receive an OTP on the mobile number registered with your Aadhaar. Make sure you have a number linked to
+        your Aadhaar. Do not have your mobile number linked to Aadhaar? <a class="text-primary" target="_blank"
+          href="{{blogUrl}}">Click
+          here</a>
+      </p> -->
+
+      <!-- <div class="welcome-document">
+        <h6>We need the following documents to complete your KYC:</h6>
+        <ul>
+          <li>Aadhaar Card</li>
+          <li> PAN Card</li>
+          <li> Address Proof</li>
+          <li> Cancelled Cheque <span style="color: #434343A3;"> (if required)</span></li>
+          <li> Income Proof <span style="color: #434343A3;"> (if required)</span></li>
+        </ul>
+      </div> -->
+
+      <!-- <span class="hello-text" style="color:rgba(0,0,0,.8)">Hello, now open your Arihant Capital trading account in a few
+        minutes.</span> -->
+      <!-- <h4 class="tb-subtitle mb-4">{{userInfo?.panUserName | uppercase}}</h4> -->
+      <!---------------- KRA Verified && PAN Verified: START --------------->
+      <!-- <p *ngIf="verifiedSteps?.isPanVerified" class="mt-3">
+        {{ contentData?.welcome_text || 'The objective of KYC guidelines is to prevent your account from being used, by unauthorized users. It also enables us to understand your financial dealings better and will help us serve & manage your risk
+        profile better.'}}
+      </p> -->
+
+      <!---------------- KRA Verified && PAN Verified: END --------------->
+
+      <!---------------- PAN & DIGILOCKER & MANUALY : START --------------->
+      <!-- <p>Welcome to the Arihant Capital trading experience.
+        You will receive an OTP on the mobile number registered with your Aadhaar. Make sure you have a number linked to
+        your Aadhaar.</p> -->
+
+      <!-- <p *ngIf="!verifiedSteps?.isPanVerified && !verifiedSteps?.isKRAVerified" class="mt-3">Make sure your mobile
+        number is linked
+        to your Aadhar Card (you will receive an OTP on that number)</p> -->
+
+
+
+      <!-- <p *ngIf="!verifiedSteps?.isPanVerified && !verifiedSteps?.isKRAVerified && !verifiedSteps?.isDigiLockerVerified">
+        {{ contentData?.non_kra_manual_text || 'If you don’t have a DigiLocker account, you can proceed to'}} <a href="javascript:void(0)" (click)="navigate('personal-details')">Register
+          Manually</a></p> -->
+
+      <div class="row digilocker-get-card mt-4">
+        <div class="col-md-6 ">
+          <a *ngIf="!verifiedSteps?.isPanVerified && !verifiedSteps?.isKRAVerified && !verifiedSteps?.isDigiLockerVerified"
+            href="javascript:void(0)" (click)="openDigilocker()">
+            <div class="card active mb-2">
+              <div class="d-flex justify-content-between">
+                <div class="d-flex flex-row align-items-center">
+                  <div class="mr-2 c-details p-3">
+                    <h6><img src="assets/images/dashboard/digilocker.png"> KYC with DigiLocker</h6>
+                  </div>
+                </div>
+                <div class="badge faster-digilocker pt-4">
+                  <div class="form-check form-check-inline">
+                    <label class="form-check-label" for="inlineRadio1">Faster</label> &nbsp;
+                    <input type="radio" name="radio" id="radio1" checked="checked" />
+                  </div>
+                </div>
+              </div>
+              <div class=" digilocker-get-bg mt-2 p-3">
+                <p>Get an easy on-boarding experience by sharing the documents already verified by DigiLocker
+                  (Government
+                  of India initiative).</p>
+                <p class="mt-2 digi-content">By continuing I permit Arihant Capital Markets Ltd. to fetch my data from
+                  DigiLocker to open
+                  an account.</p>
+              </div>
+            </div>
+          </a>
+        </div>
+        <!-- <div class="col-md-6">
+          <div class="card mb-2">
+            <div class="d-flex justify-content-between">
+              <div class="d-flex flex-row align-items-center">
+                <div class="mr-2 c-details p-3">
+                  <h6><img src="assets/images/dashboard/regular-ekyc.png"> Regular KYC</h6>
+                </div>
+              </div>
+              <div class="badge faster-digilocker pt-4">
+                <input type="radio" name="radio" id="radio1" />
+              </div>
+            </div>
+            <div class="digi-get-bg-right mt-3">
+              <p>Enter your demographic details along with bank account and nominee details. Upload relative documents.
+              </p>
+              <div class="welcome-document mt-2 digi-content">
+                <p style="font-size: 14px;">To complete your KYC we will need the documents such as:</p>
+                <ul>
+                  <li>Aadhaar Card</li>
+                  <li> PAN Card</li>
+                  <li> Address Proof</li>
+                  <li> Cancelled Cheque <span style="color: #434343A3;"> (if required)</span></li>
+                  <li> Income Proof <span style="color: #434343A3;"> (if required)</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div> -->
+
+      </div>
+
+      <div *ngIf="verifiedSteps?.isPanVerified">
+        <p class="mt-3">Trade Equities, Futures, Options & ETFs on ArihantPlus, a smart trading app designed for traders
+          and investors.
+        </p>
+
+        <p class="mt-5">Moving forward we will need few details to create your demat account. Please note that the
+          details being asked are important in order to complete your application. Any detail that is required
+          mandatorily will be marked with a red asterisk sign.</p>
+      </div>
+
+      <!-- <a *ngIf="!verifiedSteps?.isPanVerified && !verifiedSteps?.isKRAVerified && !verifiedSteps?.isDigiLockerVerified"
+          href="javascript:void(0)" (click)="openDigilocker()" class="digilocker-box d-flex align-items-center">
+          <div class="row">
+            <div class="col-md-2">
+              <img src="assets/images/dashboard/digilocker.png">
+            </div>
+            <div class="col-md-10">
+              <h4>Share your documents securely</h4>
+              <p class="mb-0">Get an easy on-boarding experience by sharing the documents already verified by DigiLocker
+                (Government of India initiative).</p>
+            </div>
+          </div>
+        </a> -->
+      <!-- 
+      <form [formGroup]="welcomeForm">
+        <div class="cursor-none custom-checkbox accept-check colps-check" style="padding: 12px ​16px;">
+          <input type="checkbox" id="logo1" formControlName="permit">
+          <label class="mb-0" style="line-height: 20px;">{{'fetching_data_from_kra' | translate}}</label>
+        </div>
+        <app-control-messages [control]="welcomeForm?.controls['permit']">
+        </app-control-messages>
+      </form>
+
+      <p class="mt-4 pl-2">
+        Do not have your mobile number linked to Aadhaar?<a style="color: #34b350;"
+          *ngIf="!verifiedSteps?.isPanVerified && !verifiedSteps?.isKRAVerified && !verifiedSteps?.isDigiLockerVerified"
+          target="_blank" href="{{blogUrl}}">Click here</a>
+      </p> -->
+
+    </div>
+  </div>
+</div>
+<div class="container footer-dash">
+  <hr>
+  <div class="dashboard-btn">
+    <div class="reg-card welcome-btn"
+      *ngIf="!verifiedSteps?.isPanVerified && !verifiedSteps?.isKRAVerified && !verifiedSteps?.isDigiLockerVerified">
+      <button *ngIf="!verifiedSteps?.isDigiLockerVerified" [disabled]="!welcomeForm.valid" type="submit"
+        class="btn btn-success btn-disabled btn-lg text-white text-center btn-disabled" (click)="openDigilocker()">
+        Continue with DigiLocker </button>
+    </div>
+    <div class="reg-card welcome-btn" *ngIf="verifiedSteps?.isPanVerified">
+      <button [disabled]="!welcomeForm.valid" type="submit"
+        class="btn btn-success btn-disabled btn-lg text-white text-center btn-disabled"
+        (click)="navigate('personal-details')"> Continue </button>
+    </div>
+  </div>
+</div>

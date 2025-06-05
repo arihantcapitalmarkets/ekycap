@@ -1,0 +1,21 @@
+body{
+  text-align: justify;
+}
+ul {
+  list-style: decimal;
+  /* text-align: justify; */
+}
+
+ul li {
+  padding: 10px 0px;
+}
+
+.term-list{
+  margin-left: 25px;
+}
+
+@media screen and (max-width: 767px) {
+  .term-list{
+  margin-left: 20px;
+}
+}

@@ -1,0 +1,93 @@
+<section class="reg-main-log">
+  <div class="container">
+    <div class="row awarded-bg">
+      <div class="col-md-6 p-0 verify-img">
+        <!-- <app-common-leftportion></app-common-leftportion> -->
+        <img src="assets/images/awarded-img.png" alt="">
+      </div>
+      <div class="col-md-6 column-blog my-auto">
+        <div class="verify-card reg-card">
+          <!-- <app-common-banner-image></app-common-banner-image> -->
+          <article class="card-body">
+            <h4>Verify OTP</h4>
+            <p class=" d-flex  mb-0" *ngIf="screenWidth > 500">Sent on
+              {{mobileNumber}}&nbsp;<a class="link-color-arihant text-decoration-none" href="javascript::void(0);"
+                (click)="moveToLoginScreen()">Edit</a></p>
+            <!-- <p class="text-center d-flex justify-content-center" *ngIf="screenWidth > 500">{{mobileNumber}}&nbsp;<a href="javascript::void(0);" (click)="moveToLoginScreen()">(Edit)</a> </p> -->
+            <p class="text-center d-flex justify-content-center mb-0" *ngIf="screenWidth <= 500">Sent on
+              {{mobileNumber}}&nbsp;<a class="link-color-arihant text-decoration-none" href="javascript::void(0);"
+                (click)="moveToLoginScreen()">Edit</a></p>
+            <!-- <p class="text-center d-flex justify-content-center mb-0" *ngIf="screenWidth <= 500">{{mobileNumber}} &nbsp;<a href="javascript::void(0);" (click)="moveToLoginScreen()">(Edit)</a></p> -->
+            <!-- <img src="assets/images/mobile/smartphone.svg" alt="" class="ph-img"> -->
+            <form [formGroup]="otpform" (ngSubmit)="onSubmit()">
+              <div class="form-group mt-4 mb-3 pb-3">
+                <label for="otp" class="req-control">OTP</label> <br>
+                <input #myinput placeholder="Enter your 6-digit OTP" type="tel" formControlName="otp" mask="000000"
+                  class="form-control form-control-sm readonlyJim" (ngModelChange)="modelSubmit($event)">
+                <app-control-messages fieldName="OTP" [control]="otpform.controls['otp']">
+                </app-control-messages>
+
+                <p *ngIf="!timeUp" class="ff-txt otp-counter"><span id="demo"></span>Resend OTP In
+                  {{timerShow}}</p>
+
+                <p *ngIf="timeUp" class="resendOtp mt-1"><a href="javascript:void(0)" (click)="resendOtp(mobileNumber)"
+                    style="color: #34b350;"><img src="assets/images/rotate-ccw.png"
+                      style="margin-bottom: 2px;font-size: 18px;"> Resend
+                    OTP</a> </p>
+              </div>
+              <!-- <div class="form-group">
+                <button type="submit" class="btn mt-4" [ngClass]="{'disable': !otpform.valid}">
+                  {{'verify' | translate}} <img src="assets/images/arrow-right.svg" alt=""></button>
+              </div> -->
+
+              <!-- <div class="d-flex register-steps justify-content-center align-items-center">
+                <a href="javascript:void(0)"></a>
+                <a href="javascript:void(0)"></a>
+                <a href="javascript:void(0)" class="active"></a>
+              </div> -->
+
+              <!-- <p class="text-center ff-txt">Already a member? <a [routerLink]="['/']"
+                  routerLinkActive="router-link-active" class="text-capitalize text-decoration-none">{{'Login Now' | translate}}</a> </p> -->
+            </form>
+
+            <hr class="my-3">
+            <div class="note-tag pl-0" style="background: none;" *ngIf="loginInformationText">
+              <!-- <div [innerHTML]="loginInformationText"></div> -->
+              By submitting my contact details, I authorize ArihantPlus to call or text me for the purpose of account
+              opening even though my number may be registered on DND.
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<ng-template #mobileNumberSystemExist let-c="close" let-d="dismiss" class="aadhar-popup">
+  <div class="modal-header green common-header">
+    <div class="popup-header">
+      <h4 class="modal-title">{{ "Already a member?" | translate }}</h4>
+    </div>
+    <div class="popup-icon">
+      <img src="assets/images/user-icon.png" alt="user" />
+    </div>
+  </div>
+
+  <div class="modal-boy">
+    <p class="wr-msg mb-2">
+      It seems that you already have an account at Arihant with the given number
+      <ng-container *ngIf="mobileNumberExist">
+        ({{ mobileNumberExist }}).
+      </ng-container>
+    </p>
+    <p class="wr-msg mb-2 mt-4">Would you like to login & trade?</p>
+    <br />
+  </div>
+  <div class="modal-footer d-flex justify-content-between logout-ftr">
+    <a class="btn modal-btn-continue font-mobile-12 p-2" (click)="c('cancel')" href="javascript:void(0)">
+      {{ "Register with another number" | translate }}
+    </a>
+    <a class="btn modal-btn-cancel font-mobile-12 p-2" (click)="c('ok')" href="javascript:void(0)">{{ "Go To Login" |
+      translate }}</a>
+  </div>
+</ng-template>

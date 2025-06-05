@@ -1,0 +1,390 @@
+<!-- Fixed Button -->
+<a type="button" class="btn fixed-bottom fixed-bottom-button d-flex fixed-button-whtsapp"
+  (click)="global?.whatsAppRedirect()">
+  <span class="w-70" style="color: #FFFFFF;">Click to Open Demat Account</span> <img
+    src="../../../assets/images/whatsapp-p.png">
+</a>
+<section class="reg-main-log" #target>
+  <div class="container" *ngIf="loading">
+    <div class="row awarded-bg d-flex justify-content-center mt-5">
+      <div class="align-self-center"><span> <i class="fa fa-circle-o-notch fa-spin"></i> </span></div>
+    </div>
+  </div>
+  <div class="container" *ngIf="!loading">
+    <div class="row awarded-bg">
+      <div class="col-md-6 p-3 order-md-1">
+        <app-common-leftportion></app-common-leftportion>
+      </div>
+      <div class="col-md-6 order-md-2">
+        <div class="mobile-number-blog">
+          <article>
+            <h4>
+              Sign up for insights from award-winning experts
+            </h4>
+            <p>
+              Make smarter trades with in-depth research reports, calls and more from award-winning experts
+            </p>
+            <p class="text-center mb-0" *ngIf="rmcode && !subrmcode">
+              <b>RMCODE:</b> {{ rmcode }}
+              <i class="fa fa-times-circle" *ngIf="isAvailableRMCODE" [routerLink]="['/']" (click)="removeRmCode()"
+                style="color: #f20; cursor: pointer" aria-hidden="true"></i>
+            </p>
+            <p class="text-center mb-0" *ngIf="!rmcode && subrmcode">
+              <b>SUB RMCODE:</b> {{ subrmcode }}
+            </p>
+            <form [formGroup]="registerform" (ngSubmit)="onSubmit()">
+              <div class="row">
+                <div class="col-md-9 col-9 reg-card">
+                  <div class="form-group mb-0">
+                    <label for="mobile" class="req-control">Mobile Number</label>
+                    <div class="input-group input-mobile">
+                      <div class="hr-dev">
+                        <select class="form-control">
+                          <option selected="91">+91</option>
+                        </select>
+                      </div>
+                      <input #myinput placeholder="Enter Mobile Number" type="tel" maxlength="10" mask="0000000000"
+                        formControlName="mobilenumber" class="form-control" />
+                    </div>
+                    <app-control-messages fieldName="Mobile Number" customeMessage="invalid_mobile_number | translate"
+                      [control]="registerform?.controls['mobilenumber']">
+                    </app-control-messages>
+                  </div>
+                </div>
+                <div class="col-md-3 home-continue-btn col-3">
+                  <div class="form-group reg-card reg-main-btn desktop-view">
+                    <button type="submit" [disabled]="!registerform.valid" aria-label="button"
+                      class="btn btn-success btn-disabled btn-lg text-white text-center mt-3 ">
+                      {{ "continue" | translate }}
+                    </button>
+                  </div>
+                  <div class="form-group reg-main-btn mobile-view">
+                    <button type="submit" [disabled]="!registerform.valid" aria-label="button"
+                      class="btn btn-success  btn-lg text-white text-center mt-3 btn-disabled">
+                      <img src="assets/images/arrow-right.svg" alt="">
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="cursor-none mt-3" style="padding: 12px ​0px; background: none">
+                <span style="font-size: 14px;">
+                  By signing up, I agree to
+                  <a rel="noopener" href="https://www.arihantplus.com/terms-and-conditions" target="_blank"
+                    style="color: #34b350;text-decoration: underline;">T&C</a>,
+                  <a rel="noopener" style="color: #34b350;text-decoration: underline"
+                    href="https://www.arihantplus.com/privacy-and-security" target="_blank">Privacy Policy</a>
+                </span>
+              </div>
+              <div class="row mt-4 mb-2">
+                <div class="col-md-6 col-6">
+                  <div class="bg-equity">
+                    <div class="text-center m-auto">
+                      <p><strong>₹0</strong> /order<br>
+                        Equity delivery</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 col-6">
+                  <div class="bg-equity">
+                    <div class="text-center m-auto">
+                      <p><strong>₹20</strong> /order<br>
+                        Equity intraday, F&O</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex asia-blog mt-5 justify-content-start mx-3">
+                <img class="img-fluid" src="assets/images/aisa-money.png" alt="">
+                <p class="pl-1 pt-3">
+                  Awarded <strong>“Best Retail Brokerage” </strong> at Asia Money - 2022 & 2021 (India).</p>
+              </div>
+            </form>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="py-5">
+  <div class="container asia-section ">
+    <h1>Get Recommendations from our Stellar Research Team </h1>
+    <div class="row pt-5 justify-content-center">
+      <div class="col-md-4">
+        <div class="text-center best-retail">
+          <img class="img-fluid" width="170px" src="assets/images/aisa-money.png" alt="">
+          <p><strong>Best Analyst/Commentator</strong> <br>
+            at Asia Money - 2022 & 2021 (India)</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="text-center best-retail">
+          <!-- <img class="img-fluid" width="170px" src="assets/images/cnbc-logo.png" alt=""> -->
+          <picture>
+            <source type="image/webp" srcSet="assets/images/cnbc-logo.webp" width="170px" />
+            <img src="assets/images/cnbc-logo.png" width="170px" alt="" />
+          </picture>
+          <p class="pt-1">3 Times <strong>Khiladi No. 1 Winner</strong> <br>
+            on Business Channel CNBC Awaaz</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="home-table">
+  <div class="container">
+    <h1>Benefit from our expert calls across all types of research</h1>
+    <table class="table mt-4 mx-auto">
+      <thead>
+        <tr>
+          <th scope="col">Segments</th>
+          <th scope="col">Period</th>
+          <th scope="col">Position Type</th>
+          <th scope="col">Research Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>F&O</td>
+          <td>Intraday</td>
+          <td>Swing Calls</td>
+          <td>Fundamental</td>
+        </tr>
+        <tr>
+          <td>Equity</td>
+          <td>Short Term</td>
+          <td>Positional Call</td>
+          <td>Technical</td>
+        </tr>
+        <tr>
+          <td>Currency</td>
+          <td>Long Term</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+<section class="invest-bg">
+  <div class="container">
+    <div class="pro-heading">
+      <h1>Become a PRO with ArihantPlus</h1>
+    </div>
+    <hr>
+    <div class="row py-4">
+      <div class="col-md-6">
+        <!-- <img src="assets/images/trade-with-expert.png" alt=""> -->
+        <picture>
+          <source type="image/webp" srcSet="assets/images/trade-with-expert.webp" width="586" height="593"
+            width="90%" />
+          <img src="assets/images/trade-with-expert.png" width="586" height="593" alt="" width="90%" />
+        </picture>
+      </div>
+      <div class="col-md-6 my-auto">
+        <div class="invest-content">
+          <h1>Trade with expert advice! </h1>
+          <p>Get stock and option calls with buy, stop loss and target price from our award-winning experts</p>
+          <hr>
+          <ul>
+            <li class="d-flex align-items-center">
+              <img class="mr-2" src="assets/images/analytics.png" alt="" style="width: 32px;height: 33px !important;">
+              <div class="inner-slogan">
+                <h4>Access tailored advice for various strategies</h4>
+                <p class="pt-0">Get short-term, long-term and F&O calls</p>
+              </div>
+            </li>
+            <li class="d-flex align-items-center">
+              <img class="mr-2" src="assets/images/checked-1.png" alt="" style="width: 32px;height: 32px !important;">
+              <div class="inner-slogan">
+                <h4>Easy to execute</h4>
+                <p class="pt-0">Enter the qty you want to trade and execute with one-click</p>
+              </div>
+            </li>
+            <li class="d-flex align-items-center">
+              <img class="mr-2" src="assets/images/favorite.png" alt="" style="width: 32px;height: 32px !important;">
+              <div class="inner-slogan">
+                <h4>Expert Guidance</h4>
+                <p class="pt-0">Leverage market insights, make your own decisions</p>
+              </div>
+            </li>
+            <li class="d-flex align-items-center">
+              <img class="mr-2" src="assets/images/risk-management.png" alt=""
+                style="width: 32px;height: 32px !important;">
+              <div class="inner-slogan">
+                <h4>Risk Management</h4>
+                <p class="pt-0">Predefined stop-loss and trigger prices</p>
+              </div>
+            </li>
+            <!-- <li><img class="mr-2" src="assets/images/star-icon.png" alt=""> Access to award-winning institutional-grade
+              research
+            </li>
+            <li><img class="mr-2" src="assets/images/bulish-icon.png" alt=""> After market (AMO) & good till date (GTD)
+              orders</li>
+            <li><img class="mr-2" src="assets/images/newspaper-icon.png" alt=""> Easy-to-understand portfolio reports
+            </li> -->
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row py-5">
+      <div class="col-md-6 my-auto order-md-1">
+        <div class="invest-content">
+          <h1>Trade like a PRO</h1>
+          <p>ArihantPlus provides smart tools to help you up your trading game</p>
+          <hr>
+          <ul>
+            <li><img class="mr-2" src="assets/images/timer-icon-new.png" alt="">
+              Super fast execution with advanced order types (SL, cover, order slicing)
+            </li>
+            <li><img class="mr-2" src="assets/images/trade-icon-new.png" alt=""> Trade directly from charts & option
+              chain
+            </li>
+            <li><img class="mr-2" src="assets/images/search-icon-new.png" alt=""> Access advanced data (FII/DII,
+              bulk-block
+              data)</li>
+            <li><img class="mr-2" src="assets/images/basket-icon-new.png" alt=""> Create & execute strategies with
+              basket
+              order</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6 order-md-2">
+        <!-- <img src="assets/images/trade-pro.png" alt=""> -->
+        <picture>
+          <source type="image/webp" srcSet="assets/images/trade-pro.webp" width="586" height="593" width="90%" />
+          <img src="assets/images/trade-pro.png" width="586" height="593" alt="" width="90%" />
+        </picture>
+      </div>
+    </div>
+    <div class="row py-4">
+      <div class="col-md-6">
+        <!-- <img src="assets/images/invest-pro-new.png" alt=""> -->
+        <picture>
+          <source type="image/webp" srcSet="assets/images/invest-pro-new.webp" width="586" height="593" width="90%" />
+          <img src="assets/images/invest-pro-new.png" width="586" height="593" alt="" width="90%" />
+        </picture>
+      </div>
+      <div class="col-md-6 my-auto">
+        <div class="invest-content">
+          <h1>Invest like a PRO</h1>
+          <p>Get the right tools & support to create long-term wealth</p>
+          <hr>
+          <ul>
+            <li><img class="mr-1" src="assets/images/fingure-icon-new.png" alt=""> Easy one-click trade</li>
+            <li><img class="mr-2" src="assets/images/star-icon-new.png" alt=""> Access to award-winning
+              institutional-grade
+              research
+            </li>
+            <li><img class="mr-2" src="assets/images/bulish-icon-new.png" alt=""> After market (AMO) & good till date
+              (GTD)
+              orders</li>
+            <li><img class="mr-2" src="assets/images/newspaper-icon-new.png" alt=""> Easy-to-understand portfolio
+              reports
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- 6th Section - Hear from our clients -->
+<app-testimonial></app-testimonial>
+<section id="get-app" class="bg-light-blue">
+  <div class="container">
+    <div class="row pt-5 pb-5">
+      <div class="col-md-6 my-auto  text-center">
+        <!-- <img alt="" src="assets/images/download-barcode-new.png" width="90%"> -->
+        <picture>
+          <source type="image/webp" srcSet="assets/images/download-barcode-new.webp" width="586" height="593"
+            width="90%" />
+          <img src="assets/images/download-barcode-new.png" width="586" height="593" alt="" width="90%" />
+        </picture>
+      </div>
+      <div class="col-md-6 my-auto text-left-md-center download-barcode">
+        <h2> Download the <br> ArihantPlus app now </h2>
+        <p> and start investing today. </p>
+        <div class="container my-5 pb-5 float-lg-left float-xl-left float-sm-none desktop-view">
+          <div class="row d-flex justify-content-start ">
+            <a rel="noopener" href="https://play.google.com/store/apps/details?id=com.msf.acml&amp;hl=en_IN&amp;gl=US"
+              target="_blank" class=" link-primary-green ml-0">
+              <img id="icon-playstore" alt="icon" src="assets/images/play-store-icon-new.png">
+              Play Store </a><b class="one-px-vertical-divider ml-5"></b>
+            <a rel="noopener" href="https://apps.apple.com/in/app/arihant-plus/id1643484698" target="_blank"
+              class=" link-primary-green ml-5"><img alt="icon" class="img-fluid" src="assets/images/apple-icon-new.png">
+              App
+              Store
+            </a>
+          </div>
+        </div>
+        <div class="container my-5 pb-5 float-lg-left float-xl-left float-sm-none mobile-view">
+          <div class="row d-flex justify-content-center"><a rel="noopener"
+              href="https://play.google.com/store/apps/details?id=com.msf.acml&amp;hl=en_IN&amp;gl=US" target="_blank"
+              class="link link-primary-green ml-0"><img id="icon-playstore" alt="icon" class="img-fluid"
+                src="assets/images/play-store-icon-new.png"> Play Store </a><b class="one-px-vertical-divider"></b><a
+              rel="noopener" href="https://apps.apple.com/in/app/arihant-plus/id1643484698" target="_blank"
+              class="link link-primary-green ml-0"><img alt="icon" class="img-fluid"
+                src="assets/images/apple-icon-new.png">
+              App Store </a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<app-faq></app-faq>
+<app-footer></app-footer>
+<ng-template #mobileNumberSystemExist let-c="close" let-d="dismiss" class="aadhar-popup">
+  <div class="modal-header green common-header">
+    <div class="popup-header">
+      <h4 class="modal-title">{{ "Already a member?" | translate }}</h4>
+    </div>
+    <div class="popup-icon">
+      <img src="assets/images/user-icon.png" alt="user" />
+    </div>
+  </div>
+
+  <div class="modal-boy">
+    <p class="wr-msg mb-2">
+      It seems that you already have an account at Arihant with the given number
+      ({{ mobileNumberExist }}).
+    </p>
+    <p class="wr-msg mb-2 mt-4">Would you like to login & trade?</p>
+    <br />
+  </div>
+  <div class="modal-footer d-flex justify-content-between logout-ftr">
+    <a class="btn modal-btn-continue font-mobile-12 p-2" (click)="resetForm()" href="javascript:void(0)">
+      {{ "Register with another number" | translate }}
+    </a>
+    <a class="btn modal-btn-cancel font-mobile-12 p-2" (click)="c('ok')" href="javascript:void(0)">{{ "Go To Login" |
+      translate }}</a>
+  </div>
+</ng-template>
+
+<ng-template #mobileNumberSystemExistEKYC let-c="close" let-d="dismiss" class="aadhar-popup">
+  <div class="modal-header green common-header">
+    <div class="popup-header">
+      <!-- <span>{{'Confirmation' | translate}}</span> -->
+      <h4 class="modal-title">{{ "Nofitication" | translate }}</h4>
+    </div>
+    <div class="popup-icon">
+      <img src="assets/images/user-icon.png" alt="user" />
+    </div>
+  </div>
+
+  <div class="modal-boy">
+    <p class="wr-msg mb-2">
+      Your account is processed through {{existDetails?.lable}} , Please resume your application from this link- <a
+        [href]="existDetails?.link">{{existDetails?.link}}</a>.
+
+    </p>
+    <!-- <p class="wr-msg mb-2 mt-4">Would you like to login & trade?</p> -->
+    <!-- <p class="wr-msg mb-2">OR</p>  
+      <a href="javascript::void(0);" >Register with new mobile number</a> -->
+
+    <br />
+  </div>
+  <div class="modal-footer d-flex justify-content-between logout-ftr">
+    <a class="btn modal-btn-continue font-mobile-12 px-3" (click)="resetForm()" href="javascript:void(0)">
+      {{ "Register with another number" | translate }}
+    </a>
+    <a class="btn modal-btn-cancel font-mobile-12 px-3" (click)="c('cancel')" href="javascript:void(0)">{{ "Close" |
+      translate }}</a>
+  </div>
+</ng-template>

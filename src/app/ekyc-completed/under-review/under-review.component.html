@@ -1,0 +1,88 @@
+<div class="under-review">
+	<div class="container">
+		<img src="assets/images/dashboard/ic-welcome.png" alt="welcome" class="welcome-image-size">
+		<h1 *ngIf="verifiedSteps?.adminApproval !== 'LD Success'">Congratulations!</h1>
+		<h1 *ngIf="verifiedSteps?.adminApproval === 'LD Success'">Congratulations!</h1>
+		<!-- <h1 *ngIf="verifiedSteps?.adminApproval === 'LD Success'">Congratulations  {{verifiedSteps?.firstName}}! </h1> -->
+
+		<!-- <p>Your have successfully submitted your application.</p> -->
+		<p *ngIf="verifiedSteps?.adminApproval !== 'LD Success'"> Your application is under review</p>
+		<p *ngIf="verifiedSteps?.adminApproval === 'LD Success'"> Your account has been activated.</p>
+		<h6 class="mt-4 border-none"><span style="color: #0F0F0F;" class="border p-3">Application ID : <span
+					style="color: #434343A3;">{{loggedInUserData?.appId}}</span>
+			</span></h6>
+		<div class="mb-3" *ngIf="verifiedSteps?.adminApproval !== 'LD Success'">
+		</div>
+		<div class="what-next" *ngIf="verifiedSteps?.adminApproval !== 'LD Success'">
+			<h5>What's Next</h5>
+			<ul>
+				<li>Your application is under review. Our agent will verify your application.</li>
+				<li>You can revisit the page within 2-5 mins to check the status of your application.</li>
+				<li>In case your application is approved, it will be shared with exchange.</li>
+				<li>In case your application is rejected due to any error, you can edit and resubmit for verification.
+					You will receive an email on your registered ID with all the details.
+				</li>
+			</ul>
+		</div>
+		<div class="what-next" *ngIf="verifiedSteps?.adminApproval === 'LD Success'">
+			<h5>What's Next</h5>
+			<ul>
+				<li>After approval of your documents, your details will be sent to exchange & depository.
+				</li>
+				<li>Exchange approval may take 24-48 hours. We will notify you when you are ready to trade!</li>
+				<li>You will receive ID and Password of trading platform on your registered email Id and mobile number.
+				</li>
+			</ul>
+		</div>
+		<div class="mt-4 mx-0 row d-flex justify-content-center">
+			<div class="col-md-12 bg-grey-tag p-3">
+				<div class="row">
+					<div class="mb-2 mb-md-0 col-md-6 col-sm-6 text-center text-lg-left align-self-center">
+						<h4>Download mobile app.</h4>
+						<p style="color: #000000;">and start investing today.</p>
+					</div>
+					<div class="col-md-6 col-sm-6">
+						<div class="row">
+							<div class="col-md-6 col-6">
+								<!-- <div class="d-flex"> -->
+								<img class="mb-2" src="assets/images/play-store.png" alt="Play store"><br>
+								<a class="link-color-arihant"
+									href="https://play.google.com/store/apps/details?id=com.msf.acml&pli=1"
+									target="_blank">
+									<b><img width="20px" src="assets/images/play-store-icon.png" alt="app store"> Play
+										Store</b>
+								</a>
+							</div>
+							<div class="col-md-6 col-6">
+								<img class="mb-2" src="assets/images/app-store.png" alt="App store"><br>
+								<a class="link-color-arihant "
+									href="https://apps.apple.com/us/app/arihant-plus/id1643484698" target="_blank">
+									<b><img width="24px" class="img-fluid" src="assets/images/apple-icon.png"
+											alt="app store"> App
+										Store</b>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- </div> -->
+		</div>
+		<div class="enquire-box">
+			<p class="mt-3">If you want to enquire about the application or wish to contact us, pls call us on <a
+					style="color: #34B350;text-decoration: underline;" href="tel:0731-4217003">0731-4217003</a>
+
+				or write to us on <a style="color: #34B350;text-decoration: underline;"
+					href="mailto:customersupport@arihantcapital.com">customersupport&#64;arihantcapital.com</a>
+			</p>
+		</div>
+
+		<p class="mt-3">
+			<a style="margin-right: 15px;text-decoration: underline;color: #34B350;font-weight: 450;"
+				href="https://www.arihantcapital.com/equity" target="_blank">Browse markets</a> <a
+				style="text-decoration: underline;color: #34B350;font-weight: 450;"
+				href="https://www.arihantcapital.com/research" target="_blank">Explore
+				research</a>
+		</p>
+	</div>
+	<div>

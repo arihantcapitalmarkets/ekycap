@@ -1,0 +1,80 @@
+<div class="card-body">
+  <div class="tb-title">
+    <a href="javascript:void(0)" (click)="openRestartPopup()" class="d-flex reset-app"><img
+        src="assets/images/dashboard/refresh.svg"><span>Reset Application</span></a>
+    <h3><span>Application Id :</span> {{userInfo?.appId | uppercase}}</h3>
+
+  </div>
+  <div class="row tb-content">
+    <div class="col-md-5 col-lg-4">
+      <img src="assets/images/dashboard/aadhar-detail.svg" class="img-fluid tb-icon">
+    </div>
+    <div class="col-md-7 col-lg-8">
+      <h4 class="tb-subtitle">{{'PAN Details' | translate}}</h4>
+      <p>{{'Details will be verifed through Govt. portals' | translate}}</p>
+      <form [formGroup]="panDetailsform" (ngSubmit)="onSubmit()">
+        <div class="reg-card">
+          <div class="form-group">
+            <label for="pan">{{'PAN Number' | translate}}</label>
+            <input class="form-control" [ngClass]="{'disabled': verifiedSteps?.isPanVerified}"
+              placeholder="{{'Enter PAN Number' | translate}}"
+              (blur)="($event.target.value = $event.target.value.toUpperCase())" type="text"
+              formControlName="panNumber">
+            <app-control-messages fieldName="PAN Number" [control]="panDetailsform.controls['panNumber']">
+            </app-control-messages>
+          </div>
+
+          <div class="form-group">
+            <label>{{'Date Of Birth' | translate}}</label>
+            <div class="input-group datepicker">
+              <input type="text" class="form-control" [ngClass]="{'disabled': verifiedSteps?.isPanVerified}"
+                placeholder="DD/MM/YYYY" dateFormat="dd/MM/yyyy" formControlName="dob" ngbDatepicker #d="ngbDatepicker">
+              <div class="input-group-append calendar" *ngIf="!verifiedSteps?.isPanVerified">
+                <span class="btn btn-outline-secondary" (click)="d.toggle()" type="button"><i class="fa fa-calendar"
+                    aria-hidden="true"></i></span>
+              </div>
+            </div>
+            <app-control-messages fieldName="Date of Birth" [control]="panDetailsform?.controls['dob']">
+            </app-control-messages>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn" [ngClass]="{'disable': !panDetailsform.valid}">{{'continue' | translate}}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss" class="aadhar-popup">
+  <div class="modal-header yellow common-header">
+    <div class="popup-header">
+      <span>{{'Confirmation' | translate}}</span>
+      <h4 class="modal-title">{{'PAN Details' | translate}}</h4>
+    </div>
+    <div class="popup-icon">
+      <img src="assets/images/doc.svg">
+    </div>
+  </div>
+
+  <div class="modal-boy">
+    <p class="wr-msg">{{'By continuing you accept that the details entered by you are correct and belongs to you. Any
+      fraud
+      entries will be against our '| translate}}<a href="javascript:void(0)">{{'Terms & Conditions' | translate}}.</a>
+    </p>
+    <div class="user-box d-flex align-items-center">
+      <img src="assets/images/dashboard/pan-ic.svg" align="aadhar">
+      <div>
+        <h3>{{userInfo?.userName | titlecase}}</h3>
+        <span>{{panDetailsform?.controls['panNumber']?.value | uppercase}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer d-flex justify-content-between">
+    <a class="btn modal-btn-cancel" (click)="c('cancel')" href="javascript:void(0)">{{'Not You!' | translate}}</a>
+    <a class="btn modal-btn-continue" (click)="c('ok')" href="javascript:void(0)">
+      {{'Continue' | translate}}
+    </a>
+  </div>
+</ng-template>

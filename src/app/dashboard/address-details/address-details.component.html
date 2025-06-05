@@ -1,0 +1,239 @@
+<div class="card-body pb-2 mb-2">
+
+  <!-- <app-step-header [userInfo]='userInfo'></app-step-header> -->
+
+  <div class="row tb-content">
+
+    <div class="col-md-12 col-lg-12">
+      <div [innerHTML]="addressDetailsContent"></div>
+      <!-- <h4 class="tb-subtitle">Now, please share your address</h4>
+      <p>Please provide your permanent address, and correspondence address if its different from your permanent address.
+      </p> -->
+      <hr>
+      <form [formGroup]="addressDetailsform" (ngSubmit)="onSubmit()">
+        <div class="reg-card">
+          <div class="address-box">
+            <label class="line-lable"><span>Permanent Address</span></label>
+            <p [hidden]='!verifiedSteps?.isPanVerified'>
+              <ng-container *ngIf="permanentAddress?.address_line1"> {{permanentAddress?.address_line1}},</ng-container>
+              <ng-container *ngIf="permanentAddress?.address_line2"> {{permanentAddress?.address_line2}},</ng-container>
+              <!-- <ng-container *ngIf="permanentAddress?.address_line3"> {{permanentAddress?.address_line3}},</ng-container> -->
+              <ng-container *ngIf="permanentAddress?.city"> {{permanentAddress?.city}},
+              </ng-container>
+              <ng-container *ngIf="permanentAddress?.pin_code"> {{permanentAddress?.pin_code | mask:'000 000'}},
+              </ng-container>
+              <ng-container *ngIf="permanentAddress?.state"> {{permanentAddress?.state}},
+              </ng-container>
+              <ng-container *ngIf="permanentAddress?.country"> {{permanentAddress?.country}}</ng-container>
+            </p>
+            <div *ngIf="global.isLoading">
+              <div class="col-md-12 p-2 global-loader">
+                <span> <i class="fa fa-circle-o-notch fa-spin"></i> </span>
+              </div>
+            </div>
+          </div>
+
+          <div id="permanent-address" [hidden]='!perAddress'>
+            <div class="form-group">
+              <label for="per_address_line1" class="req-control">Address Line 1</label>
+              <input id="per_address_line1" class="form-control" placeholder="enter address line 1" type="text"
+                formControlName="per_address_line1">
+              <app-control-messages fieldName="Address line 1"
+                [control]="addressDetailsform.controls['per_address_line1']">
+              </app-control-messages>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Address Line 2 (Optional)</label>
+              <input class="form-control" placeholder="enter address line 2" type="text"
+                formControlName="per_address_line2">
+              <app-control-messages fieldName="Address line 2"
+                [control]="addressDetailsform.controls['per_address_line2']">
+              </app-control-messages>
+            </div>
+
+            <!-- <div class="form-group">
+              <label for="email">Address Line 3</label>
+              <input class="form-control" placeholder="enter address line 3" type="text"
+                formControlName="per_address_line3">
+              <app-control-messages fieldName="Address line 3"
+                [control]="addressDetailsform.controls['per_address_line3']">
+              </app-control-messages>
+            </div> -->
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="email" class="req-control">PIN code</label>
+                  <input class="form-control" placeholder="Enter PIN code" type="text" formControlName="per_pin_code"
+                    (keyup)="checkPincodePermanent($event)" maxlength="6">
+                  <app-control-messages fieldName="PIN code" [control]="addressDetailsform.controls['per_pin_code']">
+                  </app-control-messages>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="email" class="req-control">Country</label>
+                  <select class="form-control disabled" formControlName="per_country"
+                    [ngClass]="{'grey-placeholder': !addressDetailsform?.controls['per_country']?.value}">
+                    <option value="">Country</option>
+                    <option value="INDIA">India</option>
+                    <option value="USA">USA</option>
+                  </select>
+                  <app-control-messages fieldName="Country" [control]="addressDetailsform.controls['per_country']">
+                  </app-control-messages>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="city" class="req-control">City</label>
+                  <!-- <input class="form-control" placeholder="Add your city" type="text" formControlName="per_city"> -->
+                  <select class="form-control" formControlName="per_city"
+                    [ngClass]="{'grey-placeholder': !addressDetailsform?.controls['per_city']?.value}">
+                    <option value="">City</option>
+                    <option [value]="item.city_name" *ngFor="let item of permanentCityList">{{item.city_name}}</option>
+                  </select>
+                  <app-control-messages fieldName="City" [control]="addressDetailsform.controls['per_city']">
+                  </app-control-messages>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="email" class="req-control">State</label>
+                  <select class="form-control disabled" formControlName="per_state"
+                    [ngClass]="{'grey-placeholder': !addressDetailsform?.controls['per_state']?.value}">
+                    <option value="">State</option>
+                    <option [value]="item.state_name" *ngFor="let item of permanentStateList">{{item.state_name}}
+                    </option>
+                  </select>
+                  <app-control-messages fieldName="State" [control]="addressDetailsform.controls['per_state']">
+                  </app-control-messages>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="address-box mt-4" [hidden]="true">
+            <label class="line-lable"><span>Correspondence Address
+                <span class="info-tp"><img src="assets/images/gray-info.svg">
+                  <div class="info-tp-content tp-info">
+                    <p class="m-0">
+                      Please enter the correct address so that we can connect.
+                    </p>
+                  </div>
+                </span>
+              </span></label>
+          </div>
+
+          <div class="cursor-none custom-checkbox accept-check colps-check" [hidden]="true"
+            [ngClass]="{'disabled note-tag pointer-events-none': verifiedSteps?.isPanVerified}" data-toggle="collapse"
+            data-target="#address">
+            <input type="checkbox" id="logo1" formControlName="same_as" disabled="verifiedSteps?.isPanVerified"
+              (change)="checkForSameAsPermenent($event)">
+            <label class="mb-0">Same as the permanent address</label>
+          </div>
+
+          <div id="address" class="collapse" [ngClass]="{'show': addAddress}" [hidden]='!addAddress'>
+            <div class="form-group">
+              <label for="email" class="req-control">Address Line 1</label>
+              <input class="form-control" placeholder="enter address line 1" type="text"
+                formControlName="address_line1">
+              <app-control-messages fieldName="Address line 1" [control]="addressDetailsform.controls['address_line1']">
+              </app-control-messages>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Address Line 2 (Optional)</label>
+              <input class="form-control" placeholder="enter address line 2" type="text"
+                formControlName="address_line2">
+              <app-control-messages fieldName="Address line 2" [control]="addressDetailsform.controls['address_line2']">
+              </app-control-messages>
+            </div>
+
+            <!-- <div class="form-group">
+              <label for="email">Address Line 3</label>
+              <input class="form-control" placeholder="enter address line 3" type="text"
+                formControlName="address_line3">
+              <app-control-messages fieldName="Address line 3" [control]="addressDetailsform.controls['address_line3']">
+              </app-control-messages>
+            </div> -->
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="email" class="req-control">PIN code</label>
+                  <input class="form-control" placeholder="Enter PIN code" type="text" formControlName="pin_code"
+                    (keyup)="checkPincodeCorrespodence($event)" maxlength="6">
+                  <app-control-messages fieldName="PIN code" [control]="addressDetailsform.controls['pin_code']">
+                  </app-control-messages>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="email" class="req-control">Country</label>
+                  <select class="form-control disabled" formControlName="country"
+                    [ngClass]="{'grey-placeholder': !addressDetailsform?.controls['country']?.value}">
+                    <option value="">Country</option>
+                    <option value="INDIA">India</option>
+                    <!-- <option value="USA">USA</option> -->
+                  </select>
+                  <app-control-messages fieldName="Country" [control]="addressDetailsform.controls['country']">
+                  </app-control-messages>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="email" class="req-control">City</label>
+                  <select class="form-control" formControlName="city"
+                    [ngClass]="{'grey-placeholder': !addressDetailsform?.controls['city']?.value}">
+                    <option value="">City</option>
+                    <option [value]="item.city_name" *ngFor="let item of cityList">{{item.city_name}}</option>
+                  </select>
+                  <!-- <input class="form-control" placeholder="Enter City" type="text" formControlName="city"> -->
+                  <app-control-messages fieldName="City" [control]="addressDetailsform.controls['city']">
+                  </app-control-messages>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="email" class="req-control">State</label>
+                  <select class="form-control disabled" formControlName="state"
+                    [ngClass]="{'grey-placeholder': !addressDetailsform?.controls['state']?.value}">
+                    <option value="">State</option>
+                    <option [value]="item.state_name" *ngFor="let item of stateList">{{item.state_name}}</option>
+                  </select>
+                  <app-control-messages fieldName="State" [control]="addressDetailsform.controls['state']">
+                  </app-control-messages>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <hr>
+
+          <div>
+            Did you move to a new address? Don’t worry you can always change this once your account is opened! <a
+              style="color: #34b350;" href="" target="_blank" href="#">Know more</a>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="container footer-dash">
+  <hr>
+  <div class="dashboard-btn">
+    <div class="reg-card welcome-btn" *ngIf="verifiedSteps?.isPanVerified">
+      <button type="submit" class="btn" [ngClass]="{'disable': !addressDetailsform.valid}">{{'continue' |
+        translate}} </button>
+    </div>
+  </div>
+</div>

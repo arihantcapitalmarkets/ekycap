@@ -1,0 +1,56 @@
+<!-- <ng-container *ngIf="showNavbar"> -->
+<header *ngIf="!infoSteps?.is_boat_user && !infoSteps?.isBeta">
+  <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light row py-2">
+      <div class="align-item-center ">
+        <a *ngIf="!idArihantPlus" class="navbar-brand ml-0 pointer-events-none" href="javascript:void(0);"
+          aria-label="Arihant Plus" style="line-height: normal;">
+          <img src="assets/images/logo.svg" alt="Arihant Plus" style="height: 54px;width: 150px;">
+        </a>
+        <a *ngIf="idArihantPlus" class="navbar-brand ml-3 " style="width: 218px;line-height: normal;"
+          href="javascript:void(0);" aria-label="Arihant Plus">
+          <img src="assets/images/logo.svg" alt="Arihant Plus" class="align-self-center "
+            style="height: 64px;width: 218px;">
+        </a>
+      </div>
+
+
+      <div class="logout-nav" *ngIf="isLoggedIn" style="line-height: normal;">
+        <a style="color: #34B350;font-weight: 500;" target="_blank"
+          href="https://support.arihantcapital.com/support/solutions/33000138462" class="need-txt">Need Help?</a>
+        <a href="javascript:void(0)" (click)="whatsAppBot()" class="ml-md-3 ml-2 pr-2 pr-md-3 text-white"> <img
+            src="assets/images/whatsapp-icon.svg" width="23px" alt="whatsapp"></a>
+        <a href="javascript:void(0)" (click)='logoutApplication()' class="mar-left-0"> <img
+            src="assets/images/log-in.png" alt="logout"></a>
+      </div>
+    </nav>
+  </div>
+</header>
+<!-- </ng-container> -->
+
+
+<ng-template #logoutapp let-c="close" let-d="dismiss" class="aadhar-popup">
+  <div class="modal-header yellow common-header">
+    <div class="popup-header">
+      <!-- <span>{{'Confirmation' | translate}}</span> -->
+      <h4 class="modal-title">{{'Logout from account' | translate}}</h4>
+    </div>
+    <div class="cross-icon logoutapp">
+      <a (click)="c('cancel')" href="javascript:void(0)"> <img src="assets/images/cross-icon.png"></a>
+    </div>
+  </div>
+
+  <div class="modal-boy">
+    <!-- <p class="wr-msg mb-2">
+      {{'Your KYC process is not yet complete. Logging out right now will hold your application at the last completed step with all details securly saved with us.' | translate}}
+    </p> -->
+    <p class="wr-msg" *ngIf="logoutPopupText" [innerHTML]="logoutPopupText"></p>
+    <br>
+  </div>
+  <div class="modal-footer d-flex justify-content-between">
+    <a class="btn modal-btn-continue" (click)="c('cancel')" href="javascript:void(0)">
+      {{'Close' | translate}}
+    </a>
+    <a class="btn modal-btn-cancel" (click)="c('ok')" href="javascript:void(0)">{{'Logout' | translate}}</a>
+  </div>
+</ng-template>

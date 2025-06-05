@@ -1,0 +1,240 @@
+@import '../src/assets/css/font-awesome.min.css';
+@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import '../node_modules/ngx-toastr/toastr.css';
+// @import '../src/assets/css/bootstrap.min.css';
+// @import  '../node_modules/video.js/dist/video-js.css';
+// @import   '../node_modules/videojs-record/dist/css/videojs.record.css';
+@import '../src/assets/css/style.css';
+@import '../src/assets/css/spinner.css';
+/* You can add global styles to this file, and also import other style files */
+// $menu-color: rgba(0, 0, 0, 0.56);
+// $mobile-menu-color: #fff;
+// $menu--hover-color : #000;
+// $label-color: #09B7DD;
+// $disabled-color: #B0BAC5;
+// $button-color:#09B7DD;
+// $link-color:#09B7DD;
+// $header-bg-color:#fff;
+// $step-color:#CCCCCC;
+// $step-active-color:#09B7DD;
+$menu-color: #fff;
+$mobile-menu-color: rgba(0, 0, 0, 0.56);
+$menu--hover-color : rgba(255, 255, 255, 0.6);
+$label-color: #0769D1;
+$checkbox-in-link-color: #0769D1;
+$disabled-color: #B0BAC5;
+$button-color: #0970DD;
+$link-color: #0970DD;
+$header-bg-color: #fff;
+$step-color: #CCCCCC;
+$step-active-color: #0970DD;
+$label-arihant-color:#0F0F0F;
+$link-arihant-color: #34b350;
+$step-active-arihant-color: #34b350;
+$arihant-button-color: #34b350;
+$button-hover-color: linear-gradient(0deg, #54b451eb, #54b451eb);
+$switch-on-color: #34b350;
+$checkbox-fill-color: #34b350;
+$disabled-checkbox-fill-color: #6c757d;
+$active-step-bg: #AC64E2;
+$show-color: rgba(172, 100, 226, 0.16);
+$button-border-color: #34b350;
+$link-font-color: #34b350;
+
+$font-size-line-label: 16px;
+$color-line-label: rgba(0, 0, 0, 0.8);
+$transparent-bg-color: rgba(53, 179, 80, 0.16);
+$common-left-font-color: #FFFFFF;
+$pro-heading-color:#0F0F0F;
+$invest-content-color:#AC64E2;
+
+// /*=========Header===========*/
+// header{background: $header-bg-color;}
+// header .navbar-light .navbar-nav .nav-link{color: $menu-color}
+// .navbar-light .navbar-nav .active>.nav-link, .navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .nav-link.show, .navbar-light .navbar-nav .show>.nav-link, .navbar-light .navbar-nav .nav-link:focus, .navbar-light .navbar-nav .nav-link:hover{color: $menu--hover-color}
+
+// /*=========Register===========*/
+// .reg-card label{color:$label-color}
+// .reg-card button.disable{background: $disabled-color;}
+// .reg-card button,.reg-card button:not(:disabled):not(.disabled):active{background: linear-gradient(0deg, $button-color,$button-color);}
+// p.ff-txt a{color: $link-color}
+// .register-steps a{background:$step-color; }
+// .register-steps a.active{background: $step-active-color;}
+
+// @media only screen and (max-width: 991px) {
+// 	header .navbar-light .navbar-nav .nav-link{color:$mobile-menu-color;}
+// }
+/*=========Header===========*/
+header {
+	background: $header-bg-color;
+}
+
+header .navbar-light .navbar-nav .nav-link {
+	color: $menu-color
+}
+
+.navbar-light .navbar-nav .active>.nav-link,
+.navbar-light .navbar-nav .nav-link.active,
+.navbar-light .navbar-nav .nav-link.show,
+.navbar-light .navbar-nav .show>.nav-link,
+.navbar-light .navbar-nav .nav-link:focus,
+.navbar-light .navbar-nav .nav-link:hover {
+	color: $menu--hover-color
+}
+
+/*=========Register===========*/
+.reg-card label {
+	color: $label-arihant-color
+}
+
+.reg-card button.disable {
+	background: $disabled-color;
+}
+
+.reg-card button,
+.reg-card button:not(:disabled):not(.disabled):active {
+	background: linear-gradient(0deg, $arihant-button-color, $arihant-button-color);
+}
+
+.reg-card button.custom-white-btn,
+.reg-card button.custom-white-btn:not(:disabled):not(.disabled):active {
+	background: #FFFFFF;
+}
+
+.btn-success:disabled,
+.btn-success:disabled:hover {
+	background: #93AEAF;
+}
+
+p.ff-txt a {
+	color: $link-arihant-color
+}
+
+.register-steps a,
+.register-steps span {
+	background: $step-active-arihant-color;
+}
+
+.register-steps a.active,
+.register-steps span.active {
+	background: $step-active-arihant-color;
+}
+
+.reg-card button:hover {
+	background: $button-hover-color;
+}
+
+.inline-switch input:checked+.slider {
+	background-color: $switch-on-color
+}
+
+body .nominee-switch input:checked+.slider:before {
+	background-color: $switch-on-color
+}
+
+.needhelp-app span {
+	color: $step-active-arihant-color
+}
+
+.custom-checkbox input:checked+label:before {
+	background: $checkbox-fill-color;
+	border-color: $checkbox-fill-color
+}
+
+.disabled.custom-checkbox input:checked+label:before {
+	background: $disabled-checkbox-fill-color;
+	border-color: $disabled-checkbox-fill-color
+}
+
+.ble-labl {
+	color: $label-arihant-color
+}
+
+.custom-checkbox label a {
+	color: $checkbox-in-link-color;
+}
+
+.upload-doc button.btn-doc:hover {
+	box-shadow: 2px 10px 60px 0 rgba(0, 0, 0, 0.10);
+	background: none;
+}
+
+label.line-lable {
+	color: $color-line-label;
+	font-size: $font-size-line-label;
+}
+
+label.line-lable span {
+	background-color: none
+}
+
+.link-color-arihant {
+	color: $link-font-color;
+	font-weight: 500;
+}
+
+a.link-color-arihant:hover {
+	color: $link-font-color !important;
+}
+
+section.dashboard .nav-tabs .nav-item a.active:before,
+.profile-popup .nav-tabs .nav-item a.active:before {
+	background: $active-step-bg;
+}
+
+section.dashboard .nav-tabs .nav-item a:after,
+.profile-popup .nav-tabs .nav-item a:after {
+	background: $show-color;
+}
+
+.transparent-bg-color {
+	background: $transparent-bg-color
+}
+
+.nominee-card a.new-add-btn {
+	border: 1px solid $button-border-color;
+	color: $arihant-button-color;
+}
+
+.nominee-yes {
+	color: $arihant-button-color;
+}
+
+.white-color {
+	color: $common-left-font-color
+}
+
+section.error_pg a {
+	background: $arihant-button-color;
+}
+
+section.error_pg a:hover {
+	background: $arihant-button-color;
+}
+
+.pro-heading h1{
+	color: $pro-heading-color;
+}
+.invest-content h1{
+	color: $invest-content-color;
+}
+
+.testimonial-client-name{font-weight: normal;}
+.table{color: #000000;}
+
+@media only screen and (max-width: 991px) {
+	header .navbar-light .navbar-nav .nav-link {
+		color: $mobile-menu-color;
+	}
+}
+
+@media only screen and (max-width: 640px) {
+	.reg-content:after {
+		background: $header-bg-color;
+		color: #fff;
+	}
+
+	.mobile-left-font-color {
+		color: $common-left-font-color !important
+	}
+}

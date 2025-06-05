@@ -1,0 +1,51 @@
+select option {
+  margin: 40px;
+  background: #fff;
+  color: #111;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Put this code in your CSS file, e.g. app.component.css */
+
+/* The div container */
+.qrcodeImage {
+  display: flex;
+  flex: 1;
+}
+
+/* Add custom styles here */
+.center {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}
+
+// .collapsible-btn.active i {
+//   transform: rotate(180deg);
+// }
+
+
+.collapsible-btn[aria-expanded="true"] i {
+  transform: rotate(180deg);
+}
+
+button.btn.btn-link.collapsed i {
+  transform: rotate(180deg);
+}
+
+button.btn.btn-link i {
+  transform: rotate(0deg);
+  transition: 0.5s;
+}
+
+ul.benefits-of-plan li {
+  background: url(../../../assets/images/true-sign.png) no-repeat left center !important;
+  padding: 5px 10px 5px 25px;
+  list-style: none;
+  margin: 0;
+  vertical-align: middle;           
+}
+
+.modal-dialog.modal-lg {
+  max-width: 960px !important;
+}

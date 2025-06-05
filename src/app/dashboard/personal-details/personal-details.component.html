@@ -1,0 +1,898 @@
+<div class="card-body personal-sec pb-4 mb-5">
+
+  <div class="row tb-content">
+    <div class="col-md-12 col-lg-12 trading-demd-inner">
+      <!-- <div [innerHTML]="personalDetailsContent"></div> -->
+      <div class="dashboard-heading">
+        <h3 *ngIf="verifiedSteps?.firstName">Hello {{verifiedSteps?.firstName | titlecase}},</h3>
+        <p class="pt-1">We’d love to know you better. Following details are mandatory for account
+          opening</p>
+      </div>
+      <hr>
+      <!-- <h4 class="tb-subtitle">Tell us a bit more about yourself…</h4>
+      <p>SEBI needs these details to open your account. All the fields are mandatory</p> -->
+
+      <div class="reg-card d-flex justify-content-center align-middle mt-4"
+        *ngIf="verifiedSteps?.isPanVerified && verifiedSteps?.is_boat_user && verifiedSteps?.isBeta">
+        <button class="btn" type="button" (click)="whatsAppRedirect()"> Click to redirect on whats app bot</button>
+      </div>
+
+      <ng-container *ngIf="verifiedSteps?.isPanVerified && !verifiedSteps?.is_boat_user && !verifiedSteps?.isBeta">
+        <form [formGroup]="personalDetailsform">
+          <div class="reg-card">
+            <div class="row">
+
+              <div class="form-group col-md-12 ml-2 px-2 mb-3" *ngIf="getDocumentAvailableList?.length">
+                <ng-container *ngFor="let item of getDocumentAvailableList">
+                  <div class="col-md-6 cursor-pointer mt-3" *ngIf="item?.is_visible && item?.type === 'document'"
+                    (click)="openDocumentPopupModal(item?.document_name, item?.document_modal_title, item?.document_status, item)">
+                    <div class="row border p-3 rounded-16 align-items-center mr-0"
+                      style="box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.16);">
+                      <div class="col-6 col-md-7">
+                        <b> {{item?.document_button_lable}} </b> <br>
+                        <span *ngIf="item?.document_status === 'not_uploaded'">Click to upload</span>
+                        <span *ngIf="item?.document_status === 'uploaded'">Click to preview</span>
+
+                      </div>
+
+                      <div class="col-6 col-md-5 text-right pr-0">
+                        <span class="require-btn" *ngIf="item?.document_status === 'not_uploaded'">Required</span>
+                        <span class="upload-btn-sign" *ngIf="item?.document_status === 'uploaded'">Uploaded</span>
+                        <span class="upload-btn-sign" *ngIf="item?.document_status === 'verified'">Verified</span>
+                        <i class="fa fa-angle-right ml-1"></i>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+
+              <!-- <div class="form-group col-md-6">
+              <label for="email" class="req-control">Full Name (as on PAN)</label>
+              <input class="form-control"
+                [ngClass]="{'disabled': verifiedSteps?.isPanVerified && (verifiedSteps?.isKRAVerified || verifiedSteps?.isDigiLockerVerified)}"
+                placeholder="rajat boss" type="text" formControlName="name">
+              <app-control-messages fieldName="Name" [control]="personalDetailsform.controls['name']">
+              </app-control-messages>
+            </div> -->
+              <div class="form-group col-xs-3 col-md-3 col-6  gender">
+                <label for="email" class="req-control">gender</label>
+                <select class="form-control" style="background-color: #EEE !important;"
+                  [ngClass]="{'disabled cursor-none': verifiedSteps?.isPanVerified && (verifiedSteps?.isKRAVerified || verifiedSteps?.isDigiLockerVerified)}"
+                  formControlName="gender">
+                  <option value="" selected>Gender</option>
+                  <option value="MALE">Male</option>
+                  <option value="FEMALE">Female</option>
+                </select>
+                <app-control-messages fieldName="Gender" [control]="personalDetailsform.controls['gender']">
+                </app-control-messages>
+              </div>
+              <div class="form-group col-md-3 col-xs-3 col-6">
+                <label for="email" class="req-control">marital status</label>
+                <select class="form-control" formControlName="marital_status" (change)="onChangeMaritalStatus($event)">
+                  <option value="" selected>Select Status</option>
+                  <option value="Married">Married</option>
+                  <option value="Unmarried">Unmarried</option>
+                </select>
+                <app-control-messages fieldName="Marital Status"
+                  [control]="personalDetailsform.controls['marital_status']">
+                </app-control-messages>
+              </div>
+              <div class="form-group col-md-3 pl-1 birth-date"
+                *ngIf="verifiedSteps?.isPanVerified && !verifiedSteps?.isKRAVerified">
+                <label for="email" class="req-control">Date of birth
+                  <!-- <span class="info-tp"><img src="assets/images/gray-info.svg">
+                      <div class="info-tp-content tp-info">
+                        <p class="m-0">
+                          Once registered "Date of Birth" on the application can not be changed. Please contact support for
+                          help.
+                        </p>
+                      </div>
+                    </span> -->
+                </label>
+                <div class="position-relative datepicker">
+                  <input type="text" class="form-control readonly-dob disabled"
+                    style="background-color: #EEE !important;" placeholder="DD/MM/YYYY" dateFormat="dd/MM/yyyy"
+                    formControlName="dob" rInputMask="99/99/9999" ngbDatepicker #d="ngbDatepicker">
+                  <!-- <div class="input-group-append calendar">
+                    <span class="btn btn-outline-secondary" (click)="d.toggle()" type="button"><img
+                        src="assets/images/calendar.svg"></span>
+                  </div> -->
+                </div>
+                <div
+                  *ngIf="personalDetailsform?.controls['dob']?.invalid && (personalDetailsform?.controls['dob']?.dirty || personalDetailsform?.controls['dob']?.touched)">
+                  <div class="error" *ngIf="personalDetailsform?.controls['dob']?.errors?.required">
+                    {{'verify_dob_mandatory' | translate}}
+                  </div>
+                  <div class="error"
+                    *ngIf="personalDetailsform?.controls['dob']?.errors?.Invaliddob && !personalDetailsform?.controls['dob']?.errors?.required">
+                    {{'enter_valid_date' | translate}}
+                  </div>
+                  <div class="error"
+                    *ngIf="personalDetailsform?.controls['dob']?.errors?.Invaliddob && personalDetailsform?.controls['dob']?.errors?.InvalidAge">
+                    {{'enter_valid_date' | translate}}
+                  </div>
+                  <div class="error"
+                    *ngIf="personalDetailsform?.controls['dob']?.errors?.InvalidAge && !personalDetailsform?.controls['dob']?.errors?.Invaliddob">
+                    {{'invalid date' | translate}}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-md-3 col-sm-6  col-6 pt-2">
+                <label for="email" class="req-control">Education Type</label>
+                <select class="form-control" formControlName="education_type">
+                  <option value="">Select Education Type</option>
+                  <option [value]='item.id' *ngFor="let item of educationArray">{{item.name}}</option>
+                </select>
+                <app-control-messages fieldName="Education Type"
+                  [control]="personalDetailsform.controls['education_type']">
+                </app-control-messages>
+              </div>
+              <div class="form-group col-md-3  col-sm-6 col-6 pt-2">
+                <label for="email" class="req-control">occupation </label>
+                <select class="form-control" formControlName="occupation_type">
+                  <option value="">Select Occupation Type</option>
+                  <option [value]='item.id' *ngFor="let item of OccupationTypeArray">{{item.name}}</option>
+                </select>
+                <app-control-messages fieldName="Occupation Type"
+                  [control]="personalDetailsform.controls['occupation_type']">
+                </app-control-messages>
+              </div>
+              <div class="form-group col-md-3 col-sm-6 col-6 pl-1 pt-2">
+                <label for="email" class="req-control">annual income</label>
+                <select class="form-control" formControlName="income_range">
+                  <option value="">Select Income Range</option>
+                  <option [value]='item.id' *ngFor="let item of IncomeRangeArray">{{item.name}}</option>
+                </select>
+                <app-control-messages fieldName="Income Range" [control]="personalDetailsform.controls['income_range']">
+                </app-control-messages>
+              </div>
+              <div class="form-group col-md-3 col-sm-6 col-6 pt-2">
+                <label for="email" class="req-control">trading experience</label>
+                <select class="form-control" formControlName="tradingExp">
+                  <option value="" selected>select</option>
+                  <option [value]='item.id' *ngFor="let item of tradingExp">{{item.lable}}</option>
+                </select>
+                <app-control-messages fieldName="Trading Exp." [control]="personalDetailsform.controls['tradingExp']">
+                </app-control-messages>
+              </div>
+
+
+              <div class="col-md-12 mt-2">
+                <div class="select-label mb-3 row justify-content-between m-0">
+                  <div class="col-md-6">
+                    <div class="nominee-info">
+                      Do you want to nominate anyone for your account?
+                    </div>
+                  </div>
+
+
+                  <div class="col-md-6 nominee-option">
+
+                    <span class="nominee-switch">
+                      <div class="form-check form-check-inline">
+                        <input class="cursor-pointer" type="radio" name="radio" id="inlineRadio1"
+                          (change)="switchToNominee()" [checked]="isNomineeAvailable" /> &nbsp;
+                        <label class="form-check-label cursor-pointer mb-0 mr-2" for="inlineRadio1"
+                          (click)="switchToNominee()">Yes,
+                          let’s do it</label> &nbsp;
+                        <input class="cursor-pointer" type="radio" name="radio" id="inlineRadio2"
+                          (change)="switchToNominee()" [checked]="!isNomineeAvailable" /> &nbsp;
+                        <label class="form-check-label cursor-pointer mb-0" for="inlineRadio2"
+                          (click)="switchToNominee()">No, I’ll do it later</label>
+                      </div>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <!-- <div class="row ml-0 mr-0 inline-switch">
+              <div class="col-md-12 select-label mt-2 mb-3 d-flex justify-content-between">
+                Are you politically exposed person?
+                <span class="nominee-switch">
+                  <span class="gray">No</span><label class="switch">
+                    <input type="checkbox" formControlName="politicallyExp">
+                    <span class="slider round"></span>
+                  </label>
+                  Yes
+                </span>
+              </div>
+              <div class="row ml-0 mr-0 inline-switch">
+                <div class="col-md-12 select-label mt-2 mb-3 d-flex justify-content-between">
+                  Are you politically exposed person?
+                  <span class="nominee-switch">
+                    <span class="gray">No</span><label class="switch">
+                      <input type="checkbox" formControlName="politicallyExp">
+                      <span class="slider round"></span>
+                    </label>
+                    Yes
+                  </span>
+                </div>
+              </div> -->
+
+            <!-- <div class="row ml-0 mr-0 inline-switch">
+                <div class="col-md-12 select-label mt-2 mb-3 d-flex justify-content-between">
+                  Are you resident of india?
+                  <span class="nominee-switch">
+                    <span class="gray">No</span><label class="switch">
+                      <input type="checkbox" formControlName="isResidencyOfIndia">
+                      <span class="slider round"></span>
+                    </label>
+                    Yes
+                  </span>
+                </div>
+              </div> -->
+            <div class="row pt-2">
+              <div class="form-group col-md-6 ">
+                <!-- <label for="email" class="req-control">Father’s/Husband’s Name (as per PAN)</label>
+                <input class="form-control" placeholder="Father’s/Husband’s Name (as per PAN)" type="text"
+                  formControlName="father_spouse_name"> -->
+                <label for="email" class="req-control">
+                  <ng-container *ngIf="lableOfFatherHusban">{{lableOfFatherHusban}} (as per PAN)</ng-container>
+                </label>
+                <input class="form-control" placeholder="enter {{lableOfFatherHusban}}" type="text"
+                  formControlName="father_spouse_name">
+                <app-control-messages fieldName="{{lableOfFatherHusban}}"
+                  [control]="personalDetailsform.controls['father_spouse_name']">
+                </app-control-messages>
+              </div>
+              <div class="form-group col-md-6 mb-0">
+                <label for="email">mother’s name</label>
+                <input class="form-control" placeholder="enter Mother’s Name" type="text" formControlName="mother_name">
+                <app-control-messages fieldName="Mother’s name" [control]="personalDetailsform.controls['mother_name']">
+                </app-control-messages>
+              </div>
+
+
+              <div class="form-group col-md-8 mt-3 ">
+                <label for="address" class="req-control mr-1">Permanent Address</label> <span class="info-tp"><img
+                    src="assets/images/gray-info.svg"
+                    title="This section is where you provide your official and long-term place of residence. Enter the address where you permanently reside, including house number/name, street, area, city, state, and PIN code. This information is typically required for verification and record-keeping purposes."></span>
+
+
+                <p [hidden]='!verifiedSteps?.isPanVerified' class="address-block pt-2 mt-2">
+                  <ng-container *ngIf="permanentAddress?.address_line1">
+                    {{permanentAddress?.address_line1}},</ng-container>
+                  <ng-container *ngIf="permanentAddress?.address_line2">
+                    {{permanentAddress?.address_line2}},</ng-container>
+                  <!-- <ng-container *ngIf="permanentAddress?.address_line3"> {{permanentAddress?.address_line3}},</ng-container> -->
+                  <ng-container *ngIf="permanentAddress?.city"> {{permanentAddress?.city}},
+                  </ng-container>
+                  <ng-container *ngIf="permanentAddress?.pin_code"> {{permanentAddress?.pin_code | mask:'000 000'}},
+                  </ng-container>
+                  <ng-container *ngIf="permanentAddress?.state"> {{permanentAddress?.state}},
+                  </ng-container>
+                  <ng-container *ngIf="permanentAddress?.country"> {{permanentAddress?.country}}</ng-container>
+                </p>
+                <!-- <p class="address-block">515 A, Lodhi Apartment, Ashok Nagar, Palasia,Indore, M.P - 452 003, India.</p> -->
+                <p class="personal-content"> Did you move to a new address? Don’t worry you
+                  can always change this once your account is opened! <a style="color: #34b350;" href="" target="_blank"
+                    href="https://support.arihantcapital.com/support/solutions/articles/33000278461-why-can-t-i-change-my-address-what-should-i-do-if-i-want-to-update-my-address-">Know
+                    more</a></p>
+              </div>
+            </div>
+            <!-- <div class="form-group">
+              <button type="submit" class="btn" [ngClass]="{'disable': !personalDetailsform.valid}">{{'continue' |
+                translate}}
+               </button>
+            </div> -->
+
+
+          </div>
+        </form>
+      </ng-container>
+    </div>
+  </div>
+
+</div>
+
+<div class="container footer-dash" *ngIf="!verifiedSteps?.is_boat_user && !verifiedSteps?.isBeta">
+  <hr>
+  <div class="dashboard-btn">
+    <div class="reg-card welcome-btn" *ngIf="verifiedSteps?.isPanVerified">
+      <button type="submit" class="btn" (click)="onSubmit()" [ngClass]="{'disable': !personalDetailsform.valid}">{{'Save
+        & Continue' |
+        translate}}
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-template #fileuploadAadharpopup let-c="close" let-d="dismiss">
+
+  <div class="modal-body p-0 payment-popup uploaddoc-popup">
+    <div class="d-flex justify-content-between align-items-end main-header">
+      <div class="popup-header">
+        <h4 class="modal-title">{{nameOfTitleDocument}}</h4>
+      </div>
+      <div class="cross-icon pt-0 mt-0">
+        <a (click)="c('cancel')" href="javascript:void(0)"> <img src="assets/images/cross-icon.png"></a>
+      </div>
+    </div>
+    <!-- <h4 class="border-btm-none" *ngIf="documentDetails?.proof_name">Please upload {{documentDetails?.proof_name}}</h4>
+    <h4 class="border-btm-none" *ngIf="documentDetails?.guardian_proof_name">Please upload
+      {{documentDetails?.guardian_proof_name}}</h4> -->
+    <p class="border-btm-none" *ngIf="!documentDetails?.detailText">Hello! Please take a picture and click on Save and
+      Continue to upload the document. Make
+      sure
+      the picture is
+      clear (not cut or blurry), otherwise application will be rejected.</p>
+
+
+    <div class="border-none" *ngIf="nameOfDocument === 'cancelled_cheque'">
+      <p> Please upload a clear copy of your cancelled cheque with your name printed on it <br>
+        {{verifiedSteps?.firstName || ''}} {{verifiedSteps?.middleName || ''}} {{verifiedSteps?.lastName || ''}} </p>
+    </div>
+
+    <div class="border-none " *ngIf="nameOfDocument === 'income_proof'">
+      <p class="text-center">
+        <b> You can fetch bank statement of last 6 month using provided bank details. </b>
+      </p>
+      <!-- <div class="text-center">
+        <button type="button" (click)="fetchBankStatement()" class="text-center align-self-center upload-btn">Fetch
+          Bank Statement
+          <img src="assets/images/dashboard/upload.png" alt="" style="transform: rotate(180deg);"></button>
+      </div> -->
+    </div>
+    <div class="d-flex justify-content-center align-items-center mt-3" *ngIf="nameOfDocument === 'income_proof'">
+      <b> OR </b>
+    </div>
+
+    <!-- <div class="border-none" [innerHTML]="documentDetails?.detailText"
+      *ngIf="documentDetails?.detailText && nameOfDocument !== 'cancelled_cheque'"></div> -->
+
+    <div class="form-group col-md-6 pr-1 pl-0" *ngIf="isDocsProofRequired">
+      <label for="email" class="req-control">Type of income proof</label>
+      <select class="form-control" [(ngModel)]="isDocsDropDownSelected" style="color: #000;">
+        <option value="" selected>-- select -- </option>
+        <option [value]="item?.id" *ngFor="let item of isDocsDropDown">{{item?.name}}</option>
+      </select>
+      <div class="error" *ngIf="!isDocsDropDownSelected">Please select type</div>
+    </div>
+
+    <!--------------------- Webcame code: START --------------------->
+    <div *ngIf="clickedWebcamPicture && !fileUploading && !viewSectionOfImage">
+      <div class="snapshot row mr-md-0">
+        <!-- <div class="col-md-10" *ngIf="!liveWebcam">
+        <div class="upload-doc-box">
+          <img [src]="webCamMediaPriview" />
+          <span (click)="removeWebCamMedia(webCamMediaPriview)"><img src="assets/images/edit.svg">Edit
+            Image/File</span>
+        </div>
+      </div> -->
+
+        <div class="col-md-12" *ngIf="!liveWebcam">
+          <div class="row">
+            <div class="col-md-9">
+              <div class="mt-1"><b>You can crop the image to ensure readability but make sure the document doesn’t
+                  get cut!</b></div>
+              <image-cropper [imageURL]="webCamMediaPriview" [maintainAspectRatio]="false" [aspectRatio]="1 / 1"
+                format="jpeg" [imageQuality]="50" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
+                (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()" [canvasRotation]="canvasRotation"
+                [transform]="transform"></image-cropper>
+              <!-- <div class="row form-group text-center justify-content-center">
+                <button type="button" class="btn m-1" style="background-color: #1d1d1d;color:white;right: 0;"
+                  (click)="cancelCropped()">{{'Cancel' | translate}}
+                </button>
+                <button type="button" class="btn m-1" style="background-color: #09B7DD;color:white;right: 0;"
+                  (click)="confirmCropped()">{{'Confirm' | translate}}
+                </button>
+                <button type="button" class="btn m-1"
+                  style="background-color: #1d1d1d;color:white;right: 0;float: right;margin:0 0 0 11px;"
+                  (click)="rotateLeft()">Rotate left</button>
+                <button type="button" class="btn m-1"
+                  style="background-color: #1d1d1d;color:white;right: 0;float: right;margin:0 0 0 11px;"
+                  (click)="rotateRight()">Rotate right</button>
+              </div> -->
+            </div>
+            <div class="col-md-3" *ngIf="!liveWebcam">
+              <div><b>Preview</b></div>
+              <button class="view-img">
+                <div class="img-td-div">
+                  <img [src]="croppedImage" />
+                </div>
+              </button>
+              <div class="scroll-upload" *ngIf="webCamMediaList.length > 1">
+                <button class="view-img" *ngFor="let mediaPreview of webCamMediaList; let i = index">
+                  <div class="img-td-div" (click)="webCamShowMediaBig(i)">
+                    <img src="{{ mediaPreview }}" alt="img">
+                  </div>
+                </button>
+                <button *ngIf="nameOfDocument !=='photograph'" class="green-transparent-btn mt-2"
+                  (click)="addNewDocumentImage()"><span>+</span>Add New
+                  Image/File</button>
+              </div>
+            </div>
+            <div class="col-md-10 mr-md-0 mb-2 mt-2" *ngIf="nameOfDocument ==='photograph' && croppedImage">
+              <div class=" border-none">
+                <p class="mb-1 pb-0 border-none">{{'share_photocapture_link_text' | translate}}</p>
+              </div>
+              <!-- <a href="javascript::void(0);" class="mr-2 ml-0" (click)="sharePhotoCaptureLink()">Share Photo Capture
+                Link</a> -->
+            </div>
+            <div class="modal-footer col-md-12 border-top-1 justify-content-between">
+              <div class="form-group ">
+                <button type="button" class="green-transparent-btn m-1" (click)="rotateLeft()"> <img
+                    src="assets/images/dashboard/rotate-ccw.png" alt=""> Rotate left</button>
+                <button type="button" class="green-transparent-btn m-1" (click)="rotateRight()"><img
+                    src="assets/images/dashboard/rotate-cw.png" alt=""> Rotate right</button>
+              </div>
+              <div class="form-group ">
+                <button type="button" class="red-transparent-btn m-1" (click)="cancelCropped()">{{'Cancel' |
+                  translate}}
+                </button>
+                <button type="button" class="crop-image-btn m-1" (click)="confirmCropped()">{{'Crop Image' |
+                  translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- {{addNewAadhaarImageUpload}} ===> {{clickedWebcamPicture}} ==> maxupload : {{maxUploadLimit}}
+        {{mediaPreviews?.length}} ===> {{viewMediaPreviewsList?.length}} -->
+        <div [hidden]="!liveWebcam" class="col-md-12">
+          <div class="camera upload-doc-box d-flex justify-content-center align-items-center">
+            <webcam [trigger]="triggerObservable" (imageCapture)="handleImage($event)"
+              [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
+              [videoOptions]="videoOptions" [imageQuality]="1" (cameraSwitched)="cameraWasSwitched($event)"
+              (initError)="handleInitError($event)" class="webcam">
+            </webcam>
+          </div>
+        </div>
+
+        <div class="col-md-2 p-md-0" *ngIf="!croppedImage && !liveWebcam">
+          <div class="scroll-upload">
+            <button class="view-img" *ngFor="let mediaPreview of webCamMediaList; let i = index">
+              <div class="img-td-div" (click)="webCamShowMediaBig(i)">
+                <img src="{{ mediaPreview }}" alt="img">
+              </div>
+            </button>
+            <button *ngIf="nameOfDocument !=='photograph'" class="green-transparent-btn add-new-btn-option"
+              (click)="addNewDocumentImage()"><span>+</span>Add New
+              Image/File</button>
+          </div>
+        </div>
+      </div>
+
+      <h4 *ngIf="errors.length > 0">Messages:</h4>
+      <ul *ngFor="let error of errors">
+        <li>{{error | json}}</li>
+      </ul>
+    </div>
+    <!--------------------- Webcame code: End --------------------->
+
+
+    <!----------------- UPLOAD image/file aadhar: START -------------->
+
+
+    <div class="col-md-12 mx-0" *ngIf="!viewSectionOfImage">
+      <!-- {{addNewAadhaarImageUpload}} ===> {{clickedWebcamPicture}}
+      {{mediaPreviews?.length}} ===> {{viewMediaPreviewsList?.length}} -->
+      <div class="row">
+        <div *ngIf="!fileUploading"
+          [ngClass]="{'col-md-12': (addNewAadhaarImageUpload && !clickedWebcamPicture && (!mediaPreviews?.length && !viewMediaPreviewsList?.length)),'col-md-10': (addNewAadhaarImageUpload && !clickedWebcamPicture && (mediaPreviews?.length || viewMediaPreviewsList?.length)) || (addNewAadhaarImageUpload && clickedWebcamPicture) || (!addNewAadhaarImageUpload && !clickedWebcamPicture)}">
+          <div class="upload-box"
+            *ngIf="addNewAadhaarImageUpload && !imageChangedEvent && nameOfDocument !=='photograph' && isUseCamera && isUploadFile">
+            <div class="justify-content-center w-100">
+              <div class="d-flex justify-content-center">
+
+                <div class="row signature-row pt-0" *ngIf="nameOfDocument ==='cancelled_cheque'">
+                  <div class="col-md-12 col-10 mx-auto">
+                    <div class="text-center mt-3">
+                      <img src="assets/images/dashboard/cancelled-cheque.png" alt="">
+                      <p class="sign-head" style="color: #434343;">Create cancelled cheque</p>
+                      <p class="sign-para">On an empty cheque with clear details, strike two parallel lines across the
+                        cheque and write “Cancelled” in between those parallel lines.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="row signature-row pt-0" *ngIf="nameOfDocument !=='cancelled_cheque'">
+                  <div class="col-md-12 col-12 ">
+                    <div class="text-center mx-auto">
+                      <img src="assets/images/dashboard/default-document.png" alt="">
+                      <p class="sign-head" style="color: #434343;">{{nameOfTitleDocument}}</p>
+                      <!-- <p class="sign-para w-100 mx-auto">Please upload proof</p> -->
+                      <p class="border-btm-none" *ngIf="documentDetails?.proof_name">Please upload
+                        {{documentDetails?.proof_name}}</p>
+                      <p class="border-btm-none" *ngIf="documentDetails?.guardian_proof_name">Please upload
+                        {{documentDetails?.guardian_proof_name}}</p>
+                      <div class="border-none" [innerHTML]="documentDetails?.detailText"
+                        *ngIf="documentDetails?.detailText && nameOfDocument !== 'cancelled_cheque'"></div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="row justify-content-center">
+                <div class="col-md-4 col-6 signature-btn-option ">
+                  <a href="javascript:void(0)" (click)="enableWebcamPicture()">
+                    <button type="button" class="upload-btn ">Use Camera <i class="fa fa-camera"
+                        aria-hidden="true"></i></button>
+                  </a>
+                </div>
+                <div class="col-md-4 col-6" *ngIf="nameOfDocument !=='photograph'">
+                  <a href="javascript:void(0)" class="d-flex flex-column align-items-center upload-file cursor-pointer">
+                    <input type="file" ng2FileSelect [uploader]="uploader" multiple>
+                    <input type="file" (change)="fileChangeEvent($event)" />
+                    <button type="button" class="upload-btn">Upload Image <img src="assets/images/dashboard/upload.png"
+                        alt=""></button>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- <a (click)="enableWebcamPicture()" href="javascript:void(0)" *ngIf="nameOfDocument !=='photograph'"
+              class="d-flex flex-column"><img src="assets/images/dashboard/camera.svg">
+              <div class="d-flex align-items-center"><img src="assets/images/dashboard/camera-sml.svg">Use Camera
+              </div>
+            </a> -->
+            <!-- <div *ngIf="nameOfDocument !=='photograph'" class="or-text"><span>OR</span></div>
+            <a *ngIf="nameOfDocument !=='photograph'" href="javascript:void(0)"
+              class="d-flex flex-column align-items-center upload-file"><img
+                src="assets/images/dashboard/file-minus.svg">
+              <input type="file"  ng2FileSelect [uploader]="uploader" multiple>
+              <div class="d-flex"><img src="assets/images/dashboard/upload.svg">Upload File</div>
+              <input type="file" (change)="fileChangeEvent($event)" />
+            </a>
+            <a (click)="enableWebcamPicture()" href="javascript:void(0)" *ngIf="nameOfDocument ==='photograph'"
+              style="margin: 0 auto;"><img src="assets/images/dashboard/camera.svg">
+              <div class="align-items-center"><img style="margin:5% 25%"
+                  src="assets/images/dashboard/camera-sml.svg">Use
+                Camera </div>
+            </a> -->
+          </div>
+
+          <div class="upload-box"
+            *ngIf="addNewAadhaarImageUpload && !imageChangedEvent && nameOfDocument !=='photograph' && isUseCamera && !isUploadFile">
+            <div class="justify-content-center w-100">
+              <div class="d-flex justify-content-center">
+                <div class="row signature-row pt-0" *ngIf="nameOfDocument ==='cancelled_cheque'">
+                  <div class="col-md-12 col-12 mx-auto">
+                    <div class="text-center">
+                      <img src="assets/images/dashboard/cancelled-cheque.png" alt="">
+                      <p class="sign-head" style="color: #434343;">Create cancelled cheque</p>
+                      <p class="sign-para">On an empty cheque with clear details, strike two parallel lines across the
+                        cheque and write “Cancelled” in between those parallel lines.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="row signature-row pt-0" *ngIf="nameOfDocument !=='cancelled_cheque'">
+                  <div class="col-md-12 col-12 ">
+                    <div class="text-center mx-auto">
+                      <img src="assets/images/dashboard/default-document.png" alt="">
+                      <p class="sign-head" style="color: #434343;">{{nameOfTitleDocument}}</p>
+                      <!-- <p class="sign-para w-100 mx-auto">Please upload proof</p> -->
+                      <p class="border-btm-none" *ngIf="documentDetails?.proof_name">Please upload
+                        {{documentDetails?.proof_name}}</p>
+                      <p class="border-btm-none" *ngIf="documentDetails?.guardian_proof_name">Please upload
+                        {{documentDetails?.guardian_proof_name}}</p>
+                      <div class="border-none" [innerHTML]="documentDetails?.detailText"
+                        *ngIf="documentDetails?.detailText && nameOfDocument !== 'cancelled_cheque'"></div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="row justify-content-center">
+                <div class="col-md-4 col-6 signature-btn-option ">
+                  <a href="javascript:void(0)" (click)="enableWebcamPicture()">
+                    <button type="button" class="upload-btn ">Use Camera <i class="fa fa-camera"
+                        aria-hidden="true"></i></button>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="upload-box"
+            *ngIf="addNewAadhaarImageUpload && !imageChangedEvent && nameOfDocument !=='photograph' && !isUseCamera && isUploadFile">
+            <div class="justify-content-center w-100">
+              <div class="d-flex justify-content-center">
+
+                <div class="row signature-row pt-0" *ngIf="nameOfDocument ==='cancelled_cheque'">
+                  <div class="col-md-12 col-12 mx-auto">
+                    <div class="text-center mt-3">
+                      <img src="assets/images/dashboard/cancelled-cheque.png" alt="">
+                      <p class="sign-head" style="color: #434343;">Create cancelled cheque</p>
+                      <p class="sign-para">On an empty cheque with clear details, strike two parallel lines across the
+                        cheque and write “Cancelled” in between those parallel lines.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="row signature-row pt-0" *ngIf="nameOfDocument !=='cancelled_cheque'">
+                  <div class="col-md-12 col-12 ">
+                    <div class="text-center mx-auto">
+                      <img src="assets/images/dashboard/default-document.png" alt="">
+                      <p class="sign-head" style="color: #434343;">{{nameOfTitleDocument}}</p>
+                      <!-- <p class="sign-para w-100 mx-auto">Please upload proof</p> -->
+                      <p class="border-btm-none" *ngIf="documentDetails?.proof_name">Please upload
+                        {{documentDetails?.proof_name}}</p>
+                      <p class="border-btm-none" *ngIf="documentDetails?.guardian_proof_name">Please upload
+                        {{documentDetails?.guardian_proof_name}}</p>
+                      <div class="border-none" [innerHTML]="documentDetails?.detailText"
+                        *ngIf="documentDetails?.detailText && nameOfDocument !== 'cancelled_cheque'"></div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="row justify-content-center">
+                <div class="col-md-12 col-12">
+                  <a href="javascript:void(0)" class="d-flex flex-column align-items-center upload-file">
+                    <input type="file" ng2FileSelect [uploader]="uploader" multiple>
+                    <input type="file" (change)="fileChangeEvent($event)" />
+
+                    <button type="button" class="upload-btn">Upload Image/File <img
+                        src="assets/images/dashboard/upload.png" alt=""></button>
+
+                  </a>
+                </div>
+              </div>
+              <div class="row pt-3 justify-content-center">
+                <p [innerHTML]="documentDetails?.validationText"></p>
+              </div>
+            </div>
+            <!-- <a href="javascript:void(0)" class="d-flex flex-column align-items-center upload-file"
+              style="margin: 0 auto;">
+              <img src="assets/images/dashboard/file-minus.svg" style="width: 100%;">
+              <input type="file" ng2FileSelect [uploader]="uploader" multiple>
+              <input type="file" (change)="fileChangeEvent($event)" />
+              <div class="align-items-center"><img src="assets/images/dashboard/upload.svg">Upload File</div>
+            </a> -->
+          </div>
+
+          <div class="upload-box"
+            *ngIf="addNewAadhaarImageUpload && !imageChangedEvent && nameOfDocument ==='photograph'">
+            <div class="  justify-content-center">
+              <div class="d-flex justify-content-center">
+                <div class="row signature-row">
+                  <div class="col-md-4 col-4 mx-auto">
+                    <div class="text-center">
+                      <img src="assets/images/dashboard/incorrect-pic.png" alt="">
+                      <p class="sign-head" style="color: #C7264C;">Incorrect Photo</p>
+                      <p class="sign-para">Side facing, with sunglasses or with filters</p>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-4 mx-auto">
+                    <div class="text-center">
+                      <img src="assets/images/dashboard/right-pic.png" alt="">
+                      <p class="sign-head" style="color: #34B350;">Correct Photo</p>
+                      <p class="sign-para">Full face should be clearly visible in the photo with no filters</p>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-4 mx-auto">
+                    <div class="text-center">
+                      <img src="assets/images/dashboard/wrong-pic.png" alt="">
+                      <p class="sign-head" style="color: #C7264C;">Incorrect Photo</p>
+                      <p class="sign-para">No group photos or tilted or unclear photos</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row justify-content-center">
+                <div class="signature-btn-option pt-3 pb-5">
+                  <a href="javascript:void(0)" (click)="enableWebcamPicture()">
+                    <button type="button" class="upload-btn ">Use Camera <i class="fa fa-camera"
+                        aria-hidden="true"></i></button>
+                  </a>
+                </div>
+                <!-- <div class="col-md-5 col-6">
+                  <a (click)="enableWebcamPicture()" href="javascript:void(0)" class="d-flex flex-column signature-btn-option"> 
+                    <button class="sign-pad-btn mr-4">Use Camera <img src="assets/images/dashboard/pancil.png"
+                      alt=""></button>
+                  </a>
+                </div> -->
+              </div>
+
+            </div>
+            <!-- <a (click)="enableWebcamPicture()" href="javascript:void(0)" *ngIf="nameOfDocument ==='photograph'"
+              style="margin: 0 auto;width: 150px;text-align: center;">
+              <img src="assets/images/dashboard/camera.svg" style="width: 100%;">
+              <div class="align-items-center"><img src="assets/images/dashboard/camera-sml.svg">Use Camera </div>
+            </a> -->
+          </div>
+
+
+          <div class="upload-doc-box d-flex justify-content-center align-items-center"
+            *ngIf="!addNewAadhaarImageUpload && !clickedWebcamPicture">
+            <img *ngIf="aadharDisplayImage?.contentType !== 'application/pdf'" src="{{aadharDisplayImage?.file}}">
+            <img *ngIf="aadharDisplayImage?.contentType === 'application/pdf'" src="assets/images/pdf_icon.png"
+              style="width: 100px;object-fit: contain;">
+            <!-- <span (click)="removeEditMedia(aadharDisplayImage?.file)"><img src="assets/images/edit.svg">Edit
+              Image/File</span> -->
+          </div>
+        </div>
+
+        <div class="col-md-12" *ngIf="fileUploading">
+          <div class="upload-box upload-progress">
+            <h5>Uploading File...</h5>
+            <div class="progress-ratio d-flex justify-content-between"><span>
+                Uploading...</span><span>{{uploadProgress}} %</span></div>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploadProgress + '%' }"></div>
+            </div>
+            <p>Give us a moment to upload your documents</p>
+          </div>
+        </div>
+
+        <div class="col-md-12" *ngIf="imageChangedEvent">
+          <div class="row">
+
+            <div class="col-md-10">
+              <div class="mt-1"><b>You can crop the image to ensure readability but make sure the document doesn’t get
+                  cut!</b></div>
+              <div class="col-10">
+                <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="false"
+                  [aspectRatio]="1 / 1" format="jpeg" [imageQuality]="50" (imageCropped)="imageCropped($event)"
+                  (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()"
+                  [canvasRotation]="canvasRotation" [transform]="transform"></image-cropper>
+              </div>
+
+              <!-- <div class="row form-group text-center justify-content-center">
+                <button type="button" class="btn m-1" style="background-color: #1d1d1d;color:white;right: 0;"
+                  (click)="cancelCropped()">{{'Cancel' | translate}}
+                </button>
+                <button type="button" class="btn m-1" style="background-color: #09B7DD;color:white;right: 0;"
+                  (click)="confirmCropped()">{{'Confirm' | translate}}
+                </button>
+
+                <button type="button" class="btn m-1"
+                  style="background-color: #1d1d1d;color:white;right: 0;float: right;margin:0 0 0 11px;"
+                  (click)="rotateLeft()" *ngIf="imageChangedEvent">Rotate left</button>
+                <button type="button" class="btn m-1"
+                  style="background-color: #1d1d1d;color:white;right: 0;float: right;margin:0 0 0 11px;"
+                  (click)="rotateRight()" *ngIf="imageChangedEvent">Rotate right</button>
+
+              </div> -->
+            </div>
+            <div class="col-md-2">
+              <div><b>Preview</b></div>
+              <button class="view-img" *ngIf="imageChangedEvent">
+                <div class="img-td-div">
+                  <img [src]="croppedImage" />
+                </div>
+              </button>
+
+
+              <div class="scroll-upload" *ngIf="!clickedWebcamPicture && !fileUploading && mediaPreviews?.length">
+                <button class="view-img" *ngFor="let mediaPreview of mediaPreviews; let i = index">
+                  <div class="img-td-div" (click)="documentShowBigMedia(i,true)">
+                    <img *ngIf="mediaPreview?.contentType !== 'application/pdf'" src="{{ mediaPreview?.file }}"
+                      alt="img">
+
+                    <img class="pdf-listview" *ngIf="mediaPreview?.contentType === 'application/pdf'"
+                      src="assets/images/pdf_icon.png" alt="img">
+                  </div>
+                </button>
+
+                <button type="button" class="green-transparent-btn add-new-btn-option" (click)="addNewDocumentImage()"
+                  *ngIf="mediaPreviews?.length && maxUploadLimit > mediaPreviews?.length"><span>+</span>Add New
+                  Image/File</button>
+
+              </div>
+            </div>
+
+            <div class="modal-footer col-md-12 border-top-1 rotate-view-option">
+              <div class="form-group ">
+                <button type="button" class="green-transparent-btn m-1" (click)="rotateLeft()"
+                  *ngIf="imageChangedEvent"> <img src="assets/images/dashboard/rotate-ccw.png" alt=""> Rotate
+                  left</button>
+                <button type="button" class="green-transparent-btn m-1" (click)="rotateRight()"
+                  *ngIf="imageChangedEvent"><img src="assets/images/dashboard/rotate-cw.png" alt=""> Rotate
+                  right</button>
+              </div>
+              <div class="form-group ">
+                <button type="button" class="red-transparent-btn m-1" (click)="cancelCropped()">{{'Cancel' |
+                  translate}}
+                </button>
+                <button type="button" class="crop-image-btn m-1" (click)="confirmCropped()">{{'Crop Image' |
+                  translate}}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2 p-md-0" *ngIf="!clickedWebcamPicture && !fileUploading && !imageChangedEvent">
+          <div class="scroll-upload">
+
+            <button class="view-img" *ngFor="let mediaPreview of viewMediaPreviewsList; let i = index">
+              <div class="img-td-div" (click)="previewImageBig(i)">
+                <img *ngIf="mediaPreview?.content_type !== 'application/pdf'" src="{{ mediaPreview?.url }}" alt="img">
+                <img class="pdf-listview" *ngIf="mediaPreview?.content_type === 'application/pdf'"
+                  src="assets/images/pdf_icon.png" alt="img">
+              </div>
+            </button>
+
+            <button class="view-img" *ngFor="let mediaPreview of mediaPreviews; let i = index">
+              <div class="img-td-div" (click)="documentShowBigMedia(i,true)">
+
+                <img *ngIf="mediaPreview?.contentType !== 'application/pdf'" src="{{ mediaPreview?.file }}" alt="img">
+                <img class="pdf-listview" *ngIf="mediaPreview?.contentType === 'application/pdf'"
+                  src="assets/images/pdf_icon.png" alt="img">
+              </div>
+            </button>
+            <button class="green-transparent-btn add-new-btn-option" (click)="addNewDocumentImage()"
+              *ngIf="mediaPreviews?.length && maxUploadLimit > mediaPreviews?.length"><span>+</span>Add New
+              Image/File</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!----------------- UPLOAD image/file aadhar: END -------------->
+
+    <!----------------- VIEW image/file : START -------------->
+
+    <div class="row mr-md-0" *ngIf="viewSectionOfImage">
+      <div class="col-md-10" *ngIf="!fileUploading">
+        <div class="upload-doc-box"
+          *ngIf="viewPreviewDisplayImage?.content_type === 'image/jpeg' || viewPreviewDisplayImage?.content_type === 'image/jpg' || viewPreviewDisplayImage?.content_type === 'image/png'">
+          <img src="{{viewPreviewDisplayImage?.url}}">
+          <!-- <span *ngIf="!isDocumentVerified" (click)="removeViewSectionMedia(viewPreviewDisplayImage?.id)">
+            <img src="assets/images/edit.svg">Remove Image/File</span> -->
+        </div>
+
+        <div class="upload-doc-box" *ngIf="viewPreviewDisplayImage?.content_type === 'application/pdf'">
+          <iframe [src]="viewPreviewDisplayImage?.url | safeUrl" height="100%" width="100%"></iframe>
+          <!-- <span *ngIf="!isDocumentVerified" (click)="removeViewSectionMedia(viewPreviewDisplayImage?.id)">
+            <img src="assets/images/edit.svg">Remove Image/File</span> -->
+        </div>
+      </div>
+
+      <div class="col-md-2 p-md-0">
+        <div class="scroll-upload">
+          <button class="view-img" *ngFor="let mediaPreview of viewMediaPreviewsList; let i = index">
+            <div class="img-td-div" (click)="previewImageBig(i)">
+              <img *ngIf="mediaPreview?.content_type !== 'application/pdf'" src="{{ mediaPreview?.url }}" alt="img">
+              <img class="pdf-listview" *ngIf="mediaPreview?.content_type === 'application/pdf'"
+                src="assets/images/pdf_icon.png" alt="img">
+            </div>
+          </button>
+          <button *ngIf="!isDocumentVerified && maxUploadLimit > mediaPreviews?.length"
+            class="green-transparent-btn add-new-btn-option" (click)="addNewDocumentImage()"><span>+</span>Add New
+            Image/File</button>
+        </div>
+      </div>
+    </div>
+
+    <!----------------- VIEW image/file : END -------------->
+    <div class="row mr-md-0 mb-2" *ngIf="nameOfDocument ==='photograph' && !croppedImage">
+      <div class="col-md-10 border-none">
+        <p class="mb-1 pb-0 border-none">{{'share_photocapture_link_text' | translate}}</p>
+      </div>
+      <!-- <a href="javascript::void(0);" class="mr-2 ml-3" (click)="sharePhotoCaptureLink()">Share Photo Capture Link</a> -->
+    </div>
+
+    <div class="modal-footer d-flex remove-img-file"
+      *ngIf="liveWebcam || (!clickedWebcamPicture && mediaPreviews?.length) || (!fileUploading && !addNewAadhaarImageUpload && !clickedWebcamPicture) || (viewSectionOfImage && !fileUploading && !isDocumentVerified)">
+      <a href="javascript:void(0)" *ngIf="liveWebcam" class="btn modal-btn-save px-3"
+        (click)="triggerSnapshot();">Capture</a>
+
+      <a href="javascript:void(0)" class="btn modal-btn-continue px-4"
+        *ngIf="!viewSectionOfImage && !fileUploading && !addNewAadhaarImageUpload && !clickedWebcamPicture"
+        (click)="removeEditMedia(aadharDisplayImage?.file)">
+        Edit Image/File</a>
+
+      <a *ngIf="viewSectionOfImage && !fileUploading && !isDocumentVerified" href="javascript:void(0)"
+        class="btn modal-btn-continue px-4" (click)="removeViewSectionMedia(viewPreviewDisplayImage?.id)">
+        Remove Image/File
+      </a>
+
+      <a *ngIf="!clickedWebcamPicture && mediaPreviews.length && !fileUploading && !imageChangedEvent"
+        class="btn modal-btn-save px-3" (click)="submitDocumentUploadModalCropped()" href="javascript:void(0)">
+        {{'Save & Continue' | translate}}
+      </a>
+
+      <a *ngIf="clickedWebcamPicture && webCamMediaList?.length && !fileUploading && !imageChangedEvent"
+        class="btn modal-btn-save px-3" (click)="submitWebCamUploadModal()" href="javascript:void(0)">
+
+        {{'Save & Continue d' | translate}}
+      </a>
+    </div>
+  </div>
+</ng-template>

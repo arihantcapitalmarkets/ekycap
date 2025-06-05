@@ -1,0 +1,27 @@
+<div class="modal-header green common-header">
+  <div class="popup-header">
+    <!-- <span class="modal-title">{{'Welcome' | translate}}</span> -->
+    <h4 class="modal-title green">{{'Welcome' | translate}}</h4>
+  </div>
+  <div class="popup-icon">
+    <img src="../../../../assets/images/Vector.svg">
+  </div>
+</div>
+<div class="modal-boy">
+  <p class="wr-msg mb-2">
+    {{'We welcome you to Arihant Capital, a platform trusted for better investment experience.' | translate}}
+  </p>
+  <p class="wr-msg mb-2">
+    {{'We have sent a verification link on your Email Id. You will have to verify it before you can make any transaction on the platform.' | translate}}
+  </p>
+  <p class="wr-msg mb-2">{{'We recommend you to continue & complete your KYC first.' | translate}}</p>
+  <br>
+</div>
+<div class="modal-footer justify-content-between">
+  <a class="btn modal-btn-cancel" (click)="resendVerifyEmail()"
+    href="javascript:void(0)">{{'Resend Email' | translate}}</a>
+  <a class="btn modal-btn-continue" (click)="checkEmailVerified()" href="javascript:void(0)">
+    {{'Continue' | translate}}
+  </a>
+</div>
+ 

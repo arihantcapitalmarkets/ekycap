@@ -1,0 +1,402 @@
+<section class="dashboard">
+  <div class="container d-flex">
+    <ul id="tabs" class="nav nav-tabs mobile-top-2 desktop-view" role="tablist">
+      <li class="nav-item"
+        [ngClass]="{'completed': verifiedSteps?.isPanVerified || verifiedSteps?.ispersonalDetailsVerified}">
+        <a id="tab-A" href="#pane-A" class="nav-link " data-toggle="tab" role="tab"
+          [ngClass]="{'active': (activeTab == 'welcome')}" (click)="navigate('welcome')">{{'Welcome to Arihant
+          Plus'}}</a>
+        <span class="nav-side-badge" *ngIf="activeTab == 'welcome'">
+          Usually takes {{timeLeft}} secs.
+        </span>
+      </li>
+
+      <!-- <li class="nav-item" [ngClass]="{'completed': verifiedSteps?.isAadharVerified}">
+        <a id="tab-B" href="#pane-B" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'aadhaar-details'}" (click)="navigate('aadhaar-details')">
+          {{'Aadhaar Details' | translate}}</a>
+      </li> -->
+      <!-- <li class="nav-item" [ngClass]="{'completed': verifiedSteps?.isPanVerified}">
+        <a id="tab-C" href="#pane-C" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'pan-details'}" (click)="navigate('pan-details')">
+          {{'PAN Details' | translate}}</a>
+      </li> -->
+      <li class="nav-item" [ngClass]="{'completed': verifiedSteps?.ispersonalDetailsVerified}">
+        <a id="tab-E" href="#pane-E" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'personal-details'}" (click)="navigate('personal-details')">Personal
+          Details</a>
+        <span class="nav-side-badge" *ngIf="activeTab == 'personal-details'">
+          Usually takes {{timeLeft}} secs.
+        </span>
+      </li>
+      <!-- <li class="nav-item" [ngClass]="{'completed': verifiedSteps?.isAddressVerified}">
+        <a id="tab-F" href="#pane-F" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'address-details'}" (click)="navigate('address-details')">Address
+          Details</a>
+      </li> -->
+      <li class="nav-item" *ngIf="!commonConfigFlow?.isSegmentSkip"
+        [ngClass]="{'completed': verifiedSteps?.isSegmentVerified}">
+        <a id="tab-C" href="#pane-C" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'segment-brokerage'}" (click)="navigate('segment-brokerage')">
+          Segment & Brokerage
+        </a>
+        <span class="nav-side-badge" *ngIf="activeTab == 'personal-details'">
+          Usually takes {{timeLeft}} secs.
+        </span>
+      </li>
+
+      <!-- <li class="nav-item" [ngClass]="{'completed': verifiedSteps?.isTrandingAccountType}">
+        <a id="tab-D" href="#pane-D" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'trading-account'}" (click)="navigate('trading-account')">
+          Tranding & DEMAT Details
+        </a>
+      </li> -->
+      <li class="nav-item" [ngClass]="{'completed': verifiedSteps?.isNominatedVerified}"
+        *ngIf="!verifiedSteps?.isNomineeSkiped && verifiedSteps?.ispersonalDetailsVerified">
+        <a id="tab-B" href="#pane-B" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'nominee-details'}" (click)="navigate('nominee-details')">
+          Nominee Details
+        </a>
+        <span class="nav-side-badge" *ngIf="activeTab == 'nominee-details'">
+          Usually takes {{timeLeft}} secs.
+        </span>
+      </li>
+      <li class="nav-item" [ngClass]="{'completed': verifiedSteps?.isBankAccountVerified}">
+        <a id="tab-G" href="#pane-G" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'bank-account-details'}" (click)="navigate('bank-account-details')">Link
+          Bank Account</a>
+        <span class="nav-side-badge" *ngIf="activeTab == 'bank-account-details'">
+          Usually takes {{timeLeft}} secs.
+        </span>
+      </li>
+      <li class="nav-item" [ngClass]="{'completed': verifiedSteps?.isDeclaration}">
+        <a id="tab-J" href="#pane-J" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'declarations'}" (click)="navigate('declarations')">
+          Declarations
+        </a>
+        <span class="nav-side-badge" *ngIf="activeTab == 'declarations'">
+          Usually takes {{timeLeft}} secs.
+        </span>
+      </li>
+
+      <li class="nav-item" [ngClass]="{'completed': verifiedSteps?.isSignaturePhotographUploaded}">
+        <a id="tab-SP" href="#pane-SP" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'signature-photograph'}"
+          (click)="navigate('signature-photograph')">Signature & Photograph</a>
+        <span class="nav-side-badge" *ngIf="activeTab == 'signature-photograph'">
+          Usually takes {{timeLeft}} secs.
+        </span>
+      </li>
+
+      <li class="nav-item"
+        [ngClass]="{'completed': verifiedSteps?.isDocumentUploaded,'last-child': !commonConfigFlow?.isEsignRequired}">
+        <a id="tab-H" href="#pane-H" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'documents-upload'}" (click)="navigate('documents-upload')">Documents
+          Upload</a>
+        <span class="nav-side-badge" *ngIf="activeTab == 'documents-upload'">
+          Usually takes {{timeLeft}} secs.
+        </span>
+      </li>
+      <li class="nav-item last-child" *ngIf="commonConfigFlow?.isEsignRequired"
+        [ngClass]="{'completed': verifiedSteps?.isEsignCompleted}">
+        <a id="tab-I" href="#pane-I" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'esign-confirm'}" (click)="navigate('esign-confirm')">
+          <span *ngIf="verifiedSteps?.adminApproval !== 'NOT Eligible For Esign'; else showThis">Confirmation &
+            eSign</span>
+          <ng-template #showThis>
+            Status & eSign
+          </ng-template>
+        </a>
+        <span class="nav-side-badge" *ngIf="activeTab == 'esign-confirm'">
+          Usually takes {{timeLeft}} secs.
+        </span>
+      </li>
+      <li class="align-items-center mobile-info">
+        <a (click)="openMobileMenu()"><img src="assets/images/info.svg"></a>
+      </li>
+    </ul>
+    <div class="mobile-step-option" *ngIf="!verifiedSteps?.is_boat_user && !verifiedSteps?.isBeta">
+      <div class="container">
+        <div class="row" (click)="openMobileMenu()">
+          <div class="col-9 d-flex align-items-center text-left">
+            <p *ngIf="activeTab == 'welcome'">Step 1/{{totalStep}} - Usually takes {{timeLeft}} secs.</p>
+            <p *ngIf="activeTab == 'personal-details'">Step 2/{{totalStep}} - Usually takes {{timeLeft}} secs.</p>
+            <p *ngIf="activeTab == 'nominee-details'">Step 3/{{totalStep}} - Usually takes {{timeLeft}} secs.</p>
+            <p *ngIf="activeTab == 'bank-account-details'">Step {{bankStepNo}}/{{totalStep}} - Usually takes
+              {{timeLeft}} secs.</p>
+            <p *ngIf="activeTab == 'declarations'">Step {{declarationStepNo}}/{{totalStep}} - Usually takes {{timeLeft}}
+              secs.</p>
+            <p *ngIf="activeTab == 'signature-photograph'">Step {{SignaturePhotoGraphStepNo}}/{{totalStep}} - Usually
+              takes {{timeLeft}} secs.</p>
+            <p *ngIf="activeTab == 'documents-upload'">Step {{DocumentUploadStepNo}}/{{totalStep}} - Usually takes
+              {{timeLeft}} secs.</p>
+            <p *ngIf="activeTab == 'esign-confirm'">Step {{EsignConfirmNo}}/{{totalStep}} - Usually takes {{timeLeft}}
+              secs.</p>
+          </div>
+          <div class="col-3  align-items-end text-right">
+            <span><i class="fa fa-chevron-right" aria-hidden="true"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="content" class="tab-content" role="tablist">
+      <!-- Tab A -->
+      <div id="pane-A" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-A"
+        [ngClass]="{'active show': (activeTab == 'welcome')}">
+        <ng-container *ngIf="activeTab == 'welcome'">
+          <app-welcome-user [userInfo]='loggedInUserData' [verifiedSteps]='verifiedSteps'
+            [contentData]='contentData'></app-welcome-user>
+        </ng-container>
+      </div>
+      <!-- Tab B -->
+      <!-- <div id="pane-B" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-B"
+        [ngClass]="{'active show': activeTab == 'aadhaar-details'}">
+        <ng-container *ngIf="activeTab == 'aadhaar-details'">
+          <app-adhaardetails (restartPopUpEvent)="receiveAppMessage($event)" [userInfo]='loggedInUserData'
+            [verifiedSteps]='verifiedSteps'></app-adhaardetails>
+        </ng-container>
+      </div> -->
+      <!-- Tab C -->
+      <!-- <div id="pane-C" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-C"
+        [ngClass]="{'active show': activeTab == 'pan-details'}">
+        <ng-container *ngIf="activeTab == 'pan-details'">
+          <app-pan-details [userInfo]='loggedInUserData' [verifiedSteps]='verifiedSteps'></app-pan-details>
+        </ng-container>
+      </div> -->
+      <!-- Tab D -->
+
+      <!-- Tab E -->
+      <div id="pane-E" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-E"
+        [ngClass]="{'active show': activeTab == 'personal-details'}">
+        <ng-container *ngIf="activeTab == 'personal-details'">
+          <app-personal-details [userInfo]='loggedInUserData' [verifiedSteps]='verifiedSteps'
+            [contentData]='contentData'>
+          </app-personal-details>
+        </ng-container>
+      </div>
+
+      <!-- Tab F -->
+      <div id="pane-F" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-F"
+        [ngClass]="{'active show': activeTab == 'address-details'}">
+        <ng-container *ngIf="activeTab == 'address-details'">
+          <app-address-details [userInfo]='loggedInUserData' [verifiedSteps]='verifiedSteps'
+            [contentData]='contentData'>
+          </app-address-details>
+        </ng-container>
+      </div>
+
+      <!-- Tab C -->
+      <div id="pane-C" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-C"
+        [ngClass]="{'active show': activeTab == 'segment-brokerage'}">
+        <ng-container *ngIf="activeTab == 'segment-brokerage'">
+          <app-segment-brokerage [userInfo]='loggedInUserData' [verifiedSteps]='verifiedSteps'
+            [contentData]='contentData'>
+          </app-segment-brokerage>
+        </ng-container>
+      </div>
+
+
+      <!-- Tab B -->
+      <div id="pane-B" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-B"
+        [ngClass]="{'active show': activeTab == 'nominee-details'}">
+        <ng-container *ngIf="activeTab == 'nominee-details'">
+          <app-nominee-details [userInfo]='loggedInUserData' [verifiedSteps]='verifiedSteps'
+            [contentData]='contentData'>
+          </app-nominee-details>
+        </ng-container>
+      </div>
+
+      <!-- Tab G -->
+      <div id="pane-G" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-G"
+        [ngClass]="{'active show': activeTab == 'bank-account-details'}">
+        <ng-container *ngIf="activeTab == 'bank-account-details'">
+          <app-bank-account-details [userInfo]='loggedInUserData' [verifiedSteps]='verifiedSteps'
+            [contentData]='contentData'>
+          </app-bank-account-details>
+        </ng-container>
+      </div>
+
+      <!-- Tab I -->
+      <div id="pane-J" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-J"
+        [ngClass]="{'active show': activeTab == 'declarations'}">
+        <ng-container *ngIf="activeTab == 'declarations'">
+          <app-declarations [userInfo]='loggedInUserData' [verifiedSteps]='verifiedSteps'
+            [contentData]='contentData'></app-declarations>
+        </ng-container>
+      </div>
+
+      <!-- Tab H -->
+      <div id="pane-SP" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-SP"
+        [ngClass]="{'active show': activeTab == 'signature-photograph'}">
+        <ng-container *ngIf="activeTab == 'signature-photograph'">
+          <app-signature-photograph [userInfo]='loggedInUserData' [verifiedSteps]='verifiedSteps'
+            [commonConfigFlow]='commonConfigFlow'></app-signature-photograph>
+        </ng-container>
+      </div>
+
+      <!-- Tab H -->
+      <div id="pane-H" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-H"
+        [ngClass]="{'active show': activeTab == 'documents-upload'}">
+        <ng-container *ngIf="activeTab == 'documents-upload'">
+          <app-documents-upload [userInfo]='loggedInUserData' [verifiedSteps]='verifiedSteps'
+            [commonConfigFlow]='commonConfigFlow'></app-documents-upload>
+        </ng-container>
+      </div>
+
+      <!-- Tab I -->
+      <div id="pane-I" class="card tab-pane fade" role="tabpanel" aria-labelledby="tab-I"
+        [ngClass]="{'active show': activeTab == 'esign-confirm'}">
+        <ng-container *ngIf="activeTab == 'esign-confirm'">
+          <app-esign-confirm [userInfo]='loggedInUserData' [verifiedSteps]='verifiedSteps' [contentData]='contentData'
+            [commonConfigFlow]='commonConfigFlow'></app-esign-confirm>
+        </ng-container>
+      </div>
+      <!-- Tab End -->
+    </div>
+  </div>
+</section>
+
+
+<!-- Modal -->
+<ng-template #openMobileMenuInfo let-c="close" let-d="dismiss">
+
+  <div class="modal-header green common-header mb-0 pl-2">
+    <div class="popup-header">
+      <div class="row">
+        <div class="col-md-12 col-12 d-flex align-items-center text-left">
+          <b *ngIf="activeTab == 'welcome'">Step 1/{{totalStep}} </b>
+          <b *ngIf="activeTab == 'personal-details'">Step 2/{{totalStep}} </b>
+          <b *ngIf="activeTab == 'nominee-details'">Step 3/{{totalStep}} </b>
+          <b *ngIf="activeTab == 'bank-account-details'">Step {{bankStepNo}}/{{totalStep}}</b>
+          <b *ngIf="activeTab == 'declarations'">Step {{declarationStepNo}}/{{totalStep}} </b>
+          <b *ngIf="activeTab == 'signature-photograph'">Step {{SignaturePhotoGraphStepNo}}/{{totalStep}} </b>
+          <b *ngIf="activeTab == 'documents-upload'">Step {{DocumentUploadStepNo}}/{{totalStep}} </b>
+          <b *ngIf="activeTab == 'esign-confirm'">Step {{EsignConfirmNo}}/{{totalStep}}</b>
+        </div>
+
+      </div>
+      <!-- <span>{{'Welcome' | translate}}</span> -->
+      <!-- <h4 class="modal-title">{{'Bank Name Mismatch' | translate}}</h4> -->
+    </div>
+    <div class="cross-icon">
+      <a (click)="c('cancel')" href="javascript:void(0)"> <img src="assets/images/cross-icon.png"></a>
+    </div>
+  </div>
+  <!-- Modal content-->
+
+  <div class="modal-body">
+    <!-- <button type="button" class="close" (click)="c('cancel')" data-dismiss="modal">&times;</button> -->
+    <ul id="tabs" class="nav nav-tabs" role="tablist">
+      <li (click)="c('ok')" class="nav-item"
+        [ngClass]="{'completed': verifiedSteps?.isPanVerified || verifiedSteps?.ispersonalDetailsVerified}">
+        <a id="tab-A" href="#pane-A" class="nav-link " data-toggle="tab" role="tab"
+          [ngClass]="{'active': (activeTab == 'welcome')}" (click)="navigate('welcome')">{{'Welcome to Arihant Plus'
+          |
+          translate}}</a>
+        <span class="nav-side-badge" *ngIf="activeTab == 'welcome'">
+          Usually takes {{timeLeft}} secs.
+        </span>
+      </li>
+
+      <!-- <li class="nav-item" [ngClass]="{'completed': verifiedSteps?.isAadharVerified}">
+              <a id="tab-B" href="#pane-B" class="nav-link" data-toggle="tab" role="tab"
+                [ngClass]="{'active': activeTab == 'aadhaar-details'}" (click)="navigate('aadhaar-details')">
+                {{'Aadhaar Details' | translate}}</a>
+            </li> -->
+      <!-- <li (click)="c('ok')" class="nav-item" [ngClass]="{'completed': verifiedSteps?.isPanVerified}">
+        <a id="tab-C" href="#pane-C" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'pan-details'}" (click)="navigate('pan-details')">
+          {{'PAN Details' | translate}}</a>
+      </li> -->
+      <li (click)="c('ok')" class="nav-item" [ngClass]="{'completed': verifiedSteps?.ispersonalDetailsVerified}">
+        <a id="tab-E" href="#pane-E" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'personal-details'}" (click)="navigate('personal-details')">Personal
+          Details</a>
+        <span class="nav-side-badge" *ngIf="activeTab == 'personal-details'">
+          Usually takes {{timeLeft}} secs.
+        </span>
+      </li>
+      <!-- <li (click)="c('ok')" class="nav-item" [ngClass]="{'completed': verifiedSteps?.isAddressVerified}">
+        <a id="tab-F" href="#pane-F" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'address-details'}" (click)="navigate('address-details')">Address
+          Details</a>
+      </li> -->
+      <li (click)="c('ok')" class="nav-item" *ngIf="!commonConfigFlow?.isSegmentSkip"
+        [ngClass]="{'completed': verifiedSteps?.isSegmentVerified}">
+        <a id="tab-C" href="#pane-C" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'segment-brokerage'}" (click)="navigate('segment-brokerage')">
+          Segment & Brokerage
+        </a>
+        <span class="nav-side-badge" *ngIf="activeTab == 'segment-brokerage'">
+          Usually takes {{timeLeft}} secs.
+        </span>
+      </li>
+      <!-- <li class="nav-item" [ngClass]="{'completed': verifiedSteps?.isTrandingAccountType}">
+        <a id="tab-D" href="#pane-D" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'trading-account'}" (click)="navigate('trading-account')">
+          Trading & DEMAT Details
+        </a>
+      </li> -->
+      <li (click)="c('ok')" class="nav-item" [ngClass]="{'completed': verifiedSteps?.isNominatedVerified}"
+        *ngIf="!verifiedSteps?.isNomineeSkiped && verifiedSteps?.ispersonalDetailsVerified">
+        <a id="tab-B" href="#pane-B" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'nominee-details'}" (click)="navigate('nominee-details')">
+          Nominee Details
+        </a>
+        <span class="nav-side-badge" *ngIf="activeTab == 'nominee-details'">
+          Usually takes {{timeLeft}} secs.
+        </span>
+      </li>
+      <li (click)="c('ok')" class="nav-item" [ngClass]="{'completed': verifiedSteps?.isBankAccountVerified}">
+        <a id="tab-G" href="#pane-G" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'bank-account-details'}" (click)="navigate('bank-account-details')">Bank
+          Account Details</a>
+        <span class="nav-side-badge" *ngIf="activeTab == 'bank-account-details'">
+          Usually takes {{timeLeft}} secs.
+        </span>
+      </li>
+      <li (click)="c('ok')" class="nav-item" [ngClass]="{'completed': verifiedSteps?.isDeclaration}">
+        <a id="tab-J" href="#pane-J" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'declarations'}" (click)="navigate('declarations')">
+          Declarations
+        </a>
+        <span class="nav-side-badge" *ngIf="activeTab == 'declarations'">
+          Usually takes {{timeLeft}} secs.
+        </span>
+      </li>
+
+      <li (click)="c('ok')" class="nav-item" [ngClass]="{'completed': verifiedSteps?.isSignaturePhotographUploaded}">
+        <a id="tab-SP" href="#pane-SP" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'signature-photograph'}"
+          (click)="navigate('signature-photograph')">Signature & Photograph</a>
+        <span class="nav-side-badge" *ngIf="activeTab == 'signature-photograph'">
+          Usually takes {{timeLeft}} secs.
+        </span>
+      </li>
+      <li (click)="c('ok')" class="nav-item"
+        [ngClass]="{'completed': verifiedSteps?.isDocumentUploaded,'last-child': !commonConfigFlow?.isEsignRequired}">
+        <a id="tab-H" href="#pane-H" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'documents-upload'}" (click)="navigate('documents-upload')">Documents
+          Upload</a>
+        <span class="nav-side-badge" *ngIf="activeTab == 'documents-upload'">
+          Usually takes {{timeLeft}} secs.
+        </span>
+      </li>
+      <li (click)="c('ok')" *ngIf="commonConfigFlow?.isEsignRequired" class="nav-item last-child">
+        <a id="tab-I" href="#pane-I" class="nav-link" data-toggle="tab" role="tab"
+          [ngClass]="{'active': activeTab == 'esign-confirm'}" (click)="navigate('esign-confirm')">
+          <span *ngIf="verifiedSteps?.adminApproval !== 'NOT Eligible For Esign'; else showThis">Confirmation &
+            eSign</span>
+          <ng-template #showThis>
+            Status & eSign
+          </ng-template>
+        </a>
+        <span class="nav-side-badge" *ngIf="activeTab == 'esign-confirm'">
+          Usually takes {{timeLeft}} secs.
+        </span>
+      </li>
+    </ul>
+  </div>
+
+
+</ng-template>

@@ -1,0 +1,502 @@
+<div class="card-body">
+  <div class="row tb-content  bank-detail">
+    <div class="col-md-12">
+      <div class="dashboard-heading">
+        <h3>Link Bank Account</h3>
+        <p>Select how would you like to verify your bank account (mandatory)</p>
+      </div>
+      <!-- <div class="form-group select-label transparent-bg-color d-flex" *ngIf="securityNoteBankPage">
+        <img src="../../../assets/images/shield.svg"> &nbsp; <p style="margin-bottom: 0;font-size: 12px;"
+          [innerHTML]="securityNoteBankPage"></p>
+      </div> -->
+      <hr>
+      <!-- <div class="bg-red-tag mb-2">
+        <p><b>NOTE:</b> We are currently experiencing issues with the penny drop facility. To ensure smooth operations,
+          please opt
+          for UPI mode of payment.</p>
+      </div> -->
+      <p *ngIf="!bankVerificationType">Please note that the account that you link here will be used as your primary bank
+        account to make transactions
+        for pay-in and pay-outs within the trading application. <a href="javascript:void(0);"
+          style="color: #34B350;">Learn More</a> </p>
+
+      <!-- <h4 class="tb-subtitle">Please provide your bank details</h4>
+      <p>Make sure you add the bank account that’s in your name and from which you will transact funds for trading.</p> -->
+
+      <form [formGroup]="bankVerificationForm" *ngIf="!bankVerificationType && !verifiedSteps?.isBankAccountVerified">
+        <div class="row digilocker-card mt-4">
+          <div class="col-md-6 ">
+            <div class="card mb-2 rounded-8 cursor-pointer" (click)="onSelectBankVerification('upi')"
+              [ngClass]="{'active': bankVerificationForm?.controls['bankVerificationType']?.value === 'upi'}">
+              <div class="d-flex justify-content-between">
+                <div class="d-flex flex-row align-items-center">
+                  <div class="mr-2 c-details p-3">
+                    <h6><img src="assets/images/dashboard/upi.png">&nbsp; Verify bank using UPI</h6>
+                  </div>
+                </div>
+                <div class="badge faster-digilocker pt-3">
+                  <div class="form-check form-check-inline">
+                    <label class="form-check-label" for="inlineRadio1">Faster</label> &nbsp;
+                    <input type="radio" name="bankVerificationType" id="inlineRadio1"
+                      formControlName="bankVerificationType" value="upi" checked="checked"
+                      (change)="onSelectBankVerification('upi')" />
+                  </div>
+                </div>
+              </div>
+              <div class="mt-2 digi-get-bg"
+                [ngClass]="{'digi-get-bg': bankVerificationForm?.controls['bankVerificationType']?.value === 'upi', 'digi-get-bg-right': bankVerificationForm?.controls['bankVerificationType']?.value !== 'upi'}">
+                <ol>
+                  <li>Scan the QR code that will pop on the next screen.</li>
+                  <li>Pay ₹1 on your UPI app so we can verify your account.</li>
+                  <li>Once verified, your amount will be refunded within 2-3 working days.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card mb-2 cursor-pointer" (click)="onSelectBankVerification('ifsc')"
+              [ngClass]="{'active': bankVerificationForm?.controls['bankVerificationType']?.value === 'ifsc'}">
+              <div class="d-flex justify-content-between">
+                <div class="d-flex flex-row align-items-center">
+                  <div class="mr-2 c-details p-3">
+                    <h6><img src="assets/images/dashboard/bank.png">&nbsp; Enter IFSC code & account number</h6>
+                  </div>
+                </div>
+                <div class="badge faster-digilocker pt-3">
+                  <input type="radio" name="bankVerificationType" id="radio1" formControlName="bankVerificationType"
+                    value="ifsc" checked="checked" (change)="onSelectBankVerification('ifsc')" />
+                </div>
+              </div>
+              <div class="mt-2 digi-get-bg"
+                [ngClass]="{'digi-get-bg': bankVerificationForm?.controls['bankVerificationType']?.value === 'ifsc', 'digi-get-bg-right': bankVerificationForm?.controls['bankVerificationType']?.value !== 'ifsc'}">
+                <ol>
+                  <li>Enter the IFSC code, account type & account number on the screen. </li>
+                  <li> We will send ₹1 in your bank account to verify that it truly belongs to you.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="note-tag mx-1" *ngIf="!transferCreditNote && bankVerificationType === 'ifsc'">
+        <div class="shield-img">
+          <img src="assets/images/shield.svg">
+        </div>
+        <div class="">
+          <p style="margin-bottom: 0;"> <span class="p-1">
+              {{'bank_details_verify_loader_message'
+              | translate}}</span> </p>
+        </div>
+      </div>
+      <ng-container *ngIf="isBankVerificationDone && !global?.isMobileDevice">
+        <div class="reg-card ">
+          <div class="row mt-4">
+            <div class="col-md-12 ">
+              <div class="row d-flex justify-content-center mt-5">
+                <div class="align-self-center" style="font-size: 50px;">
+                  <span> <i class="fa fa-circle-o-notch fa-spin"></i> </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- <ng-container *ngIf="!isBankVerificationDone && gpayUpiLink && global?.isMobileDevice">
+        <div class="reg-card ">
+          <div class="row mt-4">
+            <div class="col-md-12 ">
+              <div class="row d-flex justify-content-center mt-5">
+                <ul>
+                  <li class="m-2"><a [href]="gpayUpiLink | safeUrl"> <img src="assets/images/google.png" width="40"> Google Pay </a></li>
+                  <li class="m-2"><a [href]="phonePayUpiLink | safeUrl"><img src="assets/images/google.png" width="40"> Phone Pe </a></li>
+                  <li class="m-2"><a [href]="payTMUpiLink | safeUrl"><img src="assets/images/google.png" width="40"> PayTm  </a></li>
+                  <li class="m-2"><a [href]="BHIMUpiLink | safeUrl"><img src="assets/images/google.png" width="40"> BHIM </a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container> -->
+
+      <ng-container *ngIf="bankVerificationType === 'ifsc' && verifiedSteps">
+        <form [formGroup]="bankDetailsform" autocomplete="off">
+          <div class="reg-card ">
+            <div class="row mt-4">
+              <div class="col-md-5">
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-sm-6 col-6">
+                      <label for="email" class="req-control">IFSC Code </label><span class="info-tp pr-1"
+                        (click)='ifscModalOption()'><img src="assets/images/gray-info.svg"
+                          title="The IFSC code (Indian Financial System Code) is an 11-character code that identifies a specific bank branch in India. Enter the 11-digit IFSC code of the bank branch where your savings account is held. You can find the IFSC code on your bank account statement, cheque book, or bank's website. It's needed for electronic fund transfers.">
+                      </span>
+                    </div>
+
+                    <div class="col-sm-6 col-6 find-ifsc" (click)='findIfscCode()'>
+                      <i class="fa fa-search cursor-pointer" aria-hidden="true"></i> <label for="email"
+                        class="form-label cursor-pointer ml-1"> Find IFSC</label>
+                    </div>
+                  </div>
+
+                  <input #myinput [ngClass]="{'disabled': verifiedSteps?.isBankAccountVerified}"
+                    class="form-control pannumber" (keyup)="searchBankDetails($event.target.value)"
+                    placeholder="Enter IFSC Code" type="text" formControlName="IFSCCode">
+                  <app-control-messages fieldName="IFSC Code" [control]="bankDetailsform?.controls['IFSCCode']">
+                  </app-control-messages>
+                </div>
+                <div class="branch-detail transparent-bg-color" *ngIf="bankAddress">
+                  <div class="bank-branch-details" *ngIf="bankAddress?.bankName">
+                    <div class="bank-build-img">
+                      <img src="assets/images/dashboard/bank-building.png">
+                    </div>
+                    <div class="bank-name">
+                      {{bankAddress?.bankName}}
+                      <span *ngIf="bankAddress?.address">{{bankAddress?.address}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="email" class="req-control">Account number</label>
+                  <div class="pw-input">
+                    <input id="current_password" autocomplete="new-name"
+                      [ngClass]="{'disabled': verifiedSteps?.isBankAccountVerified}" class="form-control"
+                      placeholder="Enter account number" type="text" formControlName="accountNumber">
+                    <img (click)="current_password('current_password')" id="current_passwordimg" src="{{eye_img}}"
+                      alt="" title="" class="current_password eye-open">
+                  </div>
+                  <app-control-messages fieldName="Account number"
+                    [control]="bankDetailsform?.controls['accountNumber']">
+                  </app-control-messages>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group ">
+                  <label for="email" class="req-control">Account Type </label> <span class="info-tp pr-1"><img
+                      src="assets/images/gray-info.svg"
+                      title="This section allows you to specify the type of account you're opening. Choose the type of account you're applying for. Common options include savings account, current account, trading account, or demat account.">
+                  </span>
+                  <select class="form-control" formControlName="account_type"
+                    [ngClass]="{'disabled': verifiedSteps?.isBankAccountVerified}">
+                    <option value="">Select Account Type</option>
+                    <option [value]='item.id' *ngFor="let item of bankType">{{item.name}}</option>
+                  </select>
+                  <app-control-messages fieldName="Account Type" [control]="bankDetailsform?.controls['account_type']">
+                  </app-control-messages>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 px-0"
+              *ngIf="bankVerificationType === 'ifsc' && verifiedSteps?.canEditBank && verifiedSteps?.isBankAccountVerified">
+              <button type="button" (click)="modifyBankDetails()" class="btn"> Edit Bank Details</button>
+            </div>
+          </div>
+          <p class="text-left mt-3" *ngIf="bankVerificationType === 'ifsc' && !verifiedSteps?.isBankAccountVerified">
+            Want to make it easier? <a href="javascript:void(0);" (click)="resetUPIFormValidation()">Use UPI ID</a>
+          </p>
+        </form>
+      </ng-container>
+
+      <!-- <p class="text-left mt-3" *ngIf="bankVerificationType === 'ifsc' && !verifiedSteps?.isBankAccountVerified">
+          Want to make it easier? <a href="javascript:void(0);" (click)="resetUPIFormValidation()">Use UPI ID</a>
+        </p> -->
+
+      <!-- <div>
+        <p>Want to make it easier? <a href="">Use UPI ID</a> </p>
+      </div> -->
+    </div>
+  </div>
+</div>
+
+
+<div class="container footer-dash" *ngIf="!bankVerificationType">
+  <hr>
+  <div class="dashboard-btn">
+    <div class="reg-card welcome-btn" *ngIf="bankVerificationForm?.controls['bankVerificationType']?.value === 'upi'">
+      <button type="button" (click)="onConfirmBankVerification()" class="btn"
+        [ngClass]="{'disable': !bankVerificationForm.valid}">
+        {{'Continue with UPI' | translate}}
+      </button>
+    </div>
+    <div class="reg-card welcome-btn" *ngIf="bankVerificationForm?.controls['bankVerificationType']?.value === 'ifsc'">
+      <button type="button" (click)="onConfirmBankVerification()" class="btn"
+        [ngClass]="{'disable': !bankVerificationForm.valid}">
+        {{'Continue Manually' | translate}}
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<div class="container footer-dash" *ngIf="bankVerificationType === 'upi'">
+  <hr>
+  <div class="dashboard-btn">
+    <div class="reg-card welcome-btn" *ngIf="verifiedSteps.mf_app">
+      <button type="button" (click)="onSubmit()" class="btn"
+        [ngClass]="{'disable': !bankVerificationForm.valid}">{{'Save &
+        Continue' |
+        translate}}
+      </button>
+    </div>
+    <div class="reg-card welcome-btn" *ngIf="!verifiedSteps.mf_app">
+      <button type="button" (click)="onSubmit()" class="btn"
+        [ngClass]="{'disable': !bankVerificationForm.valid}">{{'Save &
+        Continue'
+        | translate}}
+      </button>
+    </div>
+  </div>
+</div>
+<div class="container footer-dash" *ngIf="bankVerificationType === 'ifsc'">
+  <hr>
+  <div class="dashboard-btn">
+    <div class="reg-card welcome-btn" *ngIf="verifiedSteps.mf_app">
+      <button type="button" (click)="onSubmit()" class="btn" [ngClass]="{'disable': !bankDetailsform.valid}">{{'Save &
+        Continue' |
+        translate}}
+      </button>
+    </div>
+    <div class="reg-card welcome-btn" *ngIf="!verifiedSteps.mf_app">
+      <button type="button" (click)="onSubmit()" class="btn" [ngClass]="{'disable': !bankDetailsform.valid}">{{'Save &
+        Continue'
+        | translate}}
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-template #mismatchcontent let-c="close" let-d="dismiss" class="aadhar-popup">
+  <div class="modal-header red common-header">
+    <div class="popup-header">
+      <span>{{'Alert' | translate}}</span>
+      <h4 class="modal-title">{{'Details mismatch!' | translate}}</h4>
+    </div>
+    <div class="cross-icon">
+      <a (click)="c('cancel')" href="javascript:void(0)"> <img src="assets/images/cross-icon.png"></a>
+    </div>
+  </div>
+
+  <div class="modal-boy">
+    <p class="wr-msg">
+      {{'The name linked with your bank account do not match with your PAN. You will have to digitally sign a
+      declaration that the bank account belongs to you.' | translate}}
+    </p>
+    <br>
+    <p class="wr-msg">
+      {{'You can choose to change the bank account details or continue to sign the declaration to accept ownership of
+      given details.' | translate}}
+    </p>
+    <br>
+  </div>
+  <div class="modal-footer d-flex justify-content-between">
+    <a class="btn modal-btn-continue" style="background: #34B350;" (click)="c('ok')" href="javascript:void(0)">
+      {{'Continue' | translate}}
+    </a>
+    <a class="btn modal-btn-cancel" (click)="c('cancel')" href="javascript:void(0)">{{'Change Details' | translate}}</a>
+  </div>
+</ng-template>
+
+<ng-template #emailNotVerify let-c="close" let-d="dismiss" class="aadhar-popup">
+  <div class="modal-header green common-header">
+    <div class="popup-header">
+      <span>{{'Welcome' | translate}}</span>
+      <h4 class="modal-title">{{userInfo?.panUserName | uppercase}}</h4>
+    </div>
+    <div class="cross-icon">
+      <a (click)="c('cancel')" href="javascript:void(0)"> <img src="assets/images/cross-icon.png"></a>
+    </div>
+  </div>
+
+  <div class="modal-boy">
+    <p class="wr-msg mb-2">
+      {{'We welcome you to Arihant Capital, a platform trusted for better investment experience.' | translate}}
+    </p>
+    <p class="wr-msg mb-2">
+      {{'We have sent a verification link on your Email Id. You will have to verify it before you can make any
+      transaction on the platform.' | translate}}
+    </p>
+    <p class="wr-msg mb-2">{{'We recommend you to continue & complete your KYC first.' | translate}}</p>
+    <br>
+  </div>
+  <div class="modal-footer d-flex justify-content-between">
+    <a class="btn modal-btn-cancel" (click)="resendVerifyEmail()" href="javascript:void(0)">{{'Verify Email' |
+      translate}}</a>
+    <a class="btn modal-btn-continue" (click)="c('cancel')" href="javascript:void(0)">
+      {{'Close' | translate}}
+    </a>
+  </div>
+</ng-template>
+
+<ng-template #ifsc let-c="close" let-d="dismiss" class="aadhar-popup">
+  <div class="modal-header yellow common-header">
+    <div class="popup-header">
+      <!-- <span>{{'Confirmation' | translate}}</span> -->
+      <h4 class="modal-title">{{'IFSC' | translate}}</h4>
+    </div>
+    <div class="cross-icon">
+      <a (click)="c('cancel')" href="javascript:void(0)"> <img src="assets/images/cross-icon.png"></a>
+    </div>
+  </div>
+
+  <div class="modal-boy ifsc-content">
+    <img src="assets/images/dashboard/ifsc.png">
+    <h6>Find your IFSC code on Chequebook</h6>
+    <ul class="mb-2">
+      <li>You can find your bank’s IFSC code on the front side of your cheque book.</li>
+      <li>It is a combination of 11 alpha-numeric characters (first four letters is your bank code)</li>
+      <li>Image above is shown for illustration purpose only. Exact location of the IFSC code may vary from bank to
+        bank.</li>
+    </ul>
+  </div>
+  <div class="modal-footer d-flex justify-content-center">
+    <button class="btn ifsc-btn" (click)="c('ok')">{{'Ok' | translate}}</button>
+  </div>
+</ng-template>
+
+<ng-template #findIfsc let-c="close" let-d="dismiss" class="aadhar-popup">
+  <div class="modal-header yellow common-header">
+    <div class="popup-header">
+      <!-- <span>{{'Confirmation' | translate}}</span> -->
+      <h4 class="modal-title">{{'Find IFSC'}}</h4>
+    </div>
+    <div class="cross-icon">
+      <a (click)="c('cancel')" href="javascript:void(0)"> <img src="assets/images/cross-icon.png"></a>
+    </div>
+  </div>
+
+  <div class="modal-boy ifsc-content">
+    <form [formGroup]="findIFSCForm" autocomplete="off">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="" class="req-control">Bank Name</label>
+            <!-- <input type="text" class="form-control"> -->
+            <select class="form-control" formControlName="bank_name" (change)="onChangeBank($event)">
+              <option value="">Select Bank </option>
+              <option [value]='item' *ngFor="let item of bankMasterArray">{{item}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-12 my-2">
+          <label for="" class="req-control">State</label>
+          <!-- <input type="text" class="form-control"> -->
+          <select class="form-control" formControlName="bank_state" (change)="onChangeBank($event)">
+            <option value="">Select State </option>
+            <option [value]='item' *ngFor="let item of bankStateArray">{{item}}</option>
+          </select>
+        </div>
+        <div class="col-md-12 my-2">
+          <label for="" class="req-control">District</label>
+          <!-- <input type="text" class="form-control"> -->
+          <select class="form-control" formControlName="bank_district" (change)="onChangeBank($event)">
+            <option value="">Select District </option>
+            <option [value]='item' *ngFor="let item of bankDistrictsArray">{{item}}</option>
+          </select>
+        </div>
+        <div class="col-md-12 mt-2">
+          <label for="" class="req-control">Branch</label>
+          <!-- <input type="text" class="form-control"> -->
+          <select class="form-control" formControlName="bank_branch" (change)="onChangeBank($event)">
+            <option value="">Select Bank </option>
+            <option [value]='item' *ngFor="let item of bankBranchesArray">{{item}}</option>
+          </select>
+        </div>
+        <div class="col-md-12 mt-2" *ngIf="ifscSearchBankDetails">
+          <label for="" class="req-control">IFSC Code</label>
+          <input type="text" class="form-control disable" [value]="ifscSearchBankDetails?.ifsc" disabled>
+        </div>
+
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer d-flex justify-content-center">
+    <button type="button" (click)="c('ok')" class="btn ifsc-btn">{{'Submit' | translate}}</button>
+  </div>
+</ng-template>
+
+<ng-template #upiIframe let-c="close" let-d="dismiss" class="aadhar-popup">
+  <div class="modal-header red common-header">
+    <div class="popup-header">
+      <!-- <span>{{'Alert' | translate}}</span> -->
+      <h4 class="modal-title">{{'UPI Through Bank Verification ' | translate}}</h4>
+    </div>
+    <div class="cross-icon">
+      <a (click)="c('cancel')" href="javascript:void(0)"> <img src="assets/images/cross-icon.png"></a>
+    </div>
+  </div>
+
+  <div class="modal-boy">
+    <iframe id="site_previewer" width="100%" height="550" scrolling="no" style=" border: none ;overflow: hidden;"
+      class="frame_wrap" [src]="setuResponse?.shortUrl | safeUrl"></iframe>
+
+  </div>
+  <!-- <div class="modal-footer d-flex justify-content-between"> -->
+  <!-- <a class="btn modal-btn-continue" style="background: #34B350;" (click)="c('ok')" href="javascript:void(0)">
+      {{'Continue' | translate}}
+    </a> -->
+  <!-- <a class="btn modal-btn-cancel" (click)="c('cancel')" href="javascript:void(0)">{{'Cancel' | translate}}</a> -->
+  <!-- </div> -->
+</ng-template>
+
+
+<ng-template #upiApppaymentgateway let-c="close" let-d="dismiss" class="aadhar-popup">
+  <div class="modal-header red common-header">
+    <div class="popup-header">
+      <!-- <span>{{'Alert' | translate}}</span> -->
+      <h4 class="modal-title">{{'Open the link using an App ' | translate}}</h4>
+    </div>
+    <div class="cross-icon">
+      <a (click)="c('cancel')" href="javascript:void(0)"> <img src="assets/images/cross-icon.png"></a>
+    </div>
+  </div>
+
+  <div class="modal-boy">
+    <div class="row d-flex justify-content-start mt-0">
+      <ul class="upi-list w-100">
+        <li class="m-2 p-2"><a [href]="gpayUpiLink | safeUrl"> <img src="assets/images/gpay.png" width="40"
+              class="mr-2"> Google Pay </a></li>
+        <li class="m-2 p-2"><a [href]="phonePayUpiLink | safeUrl"><img src="assets/images/phonepe.png" width="40"
+              class="mr-2"> Phone Pe </a></li>
+        <li class="m-2 p-2"><a [href]="payTMUpiLink | safeUrl"><img src="assets/images/paytm.png" width="40"
+              class="mr-2"> PayTm </a></li>
+        <!-- <li class="m-2 p-2"><a [href]="BHIMUpiLink | safeUrl"><img src="assets/images/bhim.png" width="40" class="mr-2"> BHIM </a></li> -->
+      </ul>
+      <!-- <div class="align-self-center" style="font-size: 50px;"><span> <i class="fa fa-circle-o-notch fa-spin"></i> </span></div> -->
+    </div>
+  </div>
+  <!-- <div class="modal-footer d-flex justify-content-between"> -->
+  <!-- <a class="btn modal-btn-continue" style="background: #34B350;" (click)="c('ok')" href="javascript:void(0)">
+      {{'Continue' | translate}}
+    </a> -->
+  <!-- <a class="btn modal-btn-cancel" (click)="c('cancel')" href="javascript:void(0)">{{'Cancel' | translate}}</a> -->
+  <!-- </div> -->
+</ng-template>
+
+<ng-template #removeBankDetails let-c="close" let-d="dismiss" class="aadhar-popup">
+  <div class="modal-header yellow common-header">
+    <div class="popup-header">
+      <!-- <span>{{'Confirmation' | translate}}</span> -->
+      <h4 class="modal-title">{{'Edit Bank Details' | translate}}</h4>
+    </div>
+    <div class="cross-icon align-self-center">
+      <a (click)="c('cancel')" href="javascript:void(0)"> <img src="assets/images/cross-icon.png"></a>
+    </div>
+  </div>
+
+  <div class="modal-boy ifsc-content">
+    <!-- <h6>Find your IFSC code on Chequebook</h6> -->
+    <!-- <ul class="mb-2"> -->
+    <p>If you will edit the bank details after that you can not able to undo that details.</p>
+    <p class="my-4"><b>Are you sure you want to edit bank details?</b></p>
+    <!-- </ul> -->
+  </div>
+  <div class="modal-footer d-flex justify-content-between">
+    <button class="btn modal-btn-continue" (click)="c('cancel')" href="javascript:void(0)">
+      {{'Cancel' | translate}}
+    </button>
+    <button class="btn modal-btn-cancel" (click)="c('ok')">{{'Yes, Confirm' | translate}}</button>
+  </div>
+</ng-template>

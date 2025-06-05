@@ -1,0 +1,14 @@
+<ngx-spinner *ngIf="isPlatformBrowser" bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-fussion"
+  [fullScreen]="true">
+  <p style="color: white;margin-top: 20px;font-size: 20px;font-weight: bold;text-align: center;">{{global?.loaderText ||
+    'Good things take time.. Hold on..'}}</p>
+</ngx-spinner>
+<!-- <div *ngIf="loader" class="laoder-img">
+  <ngx-spinner bdColor="rgba(9, 112, 221, 0.9)" size="medium" color="#fff" type="ball-fussion" [fullScreen]="true">
+    <p style="color: white;margin-top: 20px;">Loading...</p>
+  </ngx-spinner>
+</div> -->
+
+<div class="wapper">
+  <router-outlet (activate)="changeOfRoutes()"></router-outlet>
+</div>

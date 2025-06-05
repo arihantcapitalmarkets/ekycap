@@ -1,0 +1,57 @@
+<div class="tb-title">
+  <h3><span>Application Id :</span> {{userInfo?.appId | uppercase}} - {{verifiedSteps?.firstName || ''}} {{verifiedSteps?.lastName || ''}}</h3>
+  
+  <span class="d-flex" *ngIf="verifiedSteps?.rmCode">(Branch Code: {{verifiedSteps?.rmCode}})</span>
+  <span class="d-flex" *ngIf="!verifiedSteps?.rmCode">(Direct)</span>
+  <a *ngIf="!whichPage" target="_blank" href="{{needHelp}}" class="d-flex needhelp-app">
+    <span>Need help</span>
+    <img src="assets/images/help-circle-blue.svg">
+  </a>
+</div>
+
+<ng-template #needHelpModal let-c="close" let-d="dismiss" class="aadhar-popup">
+  <div class="modal-header blue common-header">
+    <div class="popup-header">
+      <!-- <span>{{'Welcome' | translate}}</span> -->
+      <h4 class="modal-title">{{'Stuck somewhere?' | translate}}</h4>
+    </div>
+    <div class="popup-icon">
+      <img src="assets/images/help-circle-blue.svg">
+    </div>
+  </div>
+
+  <div class="modal-boy">
+    <p class="wr-msg" *ngIf="needHelpPopupText" [innerHTML]="needHelpPopupText"></p>
+    <!-- <p class="wr-msg light-grey mb-2">
+      {{'Note : You can still continue to fill the application by yourself.' | translate}}
+    </p> -->
+
+    <form [formGroup]="needHelpForm" (ngSubmit)="onSubmit()">
+      <div class="reg-card">
+        <div class="row">
+          <div class="form-group col-md-12">
+            <label for="email" class="req-control">Subject</label>
+            <input class="form-control" placeholder="Subject of query" type="text" formControlName="subject">
+            <app-control-messages fieldName="Subject" [control]="needHelpForm.controls['subject']">
+            </app-control-messages>
+          </div>
+
+          <div class="form-group col-md-12">
+            <label for="email" class="req-control">Message</label>
+            <textarea class="form-control" placeholder="Please type your message" type="text" formControlName="message">
+            </textarea>
+            <app-control-messages fieldName="Message" [control]="needHelpForm.controls['message']">
+            </app-control-messages>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer d-flex justify-content-between">
+    <a class="btn modal-btn-continue" (click)="c('cancel')" href="javascript:void(0)">
+      {{'Cancel' | translate}}
+    </a>
+    <a class="btn modal-btn-cancel" [ngClass]="{'disabled': !needHelpForm.valid}" (click)="c('ok')"
+      href="javascript:void(0)">{{'Submit' | translate}}</a>
+  </div>
+</ng-template>

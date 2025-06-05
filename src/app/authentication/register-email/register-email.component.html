@@ -1,0 +1,90 @@
+<section class="reg-main-log">
+  <div class="container">
+    <div class="row awarded-bg">
+      <div class="col-md-6 p-0 verify-img">
+        <app-common-leftportion></app-common-leftportion>
+      </div>
+      <div class="col-md-6 column-blog my-auto">
+        <div class="reg-card email-card ">
+          <article class="card-body">
+            <h4>{{ contentData?.email_title || 'Welcome to Arihant Capital'}}</h4>
+            <p>{{ contentData?.email_sub_text || 'We just need few details to get you started.'}}
+            </p>
+
+            <!-- <button type="button" class="mt-0 mb-4 text-center custom-white-btn bg-white w-100"
+              *ngIf="!showButtonLoader" (click)="loginWithGoogle()">
+              <img button src="assets/images/google.png" alt="google"> &nbsp;Signup with Google</button> -->
+            <div class="my-2 text-center google-div d-flex justify-content-center mb-4">
+              <asl-google-signin-button type='standard' logo_alignment="center" size="large"
+                style="border: none;">Signup with Google</asl-google-signin-button>
+            </div>
+
+            <div class="my-2 text-center">
+              <label class="line-lable"><span class="px-4" style="text-transform: lowercase;"> or </span></label>
+            </div>
+
+            <form class="form-group" [formGroup]="registerform" (ngSubmit)="onSubmit()">
+              <label for="email" class="req-control">email ID</label>
+              <input required placeholder="Enter your email Id" type="email" formControlName="email"
+                class="form-control" [attr.disabled]="setDisabledEmail ? true : null"
+                style="border-left: 1px solid #ccc;">
+              <app-control-messages fieldName="Email" [customeMessage]="needEmailId"
+                [control]="registerform?.controls['email']">
+              </app-control-messages>
+              <div class="error" *ngIf="isEmailExist">{{isEmailExistMessage}}</div>
+              <div class="transperent" *ngIf="registerform?.controls?.email?.value">
+                <button type="button" [ngClass]="{'active': emailOption === '@gmail.com'}"
+                  class="btn custom-white-btn mt-2" (click)="onChooseEmailOption('@gmail.com')">&#64;gmail.com</button>
+                <button type="button" [ngClass]="{'active': emailOption === '@yahoo.com'}"
+                  class="btn custom-white-btn ml-1 mt-2"
+                  (click)="onChooseEmailOption('@yahoo.com')">&#64;yahoo.com</button>
+                <button type="button" [ngClass]="{'active': emailOption === '@gmail.co.in'}"
+                  class="btn custom-white-btn ml-1 mt-2"
+                  (click)="onChooseEmailOption('@gmail.co.in')">&#64;gmail.co.in</button>
+                <button type="button" [ngClass]="{'active': emailOption === '@yahoo.co.in'}"
+                  class="btn custom-white-btn ml-1 mt-2"
+                  (click)="onChooseEmailOption('@yahoo.co.in')">&#64;yahoo.co.in</button>
+                <button type="button" [ngClass]="{'active': emailOption === '@rediff.com'}"
+                  class="btn custom-white-btn ml-1 mt-2"
+                  (click)="onChooseEmailOption('@rediff.com')">&#64;rediff.com</button>
+                <button type="button" [ngClass]="{'active': emailOption === '@hotmail.com'}"
+                  class="btn custom-white-btn ml-1 mt-2"
+                  (click)="onChooseEmailOption('@hotmail.com')">&#64;hotmail.com</button>
+                <button type="button" [ngClass]="{'active': emailOption === '@outlook.com'}"
+                  class="btn custom-white-btn ml-1 mt-2"
+                  (click)="onChooseEmailOption('@outlook.com')">&#64;outlook.com</button>
+              </div>
+
+
+              <div class="note-email mt-4">
+                <p>You will receive a verification link on your email Id.</p>
+              </div>
+
+              <div class="form-group reg-main-btn mt-3">
+                <button type="submit" class="btn btn-success btn-disabled btn-lg text-white mt-2"
+                  [disabled]="!registerform.valid" *ngIf="!showButtonLoader">Continue </button>
+                <button *ngIf="showButtonLoader" type="button" class="btn mt-2">
+                  <i class="fa fa-circle-o-notch fa-spin"></i>
+                </button>
+              </div>
+
+              <!-- <div class="d-flex register-steps justify-content-center align-items-center">
+                <a href="javascript:void(0)" [ngClass]="{'active': commonConfigFlow?.step1 === 'email'}"></a>
+                <a href="javascript:void(0)" [ngClass]="{'active': commonConfigFlow?.step2 === 'email'}" [ngClass]="{'active': commonConfigFlow?.step3 === 'email'}"></a>
+                <a href="javascript:void(0)" [ngClass]="{'active': commonConfigFlow?.step4 === 'email'}" ></a>
+              </div> -->
+
+              <!-- <p class="text-center ff-txt">Already a member? <a [routerLink]="['/login']"
+                  routerLinkActive="router-link-active" class="text-capitalize text-decoration-none">Login Now</a> </p> -->
+              <!-- <hr class="container mt-3 mb-3">
+              <div class="note-tag text-center" style="background: none;" *ngIf="noteVerifiycationEmailText">
+                <div [innerHTML]="noteVerifiycationEmailText"></div>
+              </div> -->
+
+            </form>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

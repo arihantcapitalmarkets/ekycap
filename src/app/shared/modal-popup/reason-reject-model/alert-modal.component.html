@@ -1,0 +1,59 @@
+<div class="modal-header common-header"
+  [ngClass]="{'red': objectOfModal?.type==='isPanExist' || objectOfModal?.type==='isMobileExists' || objectOfModal?.type==='isEmailExists'}">
+  <div class="popup-header">
+    <span>{{objectOfModal?.lable}}</span>
+    <h4 class="modal-title">{{objectOfModal?.title | translate}}</h4>
+  </div>
+  <div class="popup-icon">
+    <img
+      *ngIf="objectOfModal?.type==='isPanExist' || objectOfModal?.type==='isMobileExists' || objectOfModal?.type==='isEmailExists'"
+      src="../../../../assets/images/slash.svg">
+    <img *ngIf="objectOfModal?.type==='request_for_document'" src="../../../../assets/images/doc.svg">
+  </div>
+</div>
+<div class="modal-boy" *ngIf="objectOfModal?.type==='isPanExist'">
+  <p class="wr-msg mb-2">
+    {{'The PAN number you have entered is already linked to an user account.' | translate}}
+  </p>
+  <p class="wr-msg mb-3">
+    {{'You can retry to enter a different PAN number for new application or login with the same account.' | translate}}
+  </p>
+  <p class="wr-msg light-grey mb-5">
+    {{'Note : If the PAN number was never registered by you, contact our support team and report the same.' | translate}}
+  </p>
+  <br>
+</div>
+
+<div class="modal-boy" *ngIf="objectOfModal?.type==='isMobileExists'">
+  <p class="wr-msg mb-2">
+    {{'The mobile number you have entered is already linked to an user account.' | translate}}
+  </p>
+  <p class="wr-msg mb-3">
+    {{'Do you wish to use this mobile number for a new account?' | translate}}
+  </p>
+  <p class="wr-msg light-grey mb-5">
+    {{'Note : If the mobile number was never registered by you, contact our support team and report the same.' | translate}}
+  </p>
+  <br>
+</div>
+
+<div class="modal-boy" *ngIf="objectOfModal?.type==='isEmailExists'">
+  <p class="wr-msg mb-2">
+    {{'The Email ID you have entered is already linked to an user account.' | translate}}
+  </p>
+  <p class="wr-msg mb-3">
+    {{'Do you wish to use this Email ID for a new account?' | translate}}
+  </p>
+  <p class="wr-msg light-grey mb-5">
+    {{'Note : If the Email ID was never registered by you, contact our support team and report the same.' | translate}}
+  </p>
+  <br>
+</div>
+
+<div class="modal-footer d-flex justify-content-between">
+  <a class="btn modal-btn-cancel" (click)="decline()">
+    {{objectOfModal?.button_name_left}}
+  </a>
+  <a class="btn" [ngClass]="{'modal-btn-continue': objectOfModal?.type==='Alert'}"
+    (click)="accept()">{{objectOfModal?.button_name_right}}</a>
+</div>

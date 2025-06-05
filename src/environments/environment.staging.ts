@@ -56,7 +56,7 @@ export const environment = {
   isPaymentEnabled: true,
   configExpAccessToken: 180,
   getCookieExpiredTimeAccessToken: 179,
-  isNomineeProofNumberRequired: false,
+  isNomineeProofNumberRequired: true,
   isDDPIConsentRequired: true,
   isRefreshTokenCheck: false,
   setAccessTokenWithExpireTime: true,

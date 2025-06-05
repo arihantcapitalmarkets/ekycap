@@ -37,6 +37,9 @@ export class ValidationService {
       'equalTo': `Confirm Account Number not matching`,
       'invalidAccountNumber': 'Invalid account number',
       'requiredOTPCustome': this.translate.instant('invalid_otp_error'),
+      'fourDigit': "Enter Valid last 4 digits of aadhar card number",
+      'drivingLicence': "Enter Valid driving licence",
+      'isValidPassportNo': "Enter valid passport",
       'customeMessage': `${extra}`,
       'invalidPercentage': `Invalid Percentage`,
       'leadingZeroNotAllow': this.translate.instant('leading_zeronot_allow_in_percentage'),
@@ -193,6 +196,46 @@ export class ValidationService {
       return { 'requiredOTPCustome': true };
     }
   }
+
+  static fourDigit(control) {
+    // RFC 2822 compliant regex
+    if (control.value) {
+      if (control.value.match(/^(?=.*[0-9])[0-9]{4,4}$/)) {
+        return null;
+      } else {
+        return { 'fourDigit': true };
+      }
+    } else {
+      return { 'fourDigit': true };
+    }
+  }
+
+  static drivingLicence(control) {
+    // /^[A-Z]{2}[0-9]{2}[0-9]{4}[0-9]{7}$/       :: Driving licence regex
+    if (control.value) {
+      if (control.value.match(/^[a-zA-Z0-9]{10,15}$/)) {
+        return null;
+      } else {
+        return { 'drivingLicence': true };
+      }
+    } else {
+      return { 'drivingLicence': true };
+    }
+  }
+
+  static isValidPassportNo(control) {
+    // RFC 2822 compliant regex
+    if (control.value) {
+      if (control.value.match(/^[a-zA-Z0-9]{10,15}$/)) {
+        return null;
+      } else {
+        return { 'isValidPassportNo': true };
+      }
+    } else {
+      return { 'isValidPassportNo': true };
+    }
+  }
+
 
   static passwordValidator(control) {
     // {6,100}           - Assert password is between 6 and 100 characters

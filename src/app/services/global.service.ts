@@ -1019,16 +1019,26 @@ export class GlobalService {
               "name": "Aadhar Number",
               "required": true
             },
-            {
-              "id": "04",
-              "name": "Proof of Identity.",
-              "required": false
-            },
+            // {
+            //   "id": "04",
+            //   "name": "Proof of Identity.",
+            //   "required": false
+            // },
             // {
             //   "id": "05",
             //   "name": "Demat Account ID",
             //   "required": true
             // }
+            {
+              "id": "06",
+              "name": "Driving Licence",
+              "required": true
+            },
+            {
+              "id": "07",
+              "name": "Passport",
+              "required": true
+            }
           ],
           "esign_provider": "NSDL",
           "login_type": "Mobile_OTP"
@@ -1066,16 +1076,26 @@ export class GlobalService {
               "name": "Aadhar Number",
               "required": true
             },
-            {
-              "id": "04",
-              "name": "Proof of Identity.",
-              "required": false
-            },
+            // {
+            //   "id": "04",
+            //   "name": "Proof of Identity.",
+            //   "required": false
+            // },
             // {
             //   "id": "05",
             //   "name": "Demat Account ID",
             //   "required": true
             // }
+            {
+              "id": "06",
+              "name": "Driving Licence",
+              "required": true
+            },
+            {
+              "id": "07",
+              "name": "Passport",
+              "required": true
+            }
           ],
           "demat_type": [
             {

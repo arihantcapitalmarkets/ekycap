@@ -100,7 +100,8 @@
                                                 <input type="text" (ngModelChange)="checkAge($event, i)"
                                                    class="form-control disabled" placeholder="DD/MM/YYYY"
                                                    dateFormat="dd/MM/yyyy" mask="99/99/9999"
-                                                   formControlName="nominee_dob" ngbDatepicker #d="ngbDatepicker">
+                                                   formControlName="nominee_dob" ngbDatepicker #d="ngbDatepicker"
+                                                   (click)="d.toggle()">
                                                 <div class="input-group-append calendar">
                                                    <span class="btn btn-outline-secondary" (click)="d.toggle()"
                                                       type="button"><img _ngcontent-serverapp-c122=""
@@ -154,7 +155,8 @@
                                           <div class="form-group">
                                              <label for="mrs" class="ble-labl req-control">Nominee’s Id proof</label>
                                              <select class="form-control" placeholder="Select relation"
-                                                formControlName="nominee_proof_type">
+                                                formControlName="nominee_proof_type"
+                                                (change)="changeNomineeProof($event, i)">
                                                 <option value="">Select Proof </option>
                                                 <option [value]="item.id"
                                                    *ngFor="let item of commonConfigFlow?.nomineeProof">
@@ -162,6 +164,22 @@
                                              </select>
                                              <app-control-messages fieldName="Proof"
                                                 [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.nominee_proof_type">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+                                       <div class="col-md-3 mt-2"
+                                          *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls?.nominee_proof_required?.value">
+                                          <div class="form-group">
+                                             <label for="nominee_proof_number"
+                                                class="ble-labl req-control">{{commonConfigFlow?.nomineeProof |
+                                                restrictValues:nomineeForm?.controls?.items?.controls[i].controls.nominee_proof_type?.value}}</label>
+                                             <input
+                                                placeholder="{{commonConfigFlow?.nomineeProof | restrictValues:nomineeForm?.controls?.items?.controls[i].controls.nominee_proof_type?.value}}"
+                                                type="text" formControlName="nominee_proof_number"
+                                                class="form-control pannumber">
+                                             <app-control-messages
+                                                fieldName="{{commonConfigFlow?.nomineeProof | restrictValues:nomineeForm?.controls?.items?.controls[i].controls.nominee_proof_type?.value}}"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.nominee_proof_number">
                                              </app-control-messages>
                                           </div>
                                        </div>
@@ -173,8 +191,10 @@
                                           <div class="form-group">
                                              <label for="nominee_name" class="ble-labl req-control">Nominee’s
                                                 share</label>
-                                             <input type="text" placeholder="Percentage" (keyup)="makeValidation(i)"
-                                                formControlName="percentage" class="form-control nominee-percentage">
+                                             <input type="text" mask="separator.2" thousandSeparator="," Add commentMore
+                                                actions decimalMarker="." maxlength="5" placeholder="Percentage"
+                                                (keyup)="makeValidation(i)" formControlName="percentage"
+                                                class="form-control nominee-percentage">
                                              <app-control-messages fieldName="Percentage"
                                                 [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.percentage">
                                              </app-control-messages>
@@ -436,7 +456,8 @@
                                           <div class="form-group">
                                              <label for="mrs" class="ble-labl req-control">Guardian Proof</label>
                                              <select class="form-control" placeholder="Select relation"
-                                                formControlName="guardian_proof_type">
+                                                formControlName="guardian_proof_type"
+                                                (change)="changeGuardianProof($event, i)">
                                                 <option value="">Select Proof </option>
                                                 <option [value]="item.id"
                                                    *ngFor="let item of commonConfigFlow?.nomineeProof">
@@ -444,6 +465,23 @@
                                              </select>
                                              <app-control-messages fieldName="Guardian Proof"
                                                 [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_proof_type">
+                                             </app-control-messages>
+                                          </div>
+                                       </div>
+                                       <div class="col-md-6"
+                                          *ngIf="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_proof_required?.value">
+                                          <div class="form-group">
+                                             <label for="guardian_proof_number"
+                                                class="ble-labl req-control">{{commonConfigFlow?.nomineeProof |
+                                                restrictValues:nomineeForm?.controls?.items?.controls[i].controls.guardian_proof_type?.value}}</label>
+                                             <input
+                                                placeholder="{{commonConfigFlow?.nomineeProof | restrictValues:nomineeForm?.controls?.items?.controls[i].controls.guardian_proof_type?.value}}"
+                                                type="text" formControlName="guardian_proof_number"
+                                                class="form-control pannumber">
+                                             <!-- [ngClass]="{'disabled': nomineeForm?.controls?.items?.controls[i]?.controls?.isGuardian?.value}" [ngClass]="{'disabled grey': nomineeForm?.controls?.items?.controls[i]?.controls?.isGuardian?.value}"  -->
+                                             <app-control-messages
+                                                fieldName="{{commonConfigFlow?.nomineeProof | restrictValues:nomineeForm?.controls?.items?.controls[i].controls.guardian_proof_type?.value}}"
+                                                [control]="nomineeForm?.controls?.items?.controls[i]?.controls?.guardian_proof_number">
                                              </app-control-messages>
                                           </div>
                                        </div>

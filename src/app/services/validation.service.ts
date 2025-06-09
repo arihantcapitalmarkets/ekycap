@@ -212,6 +212,7 @@ export class ValidationService {
 
   static drivingLicence(control) {
     // /^[A-Z]{2}[0-9]{2}[0-9]{4}[0-9]{7}$/       :: Driving licence regex
+    return null;
     if (control.value) {
       if (control.value.match(/^[a-zA-Z0-9]{10,15}$/)) {
         return null;
@@ -225,6 +226,7 @@ export class ValidationService {
 
   static isValidPassportNo(control) {
     // RFC 2822 compliant regex
+    return null;
     if (control.value) {
       if (control.value.match(/^[a-zA-Z0-9]{10,15}$/)) {
         return null;
@@ -251,6 +253,19 @@ export class ValidationService {
     if (control.value) {
       // if (control.value.match(/[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}?$/)) {
       if (control.value.match(/[a-zA-Z]{3}[Pp]{1}[a-zA-Z]{1}[0-9]{4}[a-zA-Z]{1}?$/)) {
+        return null;
+      } else {
+        return { 'invalidPAN': true };
+      }
+    } else {
+      return { 'invalidPAN': true };
+    }
+  }
+
+  static isValidResidentPAN(control) {
+    if (control.value) {
+      const regex = /^[A-Z]{3}P[A-Z][0-9]{4}[A-Z]$/;
+      if (regex.test(control.value.toUpperCase())) {
         return null;
       } else {
         return { 'invalidPAN': true };

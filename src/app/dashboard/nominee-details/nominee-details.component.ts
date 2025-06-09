@@ -396,7 +396,7 @@ export class NomineeDetailsComponent implements OnInit {
           formItem.get('nominee_proof_number').setValue('');
           if (this.nomineeForm.value.items[index].nominee_proof_type === '02') {
             this.maskProof = "SSSSS9999S";
-            formItem.get('nominee_proof_number').setValidators([Validators.required, ValidationService.panValidator]);
+            formItem.get('nominee_proof_number').setValidators([Validators.required, ValidationService.isValidResidentPAN]);
           } else if (this.nomineeForm.value.items[index].nominee_proof_type === '03') {
             this.maskProof = "9999";
             formItem.get('nominee_proof_number').setValidators([Validators.required, ValidationService.fourDigit]);
@@ -438,7 +438,7 @@ export class NomineeDetailsComponent implements OnInit {
           formItem.get('guardian_proof_number').setValue('');
           if (this.nomineeForm.value.items[index].guardian_proof_type === '02') {
             this.maskGuardianProof = "SSSSS9999S";
-            formItem.get('guardian_proof_number').setValidators([Validators.required, ValidationService.panValidator]);
+            formItem.get('guardian_proof_number').setValidators([Validators.required, ValidationService.isValidResidentPAN]);
           } else if (this.nomineeForm.value.items[index].guardian_proof_type === '03') {
             this.maskGuardianProof = "9999";
             formItem.get('guardian_proof_number').setValidators([Validators.required, ValidationService.fourDigit]);
@@ -698,7 +698,24 @@ export class NomineeDetailsComponent implements OnInit {
     nomineeArrayItems.controls.forEach((formItem, j) => {
       if (index === j && isRequired) {
         formItem.get('nominee_proof_required').setValue(true);
-        formItem.get('nominee_proof_number').setValidators([Validators.required]);
+        // formItem.get('nominee_proof_number').setValue('');
+        if (this.nomineeForm.value.items[index].nominee_proof_type === '02') {
+          this.maskProof = "SSSSS9999S";
+          formItem.get('nominee_proof_number').setValidators([Validators.required, ValidationService.isValidResidentPAN]);
+        } else if (this.nomineeForm.value.items[index].nominee_proof_type === '03') {
+          this.maskProof = "9999";
+          formItem.get('nominee_proof_number').setValidators([Validators.required, ValidationService.fourDigit]);
+        } else if (this.nomineeForm.value.items[index].nominee_proof_type === '06') {
+          // this.maskProof = "999999999999";
+          this.maskProof = "999999999999";
+          formItem.get('nominee_proof_number').setValidators([Validators.required, ValidationService.drivingLicence]);
+        } else if (this.nomineeForm.value.items[index].nominee_proof_type === '07') {
+          this.maskProof = "999999999999";
+          formItem.get('nominee_proof_number').setValidators([Validators.required, ValidationService.isValidPassportNo]);
+        } else {
+          this.maskProof = "99999999";
+          formItem.get('nominee_proof_number').setValidators([Validators.required]);
+        }
         formItem.get('nominee_proof_number').updateValueAndValidity();
       } else if (index === j && !isRequired) {
         formItem.get('nominee_proof_required').setValue(false);
@@ -706,6 +723,16 @@ export class NomineeDetailsComponent implements OnInit {
         formItem.get('nominee_proof_number').clearValidators();
         formItem.get('nominee_proof_number').updateValueAndValidity();
       }
+      // if (index === j && isRequired) {
+      //   formItem.get('nominee_proof_required').setValue(true);
+      //   formItem.get('nominee_proof_number').setValidators([Validators.required]);
+      //   formItem.get('nominee_proof_number').updateValueAndValidity();
+      // } else if (index === j && !isRequired) {
+      //   formItem.get('nominee_proof_required').setValue(false);
+      //   formItem.get('nominee_proof_number').setValue('');
+      //   formItem.get('nominee_proof_number').clearValidators();
+      //   formItem.get('nominee_proof_number').updateValueAndValidity();
+      // }
     });
   }
 
@@ -722,7 +749,22 @@ export class NomineeDetailsComponent implements OnInit {
       if (index === j && isRequired) {
         formItem.get('guardian_proof_required').setValue(true);
         // formItem.get('guardian_proof_number').setValue('');
-        formItem.get('guardian_proof_number').setValidators([Validators.required]);
+        if (this.nomineeForm.value.items[index].guardian_proof_type === '02') {
+          this.maskGuardianProof = "SSSSS9999S";
+          formItem.get('guardian_proof_number').setValidators([Validators.required, ValidationService.isValidResidentPAN]);
+        } else if (this.nomineeForm.value.items[index].guardian_proof_type === '03') {
+          this.maskGuardianProof = "9999";
+          formItem.get('guardian_proof_number').setValidators([Validators.required, ValidationService.fourDigit]);
+        } else if (this.nomineeForm.value.items[index].guardian_proof_type === '06') {
+          this.maskGuardianProof = "999999999999";
+          formItem.get('guardian_proof_number').setValidators([Validators.required, ValidationService.drivingLicence]);
+        } else if (this.nomineeForm.value.items[index].guardian_proof_type === '07') {
+          this.maskGuardianProof = "999999999999";
+          formItem.get('guardian_proof_number').setValidators([Validators.required, ValidationService.isValidPassportNo]);
+        } else {
+          this.maskGuardianProof = "99999999";
+          formItem.get('guardian_proof_number').setValidators([Validators.required]);
+        }
         formItem.get('guardian_proof_number').updateValueAndValidity();
       } else if (index === j && !isRequired) {
         formItem.get('guardian_proof_required').setValue(false);
@@ -730,6 +772,17 @@ export class NomineeDetailsComponent implements OnInit {
         formItem.get('guardian_proof_number').clearValidators();
         formItem.get('guardian_proof_number').updateValueAndValidity();
       }
+      // if (index === j && isRequired) {
+      //   formItem.get('guardian_proof_required').setValue(true);
+      //   // formItem.get('guardian_proof_number').setValue('');
+      //   formItem.get('guardian_proof_number').setValidators([Validators.required]);
+      //   formItem.get('guardian_proof_number').updateValueAndValidity();
+      // } else if (index === j && !isRequired) {
+      //   formItem.get('guardian_proof_required').setValue(false);
+      //   formItem.get('guardian_proof_number').setValue('');
+      //   formItem.get('guardian_proof_number').clearValidators();
+      //   formItem.get('guardian_proof_number').updateValueAndValidity();
+      // }
     });
   }
 
@@ -794,8 +847,11 @@ export class NomineeDetailsComponent implements OnInit {
               } else if (item === 'guardian_mobile_number') {
                 formItem.get(item).setValidators(Validators.compose([ValidationService.required, Validators.maxLength(10), ValidationService.mobileNumberValidator, ValidationService.mobileNumberFIXSTARTDigitValidator]));
                 formItem.get(item).updateValueAndValidity();
-              } else if (item === 'guardian_first_name' || item === 'guardian_last_name') {
+              } else if (item === 'guardian_first_name') {
                 formItem.get(item).setValidators(Validators.compose([ValidationService.required, ValidationService.onlyAlphabeticAllow]));
+                formItem.get(item).updateValueAndValidity();
+              } else if (item === 'guardian_last_name') {
+                formItem.get(item).clearValidators();
                 formItem.get(item).updateValueAndValidity();
               } else if (item === 'guardian_proof_number' && !environment?.isNomineeProofNumberRequired) {
                 formItem.get(item).clearValidators();

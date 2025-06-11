@@ -321,6 +321,7 @@ export class PhotoCaptureComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       } else {
         this.global.errorToastr(result.message);
+        this.global.errorToastr('Please try with new link');
         const userAuth = this.cookies.get('user_auth_token');
         if (userAuth) {
           this.router.navigate(['/documents-upload']);

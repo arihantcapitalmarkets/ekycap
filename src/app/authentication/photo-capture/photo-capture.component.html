@@ -44,8 +44,12 @@
         </webcam>
         <div class="form-group justify-content-center text-center">
           <button type="button" class="btn mt-0" (click)="triggerSnapshot();"
-            *ngIf="global?.isOwnPhotoCapture === 'Yes'">Capture <img src="assets/images/arrow-right.svg"
-              alt=""></button>
+            *ngIf="global?.isOwnPhotoCapture === 'Yes' && !isPhotocapturing">Capture <img
+              src="assets/images/arrow-right.svg" alt=""></button>
+          <button type="button" class="btn mt-0 disabled"
+            *ngIf="global?.isOwnPhotoCapture === 'Yes' && isPhotocapturing">
+            photo capturing in progress ...
+          </button>
           <button type="button" class="btn mt-0" (click)="getAINEXTToken();"
             *ngIf="global?.AINEXTSelfieMode && global?.isOwnPhotoCapture !== 'Yes'">Capture
             <img src="assets/images/arrow-right.svg" alt=""></button>

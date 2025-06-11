@@ -172,9 +172,9 @@
                                           <div class="form-group">
                                              <label for="nominee_proof_number"
                                                 class="ble-labl req-control">{{commonConfigFlow?.nomineeProof |
-                                                restrictValues:nomineeForm?.controls?.items?.controls[i].controls.nominee_proof_type?.value}}</label>
+                                                getLabel:nomineeForm?.controls?.items?.controls[i].controls.nominee_proof_type?.value}}</label>
                                              <input
-                                                placeholder="{{commonConfigFlow?.nomineeProof | restrictValues:nomineeForm?.controls?.items?.controls[i].controls.nominee_proof_type?.value}}"
+                                                placeholder="{{commonConfigFlow?.nomineeProof | getLabel:nomineeForm?.controls?.items?.controls[i].controls.nominee_proof_type?.value}}"
                                                 type="text" formControlName="nominee_proof_number"
                                                 class="form-control pannumber">
                                              <app-control-messages
@@ -473,9 +473,9 @@
                                           <div class="form-group">
                                              <label for="guardian_proof_number"
                                                 class="ble-labl req-control">{{commonConfigFlow?.nomineeProof |
-                                                restrictValues:nomineeForm?.controls?.items?.controls[i].controls.guardian_proof_type?.value}}</label>
+                                                getLabel:nomineeForm?.controls?.items?.controls[i].controls.guardian_proof_type?.value}}</label>
                                              <input
-                                                placeholder="{{commonConfigFlow?.nomineeProof | restrictValues:nomineeForm?.controls?.items?.controls[i].controls.guardian_proof_type?.value}}"
+                                                placeholder="{{commonConfigFlow?.nomineeProof | getLabel:nomineeForm?.controls?.items?.controls[i].controls.guardian_proof_type?.value}}"
                                                 type="text" formControlName="guardian_proof_number"
                                                 class="form-control pannumber">
                                              <!-- [ngClass]="{'disabled': nomineeForm?.controls?.items?.controls[i]?.controls?.isGuardian?.value}" [ngClass]="{'disabled grey': nomineeForm?.controls?.items?.controls[i]?.controls?.isGuardian?.value}"  -->

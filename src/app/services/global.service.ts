@@ -1012,11 +1012,13 @@ export class GlobalService {
             {
               "id": "02",
               "name": "PAN",
+              "label": "PAN Number",
               "required": true
             },
             {
               "id": "03",
-              "name": "Aadhar Number",
+              "name": "Aadhaar",
+              "label": "Aadhar Number (Enter Valid last 4 digits of Aadhaar card number)",
               "required": true
             },
             // {
@@ -1032,11 +1034,13 @@ export class GlobalService {
             {
               "id": "06",
               "name": "Driving Licence",
+              "label": "Driving Licence Number",
               "required": true
             },
             {
               "id": "07",
               "name": "Passport",
+              "label": "Passport Number",
               "required": true
             }
           ],
@@ -1069,11 +1073,13 @@ export class GlobalService {
             {
               "id": "02",
               "name": "PAN",
+              "label": "PAN Number",
               "required": true
             },
             {
               "id": "03",
-              "name": "Aadhar Number",
+              "name": "Aadhaar",
+              "label": "Aadhar Number (Enter Valid last 4 digits of Aadhaar card number)",
               "required": true
             },
             // {
@@ -1089,11 +1095,13 @@ export class GlobalService {
             {
               "id": "06",
               "name": "Driving Licence",
+              "label": "Driving Licence Number",
               "required": true
             },
             {
               "id": "07",
               "name": "Passport",
+              "label": "Passport Number",
               "required": true
             }
           ],

@@ -186,7 +186,7 @@ export class PhotoCaptureComponent implements OnInit, AfterViewInit, OnDestroy {
             } else {
               this.authService.logoutWithoutSession();
             }
-            // }
+            this.isPhotocapturing = false;
           } else if (res?.result && !res?.result?.country) {
             this.global.errorToastr('Your location is not found');
             const userToken: any = this.cookies.get('user_auth_token');
@@ -196,10 +196,17 @@ export class PhotoCaptureComponent implements OnInit, AfterViewInit, OnDestroy {
             } else {
               this.authService.logoutWithoutSession();
             }
+            this.isPhotocapturing = false;
           } else if (res?.result?.country && res?.result?.country?.toUpperCase() === `INDIA`) {
             this.trigger.next();
+            this.isPhotocapturing = false;
           }
+        } else {
+          this.isPhotocapturing = false;
         }
+      }, error => {
+        this.isPhotocapturing = false;
+        // this.global.errorToastr('Server error');
       })
     }
   }
@@ -231,7 +238,9 @@ export class PhotoCaptureComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  isPhotocapturing: boolean;
   public triggerSnapshot(): void {
+    this.isPhotocapturing = true;
     const temp = this.global.getLocationService().then(resp => {
       this.latitude = resp.lat;
       this.longitude = resp.lng;
@@ -242,9 +251,13 @@ export class PhotoCaptureComponent implements OnInit, AfterViewInit, OnDestroy {
         this.getGeoLocation(obj);
       }
     }, error => {
+      this.isPhotocapturing = true;
       this.latitude = '';
       this.longitude = '';
       this.global.errorToastr('Did not get location, please allow location permission.');
+      setTimeout(() => {
+        this.isPhotocapturing = false;
+      }, 1000);
       return;
     });
 

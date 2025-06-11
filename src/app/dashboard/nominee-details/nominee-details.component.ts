@@ -14,14 +14,14 @@ import { CommonModule } from '@angular/common';
 import { PipesModule } from 'src/app/shared/pipes/PipesModule';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ControlMessagesComponent } from "../../shared/control-messages/control-messages.component";
-import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'app-nominee-details',
   templateUrl: './nominee-details.component.html',
   styleUrls: ['./nominee-details.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, PipesModule, SharedModule, TranslateModule, NgbModule, ControlMessagesComponent, NgbNavModule, NgbNavItem, NgbNav, NgbNavContent, NgbDatepickerModule, NgxMaskDirective, NgxMaskPipe],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, PipesModule, SharedModule, TranslateModule, NgbModule, ControlMessagesComponent, NgbNavModule, NgbNavItem, NgbNav, NgbNavContent, NgbDatepickerModule, NgxMaskPipe],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
     { provide: NgbDateAdapter, useClass: CustomAdapter },
@@ -729,7 +729,7 @@ export class NomineeDetailsComponent implements OnInit {
    * @returns 
    */
   checkAge($event: any, index: any) {
-    // alert(`working-${$event?.length}****${$event}`);
+    console.log(`working-${$event}****${$event.length}`);
 
     if ($event && $event.length > 9) {
       let date = $event.split('/');
@@ -741,6 +741,7 @@ export class NomineeDetailsComponent implements OnInit {
 
       //now calculate the age of the user
       const calculatedAge = Math.abs(year - 1970);
+
       /**************************************************/
       // let date1 = new Date(`${parseInt(date[2], 10)}/${parseInt(date[1], 10)}/${parseInt(date[0], 10)}`);
       // let date2 = new Date();

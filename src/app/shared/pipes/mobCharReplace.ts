@@ -51,3 +51,18 @@ export class GetValueCheck implements PipeTransform {
   }
 }
 
+
+@Pipe({
+  name: 'getLabel'
+})
+@Injectable({
+  providedIn: 'root'
+})
+export class GetLabel implements PipeTransform {
+  transform(items: any[], input: any): any {
+    const result = items.filter(item => item.id === input);
+    return result[0]?.label;
+  }
+}
+
+

@@ -2,7 +2,7 @@ export const environment = {
   production: true,
   baseUrl: 'https://uatekycfrontapi.arihantcapital.com/uat/', // PHYSICAL UAT
   baseUrlOfUser: 'https://uatekycfrontapi.arihantcapital.com/uat/', // PHYSICAL UAT
-  image_upload_url: 'https://gwm1a0mt08.execute-api.ap-south-1.amazonaws.com/uat/', // PHYSICAL UAT
+  image_upload_url: 'https://uatekycfrontapi.arihantcapital.com/uat/', // PHYSICAL UAT
   common_upload: 'https://s7x44f3v4b.execute-api.ap-south-1.amazonaws.com/uat/',
   languageParamUrl: 'https://uatmobile.arihantplus.com/assets/', // dev-site Live
   manualKycUrl: 'https://zdqa4rfn2b.execute-api.ap-south-1.amazonaws.com/uat/api/processForMannualKYC',
